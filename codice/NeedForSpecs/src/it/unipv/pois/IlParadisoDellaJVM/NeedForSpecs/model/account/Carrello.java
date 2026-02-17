@@ -1,6 +1,10 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account;
 
+//	@author teopacchiega
+
 import java.util.ArrayList;
+
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.Annuncio;
 
 public class Carrello {
 	
