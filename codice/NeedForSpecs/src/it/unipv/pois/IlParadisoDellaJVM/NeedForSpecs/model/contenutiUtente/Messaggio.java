@@ -1,6 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Ticket;
@@ -18,7 +19,7 @@ public class Messaggio extends ContenutoUtente{
 	
 	
 	
-	public Messaggio(Utente autore, String testo, LocalDate data_pubblicazione, Ticket ticket_di_riferimento) {
+	public Messaggio(Utente autore, String testo, LocalDateTime data_pubblicazione, Ticket ticket_di_riferimento) {
 		super(autore, testo, data_pubblicazione);
 		this.ticket_di_riferimento = ticket_di_riferimento;
 	}
@@ -36,14 +37,10 @@ public class Messaggio extends ContenutoUtente{
 
 	
 	//query del db per aggiungerlo alla conversazione
-//	public void inviaMessaggio(String testo) {
-//		super.setTesto(testo);
-//		ticket_di_riferimento.aggiungiMessaggioAllaConversazione(this);
-//		System.out.println("Messaggio aggiunto alla conversazione");
-//		
-//		System.out.println("invio in corso....");
-//		
-//		
-//	}
+
+	
+	
+	
+	
 	
 }

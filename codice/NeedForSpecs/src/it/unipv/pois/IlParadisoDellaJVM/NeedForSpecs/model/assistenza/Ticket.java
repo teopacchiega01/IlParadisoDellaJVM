@@ -5,8 +5,10 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza;
  * Note: 
  * 	1)Implementare controllo errori
  * 	2)Implementare inizializzazion dei ticket tramite il db, e salvataggio dei messaggi tramite il db 
+ * 	3)Ricerca dei messaggi di un autore da fare in messaggio tramite la SELECT. I messaggi trovati vengono aggiunti alla conversazione 
  */
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
@@ -143,7 +145,7 @@ public class Ticket {
 	}
 	
 	public void creaMessaggio(Utente autore,String testo) {
-		Messaggio msg = new Messaggio(autore, testo, LocalDate.now(), this);
+		Messaggio msg = new Messaggio(autore, testo, LocalDateTime.now(), this);
 		System.out.println("messaggio creato con successo..");
 		aggiungiMessaggioAllaConversazione(msg);
 		
@@ -164,7 +166,7 @@ public class Ticket {
 	 */
 	private String generaIdTicket() {
 		
-		String ticket_id = "Ticket "+(Math.random()*10000);
+		String ticket_id = "Ticket"+(int)(Math.random()*10000);
 		return ticket_id;
 	}
 	
