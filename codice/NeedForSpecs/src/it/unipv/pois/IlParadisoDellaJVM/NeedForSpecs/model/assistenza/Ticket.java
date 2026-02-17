@@ -23,6 +23,7 @@ public class Ticket {
 	private UtenteStaff gestore;
 	private Stato stato_ticket;
 	private ArrayList<Messaggio> conversazione;
+	private ITicketDAO dao;
 	
 	
 	
@@ -41,9 +42,6 @@ public class Ticket {
 
 
 
-
-
-
 	public Ticket(UtenteGenerico richiedente_assistenza, UtenteStaff gestore, Stato stato_ticket,
 			ArrayList<Messaggio> conversazione) {
 		super();
@@ -56,16 +54,16 @@ public class Ticket {
 
 
 
+	public Ticket() {
+		super();
+		dao = new TicketDAOdb();
+	}
 
 
 
 	public String getId_ticket() {
 		return id_ticket;
 	}
-
-
-
-
 
 
 	public void setId_ticket(String id_ticket) {
@@ -82,17 +80,9 @@ public class Ticket {
 	}
 
 
-
-
-
-
 	public void setRichiedente_assistenza(UtenteGenerico richiedente_assistenza) {
 		this.richiedente_assistenza = richiedente_assistenza;
 	}
-
-
-
-
 
 
 	public UtenteStaff getGestore() {
@@ -100,44 +90,20 @@ public class Ticket {
 	}
 
 
-
-
-
-
 	public void setGestore(UtenteStaff gestore) {
 		this.gestore = gestore;
 	}
-
-
-
-
-
 
 	public Stato getStato_ticket() {
 		return stato_ticket;
 	}
 
-
-
-
-
-
 	public void setStato_ticket(Stato stato_ticket) {
 		this.stato_ticket = stato_ticket;
 	}
-
-
-
-
-
-
 	public ArrayList<Messaggio> getConversazione() {
 		return conversazione;
 	}
-
-
-
-
 
 
 	public void setConversazione(ArrayList<Messaggio> conversazione) {
@@ -152,12 +118,42 @@ public class Ticket {
 		
 	}
 	
+	public ArrayList<Messaggio> inizializzaMessaggiDaDb(Ticket t) {	
+		Messaggio m = new Messaggio();
+		return m.getMessaggiDaTicket(t);
+		
+	}
 	
 	public void aggiungiMessaggioAllaConversazione(Messaggio msg) {
 		
 		conversazione.add(msg);
 		System.out.println("Messaggio aggiunto alla conversazione");
 		
+	}
+	public ArrayList<Ticket> inizializzaTicketDaUtenteGenerico(UtenteGenerico u) {
+		ArrayList<Ticket> ticket_assistito = dao.getTicketDaRichiedente(u);
+		
+		for(Ticket t: ticket_assistito) {
+			ArrayList<Messaggio> msgs = inizializzaMessaggiDaDb(t);
+			t.setConversazione(msgs);
+			System.out.println("Ticket"+t+ "inizializzato");
+		}
+		
+		return ticket_assistito;
+	}
+	
+	/*
+	 * Guardare il return. restituire arraylist di ticket
+	 */
+	public ArrayList<Ticket> inizializzaTicketDaUtenteStaff(UtenteStaff staff) {
+		ArrayList<Ticket> ticket_assistito = dao.getTicketDaStaff(staff);
+		for(Ticket t: ticket_assistito) {
+			ArrayList<Messaggio> msgs = inizializzaMessaggiDaDb(t);
+			t.setConversazione(msgs);
+			System.out.println("Ticket"+t+ "inizializzato");
+		}
+		return ticket_assistito;
+			
 	}
 
 

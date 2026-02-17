@@ -12,9 +12,14 @@ import java.sql.SQLException;
 public class DatabaseManager {
 
 	private static Connection conn; 
-	private static final String URL = "jdbc:mysql://localhost:3306/needforspecs";
-	private static final String USER = "ipdj";
-	private static final String PASSWORD = "Garpez67";
+//	private static final String URL = "jdbc:mysql://localhost:3306/needforspecs";
+//	private static final String USER = "ipdj";
+	private static final String URL = "jdbc:mysql://localhost:3306/NeedForSpecsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";;
+	private static final String USER = "root";
+
+//	private static final String PASSWORD = "Garpez67";
+	private static final String PASSWORD = "persy-mac-mysql";
+	
 	
 	
 	

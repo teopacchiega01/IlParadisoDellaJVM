@@ -1,7 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Ticket;
@@ -14,7 +14,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Ticket;
 public class Messaggio extends ContenutoUtente{
 
 	private Ticket ticket_di_riferimento;
-	
+	private IMessaggioDAO dao;
 	
 	
 	
@@ -36,8 +36,22 @@ public class Messaggio extends ContenutoUtente{
 
 
 	
-	//query del db per aggiungerlo alla conversazione
+	
+	public Messaggio() {
+		super();
+		dao = new MessaggioDAOdb();
+	}
 
+
+
+
+
+	//query del db per aggiungerlo alla conversazione
+	public ArrayList<Messaggio>  getMessaggiDaTicket(Ticket t){
+		System.out.println("Eseguo la query dal database...");
+		return dao.getMessaggiDaTicket(t);
+		
+	}
 	
 	
 	
