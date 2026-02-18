@@ -35,6 +35,11 @@ public abstract class ContenutoUtente {
 		this.testo = testo;
 		this.data_pubblicazione = data_pubblicazione;
 	}
+	
+
+	public String getId_contenuto_utente() {
+		return id_contenuto_utente;
+	}
 
 
 	public Utente getAutore() {
@@ -63,7 +68,7 @@ public abstract class ContenutoUtente {
 
 	private String generaIdContenuto() {
 			
-			String contenuto_id = "Contenuto"+(int)(Math.random()*10000);
+			String contenuto_id = "Cont"+(int)(Math.random()*10000);
 			return contenuto_id;
 		}
 		
