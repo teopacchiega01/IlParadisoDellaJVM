@@ -12,5 +12,6 @@ public interface IMessaggioDAO {
 	
 	public ArrayList<Messaggio> getMessaggiDaTicket(Ticket ticket_di_riferimento);
 	//public ArrayList<Messaggio> getMessaggiDaUtente(Utente u);
+	public boolean inserisciMessaggioInTicketRiferimento(Messaggio m);
 
 }

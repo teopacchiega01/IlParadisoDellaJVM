@@ -1,13 +1,12 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza;
 
 import java.sql.Connection;
-
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
@@ -31,8 +30,8 @@ public class TicketDAOdb implements ITicketDAO {
 			statement = conn.createStatement();
 			String query = "SELECT T.id_ticket, T.stato, Staff.user_name "
 					+ "FROM Ticket as T " 
-					+ "JOIN Utente as Staff ON Staff.id_utente = T.id_utente_gestore "
-					+ "JOIN Utente as Assistito ON Assistito.id_utente = T.id_utente_richiedente "
+					+ "JOIN Utente as Staff ON Staff.user_name = T.id_utente_gestore "
+					+ "JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
 					+ "WHERE Assistito.user_name = '" + u.getNome_utente() + "'";
 					;
 			
@@ -77,8 +76,8 @@ public class TicketDAOdb implements ITicketDAO {
 			statement = conn.createStatement();
 			String query = "SELECT T.id_ticket, T.stato, Assistito.user_name, Assistito.nome, Assistito.cognome "
 					+ "FROM Ticket as T "
-					+ "LEFT JOIN Utente as Staff ON Staff.id_utente = T.id_utente_gestore "
-					+ "LEFT JOIN Utente as Assistito ON Assistito.id_utente = T.id_utente_richiedente "
+					+ "LEFT JOIN Utente as Staff ON Staff.user_name = T.id_utente_gestore "
+					+ "LEFT JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
 					+ "WHERE Staff.user_name = '" + u.getNome_utente() + "'"; 
 			resultset = statement.executeQuery(query);
 			
@@ -106,6 +105,42 @@ public class TicketDAOdb implements ITicketDAO {
 		
 		
 		return result;
+	}
+
+
+	@Override
+	public boolean inserisciTicket(Ticket t) {
+		// TODO Auto-generated method stub
+		Connection conn = DatabaseManager.getConnetcion();
+		PreparedStatement statement;
+		ResultSet resultset;
+		boolean status = false; 
+		int righe_inserite = 0;
+		try {
+			
+			String query = "INSERT INTO Ticket (id_ticket, id_utente_richiedente, id_utente_gestore, stato) "
+					+ "VALUES (?, ?, ?, ?)";
+			statement = conn.prepareStatement(query);
+			statement.setString(1, t.getId_ticket());
+			statement.setString(2, t.getRichiedente_assistenza().getNome_utente());
+			statement.setString(3, t.getGestore().getNome_utente());
+			statement.setString(4, t.getStato_ticket().toString());
+			righe_inserite = statement.executeUpdate(query);
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(righe_inserite > 0) {
+				status = true;
+			}
+		}
+
+		
+		
+		return status;
+		
 	}
 
 }

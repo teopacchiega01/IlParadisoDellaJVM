@@ -117,12 +117,13 @@ public class Ticket {
 		
 		
 	}
-	
+	/*
 	public ArrayList<Messaggio> inizializzaMessaggiDaDb(Ticket t) {	
 		Messaggio m = new Messaggio();
 		return m.getMessaggiDaTicket(t);
 		
 	}
+	*/
 	
 	public void aggiungiMessaggioAllaConversazione(Messaggio msg) {
 		
@@ -130,6 +131,10 @@ public class Ticket {
 		System.out.println("Messaggio aggiunto alla conversazione");
 		
 	}
+	
+	/*
+	 * Capire se lasciare la logica dentro
+	 *
 	public ArrayList<Ticket> inizializzaTicketDaUtenteGenerico(UtenteGenerico u) {
 		ArrayList<Ticket> ticket_assistito = dao.getTicketDaRichiedente(u);
 		
@@ -141,10 +146,14 @@ public class Ticket {
 		
 		return ticket_assistito;
 	}
+	*
+	*
+	*/
+	
 	
 	/*
-	 * Guardare il return. restituire arraylist di ticket
-	 */
+	 * Capire se lasciare la logica dentro
+	 *  
 	public ArrayList<Ticket> inizializzaTicketDaUtenteStaff(UtenteStaff staff) {
 		ArrayList<Ticket> ticket_assistito = dao.getTicketDaStaff(staff);
 		for(Ticket t: ticket_assistito) {
@@ -155,6 +164,10 @@ public class Ticket {
 		return ticket_assistito;
 			
 	}
+	
+	*
+	*/
+	
 
 
 	/*

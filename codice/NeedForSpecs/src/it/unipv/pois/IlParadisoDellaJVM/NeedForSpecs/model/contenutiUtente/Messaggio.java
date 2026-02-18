@@ -14,7 +14,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Ticket;
 public class Messaggio extends ContenutoUtente{
 
 	private Ticket ticket_di_riferimento;
-	private IMessaggioDAO dao;
+	
 	
 	
 	
@@ -24,8 +24,18 @@ public class Messaggio extends ContenutoUtente{
 		this.ticket_di_riferimento = ticket_di_riferimento;
 	}
 
-
 	
+	
+
+
+	public Messaggio(String id_contenuto_utente, Utente autore, String testo, LocalDateTime data_pubblicazione,
+			Ticket ticket_di_riferimento) {
+		super(id_contenuto_utente, autore, testo, data_pubblicazione);
+		this.ticket_di_riferimento = ticket_di_riferimento;
+	}
+
+
+
 
 
 	public Messaggio(Ticket ticket_di_riferimento) {
@@ -39,20 +49,20 @@ public class Messaggio extends ContenutoUtente{
 	
 	public Messaggio() {
 		super();
-		dao = new MessaggioDAOdb();
+		
 	}
 
 
 
-
-
+	
+	/*
 	//query del db per aggiungerlo alla conversazione
 	public ArrayList<Messaggio>  getMessaggiDaTicket(Ticket t){
 		System.out.println("Eseguo la query dal database...");
 		return dao.getMessaggiDaTicket(t);
 		
 	}
-	
+	*/
 	
 	
 	

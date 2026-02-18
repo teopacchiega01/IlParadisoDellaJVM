@@ -14,7 +14,7 @@ public interface ITicketDAO {
 
 	public ArrayList<Ticket> getTicketDaRichiedente(UtenteGenerico u);
 	public ArrayList<Ticket> getTicketDaStaff(UtenteStaff u);
-	
+	public boolean inserisciTicket(Ticket t);
 	
 	
 }

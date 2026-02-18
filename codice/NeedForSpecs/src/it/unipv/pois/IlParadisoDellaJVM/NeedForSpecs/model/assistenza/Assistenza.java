@@ -6,6 +6,7 @@ import java.util.Map;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IMessaggioDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
 
 
@@ -20,6 +21,8 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messa
 public class Assistenza {
 	
 	private Map<String,Ticket> richieste_assistenza;
+	private IMessaggioDAO msg_dao;
+	private ITicketDAO  ticket_dao; 
 	
 	
 
@@ -31,7 +34,7 @@ public class Assistenza {
 	
 	
 	private boolean trovaTicketDaId(String id_ticket) {
-		if(richieste_assistenza.get(id_ticket) != null) {
+		if(richieste_assistenza.containsKey(id_ticket)) {
 			System.out.println("Ticket trovato correttamente");
 			return true;
 		}else {
@@ -42,6 +45,7 @@ public class Assistenza {
 		
 		
 	}
+	
 	
 	public Ticket visualizzaTicketDaId(String id_ticket) {
 		
@@ -58,11 +62,11 @@ public class Assistenza {
 		
 	}
 	
-	public boolean cambioStatoTicket(String id_ticket,Stato stato) {
+	public boolean cambioStatoTicket(String id_ticket,Stato nuovo_stato) {
 		
 		if(trovaTicketDaId(id_ticket)) {
 			Ticket t = richieste_assistenza.get(id_ticket);
-			t.setStato_ticket(stato);
+			t.setStato_ticket(nuovo_stato);
 			System.out.println("Stato del ticket cambiato con successo");
 			return true;	
 			
@@ -118,5 +122,32 @@ public class Assistenza {
 		
 	}
 	
+	
+	public void inizializzaTicketAssistenza(ArrayList<Ticket> tickets) {
+		for(Ticket t : tickets) {
+			richieste_assistenza.put(t.getId_ticket(), t);
+		}
+	
+		
+	}
+	public void inizializzaMessaggiDatiTickets(ArrayList<Ticket> tickets) {
+		for (Ticket t : tickets) {
+			ArrayList<Messaggio> msgs = msg_dao.getMessaggiDaTicket(t);
+			t.setConversazione(msgs);
+			System.out.println("Ticket " + t + " inizializzato con " + msgs.size() + " messaggi.");
+		}
+		inizializzaTicketAssistenza(tickets);
+	}
+	
+	public void inizializzaTicketDaUtenteGenerico(UtenteGenerico u) {
+		ArrayList<Ticket> ticket_assistito = ticket_dao.getTicketDaRichiedente(u);
+		inizializzaMessaggiDatiTickets(ticket_assistito);
+	}
+	
+	public void inizializzaTicketDaUtenteStaff(UtenteStaff staff) {
+		ArrayList<Ticket> ticket_assistito = ticket_dao.getTicketDaStaff(staff);
+		inizializzaMessaggiDatiTickets(ticket_assistito);
+			
+	}
 
 }
