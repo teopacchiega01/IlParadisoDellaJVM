@@ -45,7 +45,52 @@ public class DatabaseManager {
 		
 		
 	}
+	public static void closeConnection(Connection conn) {
+		if (conn != null) {
+			try {
+				conn.close();
+				
+			} catch (SQLException e) {
+				System.err.println("Errore durante la chiusura della connessione!");
+				e.printStackTrace();
+			}
+		}
+	}
 	
+	
+	public static void setAutoCommit(Connection conn, boolean autoCommit) {
+		if (conn != null) {
+			try {
+				conn.setAutoCommit(autoCommit);
+			} catch (SQLException e) {
+				System.err.println("Errore durante l'impostazione dell'auto-commit!");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void commitConnection(Connection conn) {
+		if (conn != null) {
+			try {
+				conn.commit();
+			} catch (SQLException e) {
+				System.err.println("Errore critico durante il commit!");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void rollbackConnection(Connection conn) {
+		if (conn != null) {
+			try {
+				conn.rollback();
+				System.err.println("Rollback eseguito con successo. Dati ripristinati.");
+			} catch (SQLException e) {
+				System.err.println("Errore critico durante il rollback!");
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	
 	

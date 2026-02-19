@@ -1,13 +1,5 @@
-package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza;
+package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket;
 
-/*
- * @author: Persy
- * Note: 
- * 	1)Implementare controllo errori
- * 	2)Implementare inizializzazion dei ticket tramite il db, e salvataggio dei messaggi tramite il db 
- * 	3)Ricerca dei messaggi di un autore da fare in messaggio tramite la SELECT. I messaggi trovati vengono aggiunti alla conversazione 
- */
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -23,7 +15,7 @@ public class Ticket {
 	private UtenteStaff gestore;
 	private Stato stato_ticket;
 	private ArrayList<Messaggio> conversazione;
-	private ITicketDAO dao;
+	
 	
 	
 	
@@ -56,7 +48,7 @@ public class Ticket {
 
 	public Ticket() {
 		super();
-		dao = new TicketDAOdb();
+		conversazione = new ArrayList<>();
 	}
 
 
@@ -109,14 +101,63 @@ public class Ticket {
 	public void setConversazione(ArrayList<Messaggio> conversazione) {
 		this.conversazione = conversazione;
 	}
+	public void aggiungiMessaggioAllaConversazione(Messaggio msg) {
+			
+			conversazione.add(msg);
+			System.out.println("Messaggio aggiunto alla conversazione");
+			
+	}
 	
-	public void creaMessaggio(Utente autore,String testo) {
+	
+	public void agguiungiMessessaggiAllaConversazione(ArrayList<Messaggio> messaggi) {
+		for(Messaggio m : messaggi) {
+			aggiungiMessaggioAllaConversazione(m);
+		}
+	}
+		
+	public Messaggio creaMessaggio(Utente autore,String testo) {
 		Messaggio msg = new Messaggio(autore, testo, LocalDateTime.now(), this);
 		System.out.println("messaggio creato con successo..");
 		aggiungiMessaggioAllaConversazione(msg);
+		return msg;
 		
 		
 	}
+	
+	
+	public ArrayList<Messaggio> cercaCercaMessaggiDaAutore(Utente autore) {
+		ArrayList<Messaggio> messaggi = new ArrayList<>(); 
+	
+		for(Messaggio m : conversazione) {
+			if(m.getAutore().getNome_utente().equals(autore.getNome_utente()))
+				messaggi.add(m);
+		}
+		return messaggi;
+	}
+	
+	// Usare le collection per implementare un compare che controlla le stringhe usando le ragex 
+	public ArrayList<Messaggio> cercaMessaggiDataParola(String parola){
+		ArrayList<Messaggio> messaggi = new ArrayList<>();
+		if(!parola.isBlank() ) {
+			for(Messaggio m : conversazione) {
+				if(m.getTesto().contains(parola)) 
+					messaggi.add(m);
+				
+			}
+		}else {
+			System.err.println("Parola non valida");
+		}
+		return messaggi;
+	}
+	
+	public Messaggio getUltimoMessaggio() {
+	
+		return conversazione.getLast();
+	
+		
+	}
+	
+	
 	/*
 	public ArrayList<Messaggio> inizializzaMessaggiDaDb(Ticket t) {	
 		Messaggio m = new Messaggio();
@@ -125,12 +166,7 @@ public class Ticket {
 	}
 	*/
 	
-	public void aggiungiMessaggioAllaConversazione(Messaggio msg) {
-		
-		conversazione.add(msg);
-		System.out.println("Messaggio aggiunto alla conversazione");
-		
-	}
+	
 	
 	/*
 	 * Capire se lasciare la logica dentro

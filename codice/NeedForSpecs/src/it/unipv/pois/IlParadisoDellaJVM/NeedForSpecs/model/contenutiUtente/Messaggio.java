@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Ticket;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
 
 
 /*
@@ -50,6 +50,22 @@ public class Messaggio extends ContenutoUtente{
 	public Messaggio() {
 		super();
 		
+	}
+
+
+
+
+
+	public Ticket getTicket_di_riferimento() {
+		return ticket_di_riferimento;
+	}
+
+
+
+
+
+	public void setTicket_di_riferimento(Ticket ticket_di_riferimento) {
+		this.ticket_di_riferimento = ticket_di_riferimento;
 	}
 
 

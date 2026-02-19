@@ -1,4 +1,4 @@
-package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza;
+package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,8 +32,10 @@ public class TicketDAOdb implements ITicketDAO {
 					+ "FROM Ticket as T " 
 					+ "JOIN Utente as Staff ON Staff.user_name = T.id_utente_gestore "
 					+ "JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
-					+ "WHERE Assistito.user_name = '" + u.getNome_utente() + "'";
+					+ "WHERE Assistito.user_name = '" + u.getNome_utente() + "'"
+					+ ";"
 					;
+					
 			
 			resultset = statement.executeQuery(query);
 			
@@ -52,13 +54,13 @@ public class TicketDAOdb implements ITicketDAO {
 				
 				
 			}
-			conn.close();
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		DatabaseManager.closeConnection(conn);
 		
 		return result;
 	}
@@ -94,7 +96,7 @@ public class TicketDAOdb implements ITicketDAO {
 				Ticket t = new Ticket(id_ticket,assistito, u, e_stato, null);
 				result.add(t);
 			}
-			conn.close();
+			
 			
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -103,17 +105,16 @@ public class TicketDAOdb implements ITicketDAO {
 		    e.printStackTrace(); 
 		}
 		
-		
+		DatabaseManager.closeConnection(conn);
 		return result;
 	}
 
-
+	// Analizzare il controllo sul ticket
 	@Override
 	public boolean inserisciTicket(Ticket t) {
 		// TODO Auto-generated method stub
 		Connection conn = DatabaseManager.getConnetcion();
 		PreparedStatement statement;
-		ResultSet resultset;
 		boolean status = false; 
 		int righe_inserite = 0;
 		try {
@@ -123,9 +124,14 @@ public class TicketDAOdb implements ITicketDAO {
 			statement = conn.prepareStatement(query);
 			statement.setString(1, t.getId_ticket());
 			statement.setString(2, t.getRichiedente_assistenza().getNome_utente());
-			statement.setString(3, t.getGestore().getNome_utente());
+			if (t.getGestore() != null) {
+			    statement.setString(3, t.getGestore().getNome_utente());
+			} else {
+			    statement.setNull(3, java.sql.Types.NULL); // Inserisco NULL nel DB
+			}
+			//statement.setString(3, t.getGestore().getNome_utente());
 			statement.setString(4, t.getStato_ticket().toString());
-			righe_inserite = statement.executeUpdate(query);
+			righe_inserite = statement.executeUpdate();
 			
 			
 		} catch (SQLException e) {
@@ -138,9 +144,91 @@ public class TicketDAOdb implements ITicketDAO {
 		}
 
 		
-		
+		DatabaseManager.closeConnection(conn);
 		return status;
 		
+	}
+
+
+	@Override
+	public boolean aggiornaStatoTicket(Stato nuovo_stato,Ticket t) {
+		// TODO Auto-generated method stub
+		Connection conn = DatabaseManager.getConnetcion();
+		PreparedStatement statement;
+		boolean status;
+		int righe_inserite;
+		String query = "UPDATE Ticket SET stato = ? WHERE id_ticket = ?";
+				
+	
+		try {
+			
+			statement = conn.prepareStatement(query);
+			statement.setString(1, nuovo_stato.toString());
+			statement.setString(2, t.getId_ticket());
+			righe_inserite = statement.executeUpdate();
+			if(righe_inserite > 0) {
+				System.out.println("Update ESEGUITO con successo controllare le corrispondenze nel db");
+				status = true;
+			}else {
+				System.err.println("Update FALLITO controllare le corrispondenze nel db");
+				status = false;
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			status = false;
+			
+			
+		}
+		DatabaseManager.closeConnection(conn);
+		return status;
+		
+		
+	}
+
+
+	@Override
+	public ArrayList<Ticket> getTicketSenzaGestore() {
+		// TODO Auto-generated method stub
+		ArrayList<Ticket> result = new ArrayList<>();
+		Connection conn = DatabaseManager.getConnetcion();
+		PreparedStatement statement;
+		ResultSet resultset;
+		
+		String query = "SELECT T.id_ticket, T.stato, Assistito.user_name, Assistito.nome, Assistito.cognome"
+				+ "FROM Ticket as T "
+				+ "JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
+				+ "WHERE T.id_utente_gestore IS NULL"
+				+ "LIMIT 5"
+				+ ";";
+		try {
+			statement = conn.prepareStatement(query);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				String user_name = resultset.getString(3);
+				String nome_assistito = resultset.getString(4);
+				String cognome_assistito = resultset.getString(5);
+				
+				
+				String ticket_id = resultset.getString(1);
+				String stato_string = resultset.getString(2);
+				Stato e_stato = Stato.valueOf(stato_string);
+				
+				UtenteGenerico assistito = new UtenteGenerico(user_name, null, null, nome_assistito, cognome_assistito);
+				Ticket t = new Ticket(ticket_id, assistito, null, e_stato, null);
+				result.add(t);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			DatabaseManager.closeConnection(conn);
+		}
+	
+		return result;
 	}
 
 }

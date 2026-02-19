@@ -2,7 +2,7 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs;
 
 import java.util.ArrayList;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Ticket;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
 
 public class main {
