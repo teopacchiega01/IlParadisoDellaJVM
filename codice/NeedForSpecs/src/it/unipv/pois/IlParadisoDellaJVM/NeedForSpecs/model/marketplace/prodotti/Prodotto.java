@@ -1,6 +1,6 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti;
 
-//@author teopacchiega
+//	@author teopacchiega
 
 public abstract class Prodotto {
 	private String id_prodotto;
@@ -10,7 +10,7 @@ public abstract class Prodotto {
 	
 	public Prodotto(double prezzo) {
 		super();
-		this.id_prodotto = generaId();
+		this.id_prodotto = null;
 		this.prezzo = prezzo;
 	}
 	
@@ -18,8 +18,8 @@ public abstract class Prodotto {
 		super();
 	}
 
-
-
+	
+	
 	public abstract TipologiaProdotto getTipologia();
 	
 	protected abstract String generaId();
@@ -39,4 +39,21 @@ public abstract class Prodotto {
 		return sb.toString();
 	}
 
+	public String getId_prodotto() {
+		return id_prodotto;
+	}
+
+	public void setId_prodotto(String id_prodotto) {
+		this.id_prodotto = id_prodotto;
+	}
+
+	public double getPrezzo() {
+		return prezzo;
+	}
+
+	public void setPrezzo(double prezzo) {
+		this.prezzo = prezzo;
+	}
+	
+	public abstract String getInfoProdotto();
 }
