@@ -45,6 +45,9 @@ public class DatabaseManager {
 		
 		
 	}
+	
+	
+	
 	public static void closeConnection(Connection conn) {
 		if (conn != null) {
 			try {
