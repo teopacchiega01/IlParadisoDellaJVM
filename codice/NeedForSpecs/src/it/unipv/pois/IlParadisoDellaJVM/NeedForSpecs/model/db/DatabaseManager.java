@@ -12,13 +12,10 @@ import java.sql.SQLException;
 public class DatabaseManager {
 
 	private static Connection conn; 
-//	private static final String URL = "jdbc:mysql://localhost:3306/needforspecs";
 	private static final String USER = "ipdj";
 	private static final String URL = "jdbc:mysql://localhost:3306/NeedForSpecsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";;
-//private static final String USER = "root";
 
 	private static final String PASSWORD = "Garpez67";
-//	private static final String PASSWORD = "persy-mac-mysql";
 	
 	
 	
@@ -26,12 +23,11 @@ public class DatabaseManager {
 	
 
 
-	public static Connection getConnetcion () {
+	public static Connection getConnection () {
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
-			// 2. Se la connessione è null o è stata chiusa, la riapriamo
 			if (conn == null || conn.isClosed()) {
 				conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			}

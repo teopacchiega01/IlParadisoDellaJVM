@@ -25,7 +25,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 		ArrayList<Commento> commenti = new ArrayList<Commento>();
 
 		//CONNESSIONE AL DB
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 
@@ -82,7 +82,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 		ArrayList<Commento> commenti = new ArrayList<Commento>();
 
 		//CONNESSIONE AL DB
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 

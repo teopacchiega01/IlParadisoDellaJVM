@@ -2,7 +2,7 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account;
 
 public  class Utente {
 	
-	private String nome_utente;
+	private String user_name;
 	private String email;
 	private String psw;
 	private String nome;
@@ -12,7 +12,7 @@ public  class Utente {
 	
 	public Utente(String nome_utente, String email, String psw, String nome, String cognome) {
 		super();
-		this.nome_utente = nome_utente;
+		this.user_name = nome_utente;
 		this.email = email;
 		this.psw = psw;
 		this.nome = nome;
@@ -21,21 +21,15 @@ public  class Utente {
 
 	public Utente() {
 		// TODO Auto-generated constructor stub	
-		
-		
+		super();
 	}
 	
-	
-	
-	
-	
-	
-	public String getNome_utente() {
-		return nome_utente;
+	public String getUser_name() {
+		return user_name;
 	}
 
-	public void setNome_utente(String nome_utente) {
-		this.nome_utente = nome_utente;
+	public void setUser_name(String nome_utente) {
+		this.user_name = nome_utente;
 	}
 
 	public String getEmail() {
@@ -78,25 +72,20 @@ public  class Utente {
 		this.loggato = loggato;
 	}
 
-	boolean creaUtente() {
-		
-		return false;
-	}
-	
-	boolean login() {
-			
-			return false;
-	}
-	
-	boolean logout() {
-		
-		return false;
-	}
-	
-	boolean registrazione() {
-		
-		return false;
-	}
+//	boolean login(String user_name, String pw) {
+//				pesca dal db l'utente corrispondente
+//			return false;
+//	}
+//	
+//	boolean logout() {
+//			setta a null tutti gli elementi dell'utente corrente, verrà chiamato dai singleton Forum, Assistenza, MarketPlace
+//		return false;
+//	}
+//	
+//	boolean registrazione(String user_name, String email, String pw, String nome, String cognome) {
+//			cerca sul db se c'è un altro user con lo stesso user_name, se non lo trova, fa un'insert into Utente sul db
+//		return false;
+//	}
 	
 
 	

@@ -155,7 +155,7 @@ public class Assistenza {
 				
 			}
 			
-			System.out.println("Assegnazione COMPLETATA, sono stati assegnati"+ticket_assegnati+ "allo staff"+staff.getNome_utente());	
+			System.out.println("Assegnazione COMPLETATA, sono stati assegnati"+ticket_assegnati+ "allo staff"+staff.getUser_name());	
 			return ticket_assegnati ==  ticket_da_assegnare.size();
 			
 		}else {

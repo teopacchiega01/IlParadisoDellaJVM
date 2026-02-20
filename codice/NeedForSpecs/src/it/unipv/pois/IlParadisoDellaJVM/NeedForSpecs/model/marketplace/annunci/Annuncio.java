@@ -4,11 +4,12 @@ import java.security.SecureRandom;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.Prodotto;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreId;
 
 //	@author teopacchiega
 
 public class Annuncio {
-	private final static int DIM_ID = 20;
+	private final static int DIM_ID_ANNUNCIO = 20;
 	private String id_annuncio;
 	private Prodotto prodotto_in_vendita;
 	private UtenteGenerico venditore;
@@ -16,7 +17,7 @@ public class Annuncio {
 	
 	public Annuncio(Prodotto prodotto_in_vendita, UtenteGenerico venditore, double prezzo) {
 		super();
-		this.id_annuncio = generaId_annuncio();
+		this.id_annuncio = GeneratoreId.generaId(DIM_ID_ANNUNCIO);
 		this.prodotto_in_vendita = prodotto_in_vendita;
 		this.venditore = venditore;
 		this.prezzo = prezzo;
@@ -53,16 +54,11 @@ public class Annuncio {
 	public void setPrezzo(double prezzo) {
 		this.prezzo = prezzo;
 	}
-	
-	private String generaId_annuncio() {
-		StringBuilder id = new StringBuilder(DIM_ID);
-		SecureRandom rand = new SecureRandom();
-		for(int i = 0; i< DIM_ID; i++) {
-			id.append(rand.nextInt(10));
-		}
-		return id.toString();
+
+	// Di fatto è un toString()
+	public String getInfoAnnuncio() {
+		String ret = "[ "+getId_annuncio()+" ]\nProdotto in vendita: "+prodotto_in_vendita.getInfoProdotto()+"\nVenditore: "+venditore.getUser_name()+"\nPrezzo: "+getPrezzo()+"€\n\n";
+		return ret;
 	}
-	
-	
 	
 }

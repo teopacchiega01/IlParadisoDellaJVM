@@ -37,7 +37,13 @@ public class ProdottiFactory {
 		return b;
 	}
 
+	public static Prodotto creaBuild(String nomeBuild, double prezzo) {
 
+		Build b = new Build(prezzo, nomeBuild);
+
+		return b;
+	}
+	
 	public static Prodotto getProdotto(TipologiaProdotto tipo_prodotto_scelto) {
 		Prodotto prod = null;
 		String nome_classe_prodotto;			

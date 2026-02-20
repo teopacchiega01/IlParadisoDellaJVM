@@ -1,7 +1,12 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi.IIndirizzoDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagamento.ICartaDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.ITicketDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IMessaggioDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.IAnnuncioDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.IOrdineDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.IProdottoDAO;
 
 
 /*
@@ -11,6 +16,16 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IMess
 public abstract class DAOFactory{
 	public abstract ITicketDAO getTicketDAO();
     public abstract IMessaggioDAO getMessaggioDAO();
+    public abstract IProdottoDAO getProdottoDAO();
+    public abstract IAnnuncioDAO getAnnuncioDAO();
+    public abstract IOrdineDAO getOrdineDAO();
+    public abstract ICartaDAO getCartaDAO();
+    public abstract IIndirizzoDAO getIndirizzoDAO();
+//    public abstract IUtenteDAO getUtenteDAO();
+//    public abstract IUtenteGenericoDAO getUtenteGenericoDAO();
+    
+    
+    
     
     
     

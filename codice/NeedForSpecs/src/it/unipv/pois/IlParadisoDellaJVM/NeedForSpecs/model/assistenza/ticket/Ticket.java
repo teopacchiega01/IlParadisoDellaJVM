@@ -136,7 +136,7 @@ public class Ticket {
 		ArrayList<Messaggio> messaggi = new ArrayList<>(); 
 	
 		for(Messaggio m : conversazione) {
-			if(m.getAutore().getNome_utente().equals(autore.getNome_utente()))
+			if(m.getAutore().getUser_name().equals(autore.getUser_name()))
 				messaggi.add(m);
 		}
 		return messaggi;
@@ -176,7 +176,7 @@ public class Ticket {
 	    
 	    StringBuilder cronologia = new StringBuilder();
 	    for (Messaggio m : conversazione) {
-	        cronologia.append(m.getAutore().getNome_utente())
+	        cronologia.append(m.getAutore().getUser_name())
 	                  .append(": ")
 	                  .append(m.getTesto())
 	                  .append("\n\n");

@@ -3,6 +3,7 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti
 //	@author teopacchiega
 
 public abstract class Prodotto {
+	private final static int DIM_ID_PRODOTTO = 20;
 	private String id_prodotto;
 	private double prezzo;
 	
@@ -17,8 +18,6 @@ public abstract class Prodotto {
 	public Prodotto() {
 		super();
 	}
-
-	
 	
 	public abstract TipologiaProdotto getTipologia();
 	
@@ -55,5 +54,11 @@ public abstract class Prodotto {
 		this.prezzo = prezzo;
 	}
 	
+	// Di fatto è un toString()
 	public abstract String getInfoProdotto();
+
+	public static int getDimIdProdotto() {
+		return DIM_ID_PRODOTTO;
+	}
+	
 }
