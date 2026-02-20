@@ -15,10 +15,10 @@ public interface ITicketDAO {
 	public ArrayList<Ticket> getTicketDaRichiedente(UtenteGenerico u);
 	public ArrayList<Ticket> getTicketDaStaff(UtenteStaff u);
 	public boolean inserisciTicket(Ticket t);
-	
-	boolean aggiornaStatoTicket(Stato nuovo_stato,Ticket t);
-	
+	public boolean aggiornaStatoTicket(Stato nuovo_stato,Ticket t);
 	public ArrayList<Ticket> getTicketSenzaGestore();
+	public boolean aggiornaGestoreTicket(UtenteStaff staff, Ticket t);
+	
 	
 	
 }

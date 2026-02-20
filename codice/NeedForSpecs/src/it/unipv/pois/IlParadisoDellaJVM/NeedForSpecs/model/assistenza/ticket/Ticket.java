@@ -204,7 +204,22 @@ public class Ticket {
 	*
 	*/
 	
-
+	public String getCronologiaMessaggiFormattata() {
+	    if (conversazione == null || conversazione.isEmpty()) {
+	        return "Nessun messaggio presente in questo ticket.\n";
+	    }
+	    
+	    // Usiamo StringBuilder che è super efficiente per concatenare testi lunghi
+	    StringBuilder cronologia = new StringBuilder();
+	    for (Messaggio m : conversazione) {
+	        cronologia.append(m.getAutore().getNome_utente())
+	                  .append(": ")
+	                  .append(m.getTesto())
+	                  .append("\n\n");
+	    }
+	    
+	    return cronologia.toString();
+	}
 
 	/*
 	 * Generazione ID ticket tramite la stringa Ticket e un numero casuale a 4 cifre. La scelta di avere 10 caratteri massimi è un vincolo del camppo id nel db 
@@ -214,6 +229,10 @@ public class Ticket {
 		String ticket_id = "Ticket"+(int)(Math.random()*10000);
 		return ticket_id;
 	}
-	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.id_ticket + " - Stato: " + this.stato_ticket;	
+	}
 	
 }

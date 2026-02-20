@@ -9,7 +9,6 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Tic
 public interface IMessaggioDAO {
 	
 	public ArrayList<Messaggio> getMessaggiDaTicket(Ticket ticket_di_riferimento);
-	//public ArrayList<Messaggio> getMessaggiDaUtente(Utente u);
 	public boolean inserisciMessaggioInTicketRiferimento(Messaggio m);
 	public ArrayList<Messaggio> getMessaggiNuovi(Ticket ticket_di_riferimento, LocalDateTime data_ultimo_messaggio );
 	

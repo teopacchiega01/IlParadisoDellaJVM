@@ -17,16 +17,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
  */
 
 public class MessaggioDAOdb implements IMessaggioDAO {
-	private String schema; 
-
-	
-	
-	
-	
-
 	public MessaggioDAOdb() {
 		super();
-		schema = "Messaggio";
+	
 		
 	}
 
@@ -61,7 +54,7 @@ public class MessaggioDAOdb implements IMessaggioDAO {
 				
 				 
 			}
-			conn.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

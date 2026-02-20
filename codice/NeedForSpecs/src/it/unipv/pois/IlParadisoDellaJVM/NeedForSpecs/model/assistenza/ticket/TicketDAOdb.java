@@ -197,12 +197,11 @@ public class TicketDAOdb implements ITicketDAO {
 		PreparedStatement statement;
 		ResultSet resultset;
 		
-		String query = "SELECT T.id_ticket, T.stato, Assistito.user_name, Assistito.nome, Assistito.cognome"
-				+ "FROM Ticket as T "
-				+ "JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
-				+ "WHERE T.id_utente_gestore IS NULL"
-				+ "LIMIT 5"
-				+ ";";
+		String query = "SELECT T.id_ticket, T.stato, Assistito.user_name, Assistito.nome, Assistito.cognome " // <-- Spazio qui
+		        + "FROM Ticket as T "
+		        + "JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
+		        + "WHERE T.id_utente_gestore IS NULL " // <-- Spazio qui
+		        + "LIMIT 5;";
 		try {
 			statement = conn.prepareStatement(query);
 			resultset = statement.executeQuery();
@@ -216,8 +215,10 @@ public class TicketDAOdb implements ITicketDAO {
 				String stato_string = resultset.getString(2);
 				Stato e_stato = Stato.valueOf(stato_string);
 				
+				// Dentro il while del resultset:
 				UtenteGenerico assistito = new UtenteGenerico(user_name, null, null, nome_assistito, cognome_assistito);
-				Ticket t = new Ticket(ticket_id, assistito, null, e_stato, null);
+				// Inizializza con una lista vuota invece di null per la conversazione
+				Ticket t = new Ticket(ticket_id, assistito, null, e_stato, new ArrayList<>()); 
 				result.add(t);
 				
 			}
@@ -229,6 +230,43 @@ public class TicketDAOdb implements ITicketDAO {
 		}
 	
 		return result;
+	}
+
+
+	@Override
+	public boolean aggiornaGestoreTicket(UtenteStaff staff, Ticket t) {
+		// TODO Auto-generated method stub
+		String query = "UPDATE Ticket SET id_utente_gestore = ? WHERE id_ticket = ?";
+		Connection conn = DatabaseManager.getConnetcion();
+		PreparedStatement statement;
+		boolean status;
+		int righe_inserite = 0;
+
+		try {
+	        statement = conn.prepareStatement(query);
+	        statement.setString(1, staff.getNome_utente());
+	        statement.setString(2, t.getId_ticket());
+	        
+	        righe_inserite = statement.executeUpdate();
+	        if(righe_inserite > 0) {
+				System.out.println("Update ESEGUITO con successo controllare le corrispondenze nel db");
+				status = true;
+			}else {
+				System.err.println("Update FALLITO controllare le corrispondenze nel db");
+				status = false;
+			}
+			
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        status = false;
+	    } finally {
+	        DatabaseManager.closeConnection(conn);
+	    }
+	    return status;
+		
+		
+	
 	}
 
 }

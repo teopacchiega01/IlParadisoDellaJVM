@@ -71,14 +71,6 @@ public class Messaggio extends ContenutoUtente{
 
 
 	
-	/*
-	//query del db per aggiungerlo alla conversazione
-	public ArrayList<Messaggio>  getMessaggiDaTicket(Ticket t){
-		System.out.println("Eseguo la query dal database...");
-		return dao.getMessaggiDaTicket(t);
-		
-	}
-	*/
 	
 	
 	
