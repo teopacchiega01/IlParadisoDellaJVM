@@ -5,6 +5,11 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Tic
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IMessaggioDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.MessaggioDAOdb;
 
+
+/*
+ * @author: Persy
+ */
+
 public class MySQLDAOFactory extends DAOFactory {
 	public ITicketDAO getTicketDAO() {
 		return new TicketDAOdb();

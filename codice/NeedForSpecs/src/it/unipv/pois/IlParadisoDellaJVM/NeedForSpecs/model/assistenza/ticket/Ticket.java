@@ -2,11 +2,18 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
+
+
+
+/*
+ * @author: Persy
+ */
 
 public class Ticket {
 
@@ -156,60 +163,17 @@ public class Ticket {
 	
 		
 	}
-	
-	
-	/*
-	public ArrayList<Messaggio> inizializzaMessaggiDaDb(Ticket t) {	
-		Messaggio m = new Messaggio();
-		return m.getMessaggiDaTicket(t);
-		
+	private void ordinaConversazionePerData() {
+
+	    Collections.sort(conversazione); 
 	}
-	*/
-	
-	
-	
-	/*
-	 * Capire se lasciare la logica dentro
-	 *
-	public ArrayList<Ticket> inizializzaTicketDaUtenteGenerico(UtenteGenerico u) {
-		ArrayList<Ticket> ticket_assistito = dao.getTicketDaRichiedente(u);
-		
-		for(Ticket t: ticket_assistito) {
-			ArrayList<Messaggio> msgs = inizializzaMessaggiDaDb(t);
-			t.setConversazione(msgs);
-			System.out.println("Ticket"+t+ "inizializzato");
-		}
-		
-		return ticket_assistito;
-	}
-	*
-	*
-	*/
-	
-	
-	/*
-	 * Capire se lasciare la logica dentro
-	 *  
-	public ArrayList<Ticket> inizializzaTicketDaUtenteStaff(UtenteStaff staff) {
-		ArrayList<Ticket> ticket_assistito = dao.getTicketDaStaff(staff);
-		for(Ticket t: ticket_assistito) {
-			ArrayList<Messaggio> msgs = inizializzaMessaggiDaDb(t);
-			t.setConversazione(msgs);
-			System.out.println("Ticket"+t+ "inizializzato");
-		}
-		return ticket_assistito;
-			
-	}
-	
-	*
-	*/
-	
+
 	public String getCronologiaMessaggiFormattata() {
 	    if (conversazione == null || conversazione.isEmpty()) {
-	        return "Nessun messaggio presente in questo ticket.\n";
+	        return "Nessun messaggio presente.\n";
 	    }
+	    ordinaConversazionePerData();
 	    
-	    // Usiamo StringBuilder che è super efficiente per concatenare testi lunghi
 	    StringBuilder cronologia = new StringBuilder();
 	    for (Messaggio m : conversazione) {
 	        cronologia.append(m.getAutore().getNome_utente())
@@ -220,7 +184,8 @@ public class Ticket {
 	    
 	    return cronologia.toString();
 	}
-
+	
+	
 	/*
 	 * Generazione ID ticket tramite la stringa Ticket e un numero casuale a 4 cifre. La scelta di avere 10 caratteri massimi è un vincolo del camppo id nel db 
 	 */
@@ -232,7 +197,7 @@ public class Ticket {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return this.id_ticket + " - Stato: " + this.stato_ticket;	
+		return this.id_ticket + " - Stato: " + this.stato_ticket + " - Responsabile: "+this.gestore.getNome_utente()+ " - Utente Richiedente "+this.richiedente_assistenza.getNome_utente();	
 	}
 	
 }

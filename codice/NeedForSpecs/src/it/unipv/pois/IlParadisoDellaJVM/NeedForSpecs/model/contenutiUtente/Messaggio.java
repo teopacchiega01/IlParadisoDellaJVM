@@ -11,7 +11,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Tic
  * @author: Persy
  */
 
-public class Messaggio extends ContenutoUtente{
+public class Messaggio extends ContenutoUtente implements Comparable<Messaggio>{
 
 	private Ticket ticket_di_riferimento;
 	
@@ -66,6 +66,18 @@ public class Messaggio extends ContenutoUtente{
 
 	public void setTicket_di_riferimento(Ticket ticket_di_riferimento) {
 		this.ticket_di_riferimento = ticket_di_riferimento;
+	}
+
+
+
+
+
+	@Override
+	public int compareTo(Messaggio altro_messaggio) {
+		// TODO Auto-generated method stub
+		
+		
+		return this.getData_pubblicazione().compareTo(altro_messaggio.getData_pubblicazione());
 	}
 
 

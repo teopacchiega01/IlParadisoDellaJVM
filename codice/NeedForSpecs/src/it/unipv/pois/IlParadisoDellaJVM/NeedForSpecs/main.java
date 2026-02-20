@@ -25,14 +25,14 @@ public class main {
 		
         //frame.mostraHomeStaff(); 
         
-       frame.mostraChatStaff();
+       //frame.mostraChatStaff();
        // frame.mostraHomeUtente();
         
         frame.setVisible(true);
         UtenteGenerico utenteSimulato = new UtenteGenerico("GiuliaBianchi", "giulia.b@email.com", "qwerty", "Giulia", "Bianchi");
         UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@paradiso.com", "adminpass", "Luca", "Verdi");
 		
-      //  new ControllerAssistenza(frame, ass, utenteSimulato);
+        //new ControllerAssistenza(frame, ass, utenteSimulato);
       
         new ControllerAssistenza(frame, ass, luca);
 	}

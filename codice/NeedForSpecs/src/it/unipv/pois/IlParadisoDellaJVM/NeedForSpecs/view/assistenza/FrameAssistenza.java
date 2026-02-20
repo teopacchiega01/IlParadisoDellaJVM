@@ -1,9 +1,15 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza;
 
 import java.awt.CardLayout;
+
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
+/*
+ * @author: Persy
+ */
 public class FrameAssistenza extends JFrame {
 
 	private CardLayout cardLayout;

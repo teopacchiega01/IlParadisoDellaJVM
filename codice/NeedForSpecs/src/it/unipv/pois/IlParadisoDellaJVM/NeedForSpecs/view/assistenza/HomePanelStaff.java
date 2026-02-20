@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Stato;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
+/*
+ * @author: Persy
+ */
 
 
 public class HomePanelStaff extends JPanel {
@@ -57,6 +60,9 @@ public class HomePanelStaff extends JPanel {
 	}
 
 	
+	public void aggiornaGrafica() {
+	    this.repaint();
+	}
 	
 	public void setLabelOutStaff(String text) {
 		risultati_home_staff.setText(text);

@@ -9,6 +9,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 
+
+/*
+ * @author: Persy
+ */
+
 public class TicketUtentePanel extends JPanel {
 	
 	private JLabel out_ticket_utente;
@@ -55,6 +60,10 @@ public class TicketUtentePanel extends JPanel {
 	}
 	
 	
+	
+	public boolean isPannelloVisibile() {
+	    return this.isShowing();
+	}
 	public String getTestoUtente() {
 		String testo = testo_messaggio_utente.getText();
 	
@@ -83,6 +92,10 @@ public class TicketUtentePanel extends JPanel {
 		conversazione_utente.setText("");
 	}
 
+	public void setLabelOutUtente(String text) {
+		out_ticket_utente.setText(text);
+	}
+	
 	public JLabel getOut_ticket_utente() {
 		return out_ticket_utente;
 	}

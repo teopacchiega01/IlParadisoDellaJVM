@@ -9,6 +9,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 
+
+/*
+ * @author: Persy
+ */
+
 public class TicketStaffPanel extends JPanel {
 	
 	private JLabel out_ticket_staff;
@@ -54,8 +59,11 @@ public class TicketStaffPanel extends JPanel {
 		this.add(sud, BorderLayout.SOUTH);
 	}
 
+	public boolean isPannelloVisibile() {
+	    return this.isShowing();
+	}
 	public void setConversazioneTicket(String cronologia) {
-		this.conversazione_staff.setText(cronologia); // Assicurati di usare il nome della tua variabile JTextArea
+		this.conversazione_staff.setText(cronologia); 
 	}
 	
 	public void setTitoloTicket(String titolo) {
@@ -65,12 +73,17 @@ public class TicketStaffPanel extends JPanel {
 		conversazione_staff.append(mittente + ": " + testo + "\n\n");
 	}
 	
+	
 	public void pulisciInput() {
 		testo_messaggio_staff.setText("");
 	}
 	
 	public void pulisciChat() {
 		conversazione_staff.setText("");
+	}
+	public void setLabeOutTicketStaff(String text) {
+		
+		out_ticket_staff.setText(text);
 	}
 
 	public JLabel getOut_ticket_staff() {
