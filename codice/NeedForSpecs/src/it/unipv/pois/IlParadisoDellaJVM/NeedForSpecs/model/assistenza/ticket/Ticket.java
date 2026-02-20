@@ -197,7 +197,7 @@ public class Ticket {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return this.id_ticket + " - Stato: " + this.stato_ticket + " - Responsabile: "+this.gestore.getNome_utente()+ " - Utente Richiedente "+this.richiedente_assistenza.getNome_utente();	
+		return this.id_ticket + " - Stato: " + this.stato_ticket + " - Responsabile: "+this.gestore.getUser_name()+ " - Utente Richiedente "+this.richiedente_assistenza.getUser_name();	
 	}
 	
 }
