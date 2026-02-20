@@ -33,8 +33,13 @@ public class Carrello {
 		return totale;
 	}
 	
-	public boolean aggiungiElemento(Annuncio acquisto) {
-		return this.acquisti.add(acquisto);
+	public boolean aggiungiElementoAlCarrello(Annuncio acquisto) {
+		if(this.acquisti.add(acquisto)) {
+			this.prezzo_totale = getPrezzoTotale();
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public void eliminaCarrello() {
@@ -42,9 +47,29 @@ public class Carrello {
 		this.prezzo_totale = 0;
 	}
 	
-//	TODO
-//	public boolean eliminaElementoDalCarrello(Annuncio acquisto_da_eliminare) {
-//		
-//	}
+	public boolean eliminaElementoDalCarrello(Annuncio acquisto_da_eliminare) {
+		if(this.acquisti.add(acquisto_da_eliminare)) {
+			this.prezzo_totale = getPrezzoTotale();
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public ArrayList<Annuncio> getAcquisti() {
+		return acquisti;
+	}
+
+	public void setAcquisti(ArrayList<Annuncio> acquisti) {
+		this.acquisti = acquisti;
+	}
+
+	public double getPrezzo_totale() {
+		return prezzo_totale;
+	}
+
+	public void setPrezzo_totale(double prezzo_totale) {
+		this.prezzo_totale = prezzo_totale;
+	}
 
 }

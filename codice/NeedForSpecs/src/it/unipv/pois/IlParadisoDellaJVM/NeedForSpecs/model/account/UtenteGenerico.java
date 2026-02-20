@@ -35,7 +35,11 @@ public class UtenteGenerico extends Utente {
 	}
 
 	public boolean aggiungiElementoAlCarrello(Annuncio elemento) {
-		return carrello.aggiungiElemento(elemento);
+		return carrello.aggiungiElementoAlCarrello(elemento);
+	}
+	
+	public boolean eliminaElementoAlCarrello(Annuncio elemento) {
+		return carrello.eliminaElementoDalCarrello(elemento);
 	}
 
 	public Carrello getCarr() {
@@ -61,13 +65,5 @@ public class UtenteGenerico extends Utente {
 	public void setMetodo_di_pagamento(Carta metodo_di_pagamento) {
 		this.metodo_di_pagamento = metodo_di_pagamento;
 	}
-
-
-	//TODO eliminaElementoDalCarrello
-
-
-
-
-
 
 }

@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 /*
@@ -47,7 +48,7 @@ public class MessaggioDAOdb implements IMessaggioDAO {
 			
 			resultset = statement.executeQuery(query);
 			while(resultset.next()) {
-				Utente autore = new Utente(resultset.getString(1),resultset.getString(2),resultset.getString(3),resultset.getString(4),resultset.getString(5));
+				Utente autore = new UtenteGenerico(resultset.getString(1),resultset.getString(2),resultset.getString(3),resultset.getString(4),resultset.getString(5));
 				LocalDateTime data = resultset.getTimestamp(7).toLocalDateTime();
 				Messaggio msg = new Messaggio(resultset.getString(8),autore, resultset.getString(6), data, ticket_di_riferimento);
 				result.add(msg);
@@ -137,7 +138,7 @@ public class MessaggioDAOdb implements IMessaggioDAO {
 			statement.setObject(2, data_ultimo_messaggio);
 			resultset = statement.executeQuery();
 			while(resultset.next()) {
-				Utente autore = new Utente(resultset.getString(1),resultset.getString(2),resultset.getString(3),resultset.getString(4),resultset.getString(5));
+				Utente autore = new UtenteGenerico(resultset.getString(1),resultset.getString(2),resultset.getString(3),resultset.getString(4),resultset.getString(5));
 				LocalDateTime data = resultset.getTimestamp(7).toLocalDateTime();
 				Messaggio msg = new Messaggio(resultset.getString(8),autore, resultset.getString(6), data, ticket_di_riferimento);
 				result.add(msg);
