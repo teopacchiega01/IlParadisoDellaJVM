@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.ForumException;
 
 public class PostDaoDb implements IPostDAO {
-	
+
 	private String schema;
 
 	public PostDaoDb() {
@@ -20,12 +21,12 @@ public class PostDaoDb implements IPostDAO {
 	}
 
 	@Override
-	public ArrayList<Post> getPostUtente(Utente u) {
+	public ArrayList<Post> getPostUtente(Utente u) throws ForumException{
 		// TODO Auto-generated method stub
 
 		ArrayList<Post> post = new ArrayList<Post>();
 
-		//CONNESSIONE DB
+		 
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
@@ -63,8 +64,8 @@ public class PostDaoDb implements IPostDAO {
 
 
 		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
+
+			throw new ForumException("Errore caricamento dei post", e);
 
 		}
 
@@ -76,12 +77,12 @@ public class PostDaoDb implements IPostDAO {
 
 
 	@Override
-	public ArrayList<Post> getPost() {
+	public ArrayList<Post> getPost() throws ForumException{
 		// TODO Auto-generated method stub
 
 		ArrayList<Post> post = new ArrayList<Post>();
 
-		//CONNESSIONE DB
+		 
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
@@ -121,8 +122,8 @@ public class PostDaoDb implements IPostDAO {
 
 
 		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
+
+			throw new ForumException("Errore caricamento dei post", e);
 
 		}
 
@@ -134,12 +135,12 @@ public class PostDaoDb implements IPostDAO {
 
 
 	@Override
-	public boolean creaPost(Post p) {
+	public boolean creaPost(Post p) throws ForumException{
 
 		String queryPost = "INSERT INTO Post VALUES (?, ?, ?)";
 		String queryContenutoUtente = "INSERT INTO ContenutoUtente VALUES (?, ?, ?, ?)";
 
-		//CONNESSIONE DB
+		 
 		ResultSet resultset;
 
 		boolean success = false;
@@ -161,28 +162,83 @@ public class PostDaoDb implements IPostDAO {
 			PreparedStatement psCu = conn.prepareStatement(queryContenutoUtente);
 
 			psCu.setString(1, p.getId_contenuto_utente());
-			psCu.setString(2, p.getAutore().getUser_name()); //CONTROLLARE SE VA BENE!!!!!!!!!!!!!!!!!!!!!!!!!
+			psCu.setString(2, p.getAutore().getUser_name());
 			psCu.setString(3, p.getTesto());
 			psCu.setObject(4, p.getData_pubblicazione());
 
 			psCu.executeUpdate();
-			
-			DatabaseManager.commitConnection(conn);
-	        success = true;
 
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			
+			DatabaseManager.commitConnection(conn);
+			success = true;
+
+		} catch (SQLException e) {
+
 			DatabaseManager.rollbackConnection(conn);
 			
-		}finally {
-	        
-	        DatabaseManager.setAutoCommit(conn, true);
-	        DatabaseManager.closeConnection(conn);
-	    }
+			throw new ForumException("Errore creazione post", e);
 
-	    return success;
+		}finally {
+
+			DatabaseManager.setAutoCommit(conn, true);
+			DatabaseManager.closeConnection(conn);
+		}
+
+		return success;
+
+	}
+
+	@Override
+	public boolean eliminaPost(Post p) throws ForumException{
+
+		String queryPost = "DELETE FROM Post WHERE contenuto_utente = ?";
+		String queryContenutoUtente = "DELETE FROM ContenutiUtente WHERE id_contenutoUtente = ?";
+
+
+
+		boolean success = false;
+		Connection conn = DatabaseManager.getConnection();
+
+		try {
+
+			DatabaseManager.setAutoCommit(conn, false);
+
+			PreparedStatement psPost = conn.prepareStatement(queryPost);
+
+			psPost.setString(1, p.getId_contenuto_utente());
+
+			psPost.executeUpdate();
+
+			PreparedStatement psCu = conn.prepareStatement(queryContenutoUtente);
+
+			psCu.setString(1, p.getId_contenuto_utente());
+
+			psCu.executeUpdate();
+
+			DatabaseManager.commitConnection(conn);
+			success = true;
+
+		} catch (SQLException e) {
+
+			DatabaseManager.rollbackConnection(conn);
+			
+			throw new ForumException("Errore eliminazione post", e);
+
+		}finally {
+
+			DatabaseManager.setAutoCommit(conn, true);
+			DatabaseManager.closeConnection(conn);
+		}
+
+		return success;
+
+
+
+
+
+
+
+
+
 
 	}
 

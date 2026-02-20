@@ -30,6 +30,12 @@ public class Commento extends ContenutoUtente {
 		this.post_di_riferimento = post_di_riferimento;
 		this.parent = parent;
 	}
+	
+	public Commento(Utente autore, String testo, LocalDateTime data_pubblicazione, Post post_di_riferimento, ContenutoUtente parent) {
+		super(autore, testo, data_pubblicazione);
+		this.post_di_riferimento = post_di_riferimento;
+		this.parent = parent;
+	}
 
 	public Post getPost_di_riferimento() {
 		return post_di_riferimento;

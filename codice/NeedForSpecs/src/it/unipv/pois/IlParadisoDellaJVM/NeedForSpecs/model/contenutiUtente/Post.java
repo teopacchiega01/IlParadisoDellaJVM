@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 
 public class Post extends ContenutoUtente {
-	
+
 	private String titolo; 
 	private String sottotitolo;
 	private ArrayList<Commento> commenti;
-	
 
-	
+
+
 	public Post(String titolo, String sottotitolo, ArrayList<Commento> commenti) {
 		super();
 		this.titolo = titolo;
@@ -20,7 +20,7 @@ public class Post extends ContenutoUtente {
 		this.commenti = commenti;
 	}
 
-	
+
 	public Post(Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo, String sottotitolo,
 			ArrayList<Commento> commenti) {
 		super(autore, testo, data_pubblicazione);
@@ -28,7 +28,7 @@ public class Post extends ContenutoUtente {
 		this.sottotitolo = sottotitolo;
 		this.commenti = commenti;
 	}
-	
+
 	public Post(Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo, String sottotitolo) {
 		super(autore, testo, data_pubblicazione);
 		this.titolo = titolo;
@@ -43,7 +43,7 @@ public class Post extends ContenutoUtente {
 		this.sottotitolo = sottotitolo;
 		this.commenti = commenti;
 	}
-	
+
 	public Post(String id_contenuto_utente, Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo,
 			String sottotitolo) {
 		super(id_contenuto_utente, autore, testo, data_pubblicazione);
@@ -115,10 +115,22 @@ public class Post extends ContenutoUtente {
 	public void setCommenti(ArrayList<Commento> commenti) {
 		this.commenti = commenti;
 	}
-	
-	
 
-	
-	
-	
+
+
+	public void aggiungiCommento(Commento c) {
+
+		if (c == null) {
+			throw new IllegalArgumentException("Il commento non può essere nullo");
+		}
+
+		this.commenti.add(c);
+
+	}
+
+
+
+
+
+
 }
