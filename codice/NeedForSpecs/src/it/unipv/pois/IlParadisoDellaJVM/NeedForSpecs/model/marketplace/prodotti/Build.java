@@ -9,13 +9,12 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.ComponentiException.TipoErrore;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.AspettiTecnici;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreId;
 
 //	@author teopacchiega
 
 public class Build extends Prodotto{
-	// Questi due attributi forse sono inutili
-	final static int MAX_RAM = 4;
-	final static int MAX_GPU = 2;
+	private final static int DIM_NOME_ID = 15;
 	private String nome;
 	private EnumMap<TipoComponente, ArrayList<Componente>> componenti;
 
@@ -48,8 +47,8 @@ public class Build extends Prodotto{
 
 	@Override
 	protected String generaId() {
-		String nome = formattazione(this.nome, 15);
-		String extra = formattazione((int)Math.random()*100000+"", 10);
+		String nome = formattazione(this.nome, DIM_NOME_ID);
+		String extra = GeneratoreId.generaId(getDimIdProdotto()-DIM_NOME_ID);
 		String id = nome+extra;
 		return id;
 	}
@@ -204,17 +203,14 @@ public class Build extends Prodotto{
 
 		//	Controllo se uno dei due componenti è una scheda madre
 		if(c1.getTipo()==TipoComponente.MOBO || c2.getTipo()==TipoComponente.MOBO){
-			TipoComponente mobo = null;
 			TipoComponente comp = null;
 			EnumMap<AspettiTecnici, String> st_mobo = null;
 			EnumMap<AspettiTecnici, String> st_comp = null;
 			if(c1.getTipo()==TipoComponente.MOBO){
-				mobo = c1.getTipo();
 				comp = c2.getTipo();
 				st_mobo = c1.getScheda_tecnica();
 				st_comp = c2.getScheda_tecnica();
 			}else if(c2.getTipo()==TipoComponente.MOBO){
-				mobo = c2.getTipo();
 				comp = c1.getTipo();
 				st_mobo = c2.getScheda_tecnica();
 				st_comp = c1.getScheda_tecnica();

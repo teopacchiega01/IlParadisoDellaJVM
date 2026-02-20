@@ -21,7 +21,7 @@ public class TicketDAOdb implements ITicketDAO {
 	public ArrayList<Ticket> getTicketDaRichiedente(UtenteGenerico u) {
 		// TODO Auto-generated method stub
 		ArrayList<Ticket> result = new ArrayList<>();
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		Statement statement;
 		ResultSet resultset;
 		
@@ -32,7 +32,7 @@ public class TicketDAOdb implements ITicketDAO {
 					+ "FROM Ticket as T " 
 					+ "JOIN Utente as Staff ON Staff.user_name = T.id_utente_gestore "
 					+ "JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
-					+ "WHERE Assistito.user_name = '" + u.getNome_utente() + "'"
+					+ "WHERE Assistito.user_name = '" + u.getUser_name() + "'"
 					+ ";"
 					;
 					
@@ -70,7 +70,7 @@ public class TicketDAOdb implements ITicketDAO {
 	public ArrayList<Ticket> getTicketDaStaff(UtenteStaff u) {
 		// TODO Auto-generated method stub
 		ArrayList<Ticket> result = new ArrayList<>();
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		Statement statement;
 		ResultSet resultset;
 		
@@ -80,7 +80,7 @@ public class TicketDAOdb implements ITicketDAO {
 					+ "FROM Ticket as T "
 					+ "LEFT JOIN Utente as Staff ON Staff.user_name = T.id_utente_gestore "
 					+ "LEFT JOIN Utente as Assistito ON Assistito.user_name = T.id_utente_richiedente "
-					+ "WHERE Staff.user_name = '" + u.getNome_utente() + "'"; 
+					+ "WHERE Staff.user_name = '" + u.getUser_name() + "'"; 
 			resultset = statement.executeQuery(query);
 			
 			while(resultset.next()) {
@@ -92,7 +92,11 @@ public class TicketDAOdb implements ITicketDAO {
 				String nome = resultset.getString(4);
 				String cognome = resultset.getString(5);
 				
-				UtenteGenerico assistito = new UtenteGenerico(user_name, null, null, nome, cognome);
+//				UtenteGenerico assistito = new UtenteGenerico(user_name, null, null, nome, cognome);
+				UtenteGenerico assistito = new UtenteGenerico();
+				assistito.setUser_name(user_name);
+				assistito.setNome(nome);
+				assistito.setCognome(cognome);
 				Ticket t = new Ticket(id_ticket,assistito, u, e_stato, null);
 				result.add(t);
 			}
@@ -113,7 +117,7 @@ public class TicketDAOdb implements ITicketDAO {
 	@Override
 	public boolean inserisciTicket(Ticket t) {
 		// TODO Auto-generated method stub
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		boolean status = false; 
 		int righe_inserite = 0;
@@ -123,9 +127,9 @@ public class TicketDAOdb implements ITicketDAO {
 					+ "VALUES (?, ?, ?, ?)";
 			statement = conn.prepareStatement(query);
 			statement.setString(1, t.getId_ticket());
-			statement.setString(2, t.getRichiedente_assistenza().getNome_utente());
+			statement.setString(2, t.getRichiedente_assistenza().getUser_name());
 			if (t.getGestore() != null) {
-			    statement.setString(3, t.getGestore().getNome_utente());
+			    statement.setString(3, t.getGestore().getUser_name());
 			} else {
 			    statement.setNull(3, java.sql.Types.NULL); // Inserisco NULL nel DB
 			}
@@ -153,7 +157,7 @@ public class TicketDAOdb implements ITicketDAO {
 	@Override
 	public boolean aggiornaStatoTicket(Stato nuovo_stato,Ticket t) {
 		// TODO Auto-generated method stub
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		boolean status;
 		int righe_inserite;
@@ -193,7 +197,7 @@ public class TicketDAOdb implements ITicketDAO {
 	public ArrayList<Ticket> getTicketSenzaGestore() {
 		// TODO Auto-generated method stub
 		ArrayList<Ticket> result = new ArrayList<>();
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 		
@@ -216,7 +220,11 @@ public class TicketDAOdb implements ITicketDAO {
 				Stato e_stato = Stato.valueOf(stato_string);
 				
 				// Dentro il while del resultset:
-				UtenteGenerico assistito = new UtenteGenerico(user_name, null, null, nome_assistito, cognome_assistito);
+//				UtenteGenerico assistito = new UtenteGenerico(user_name, null, null, nome_assistito, cognome_assistito);
+				UtenteGenerico assistito = new UtenteGenerico();
+				assistito.setUser_name(user_name);
+				assistito.setNome(nome_assistito);
+				assistito.setCognome(cognome_assistito);
 				// Inizializza con una lista vuota invece di null per la conversazione
 				Ticket t = new Ticket(ticket_id, assistito, null, e_stato, new ArrayList<>()); 
 				result.add(t);
@@ -237,14 +245,14 @@ public class TicketDAOdb implements ITicketDAO {
 	public boolean aggiornaGestoreTicket(UtenteStaff staff, Ticket t) {
 		// TODO Auto-generated method stub
 		String query = "UPDATE Ticket SET id_utente_gestore = ? WHERE id_ticket = ?";
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		boolean status;
 		int righe_inserite = 0;
 
 		try {
 	        statement = conn.prepareStatement(query);
-	        statement.setString(1, staff.getNome_utente());
+	        statement.setString(1, staff.getUser_name());
 	        statement.setString(2, t.getId_ticket());
 	        
 	        righe_inserite = statement.executeUpdate();

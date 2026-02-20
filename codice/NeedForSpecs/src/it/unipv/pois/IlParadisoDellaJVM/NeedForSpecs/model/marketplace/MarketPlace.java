@@ -7,6 +7,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.A
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.Build;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.ProdottiFactory;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.Prodotto;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.ProdottoDAOdb;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.Componente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.ComponentiException;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
@@ -105,5 +106,32 @@ public class MarketPlace {
 		}
 	}
 
-
+	public String mostraAnnunci() {
+		if(annunci.isEmpty()) {
+			return null;
+		}else {
+			String ret = "=[]== Annunci presenti ==[]=\n";
+			for(Annuncio ann_in_lista : annunci) {
+				ret = ret + ann_in_lista.toString();
+			}
+			return ret;
+		}
+		
+	}
+	
+	public String mostraProdotti() {
+		if(prodotti.isEmpty()) {
+			return null;
+		}else {
+			String ret = "=[]== Prodotti presenti ==[]=\n";
+			for(Prodotto prod_in_lista : prodotti) {
+				ret = ret + prod_in_lista.getInfoProdotto();
+			}
+			return ret;
+		}
+	}
+	
+	public boolean inizializzaMarketPlace() {
+		return false;
+	}
 }

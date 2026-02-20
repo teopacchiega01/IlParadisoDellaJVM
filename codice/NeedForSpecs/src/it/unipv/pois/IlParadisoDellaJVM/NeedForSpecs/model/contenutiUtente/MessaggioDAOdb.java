@@ -31,7 +31,7 @@ public class MessaggioDAOdb implements IMessaggioDAO {
 	public ArrayList<Messaggio> getMessaggiDaTicket(Ticket ticket_di_riferimento) {
 		// TODO Auto-generated method stub
 		ArrayList<Messaggio> result = new ArrayList<>();
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		Statement statement;
 		ResultSet resultset;
 		
@@ -73,7 +73,7 @@ public class MessaggioDAOdb implements IMessaggioDAO {
 	    String queryContenuto = "INSERT INTO ContenutoUtente (id_contenutoUtente, id_utente, testo, data_pubblicazione) VALUES (?, ?, ?, ?)";
 	    String queryMessaggio = "INSERT INTO Messaggio (id_contenutoUtente, id_ticket) VALUES (?, ?)";
 
-	    Connection conn = DatabaseManager.getConnetcion();
+	    Connection conn = DatabaseManager.getConnection();
 	    boolean success = false;
 
 	    try {
@@ -82,7 +82,7 @@ public class MessaggioDAOdb implements IMessaggioDAO {
 
 	        PreparedStatement psContenuto = conn.prepareStatement(queryContenuto);
 	        psContenuto.setString(1, m.getId_contenuto_utente());
-	        psContenuto.setString(2, m.getAutore().getNome_utente());
+	        psContenuto.setString(2, m.getAutore().getUser_name());
 	        psContenuto.setString(3, m.getTesto());
 	        psContenuto.setObject(4, m.getData_pubblicazione());
 	        psContenuto.executeUpdate();
@@ -120,7 +120,7 @@ public class MessaggioDAOdb implements IMessaggioDAO {
 	public ArrayList<Messaggio> getMessaggiNuovi(Ticket ticket_di_riferimento, LocalDateTime data_ultimo_messaggio) {
 		// TODO Auto-generated method stub
 		ArrayList<Messaggio> result = new ArrayList<>();
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement; 
 		ResultSet resultset;
 		

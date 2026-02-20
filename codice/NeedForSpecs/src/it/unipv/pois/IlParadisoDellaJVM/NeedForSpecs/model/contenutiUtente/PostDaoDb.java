@@ -26,7 +26,7 @@ public class PostDaoDb implements IPostDAO {
 		ArrayList<Post> post = new ArrayList<Post>();
 
 		//CONNESSIONE DB
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 
@@ -43,7 +43,7 @@ public class PostDaoDb implements IPostDAO {
 
 			statement = conn.prepareStatement(query);
 
-			statement.setString(1, u.getNome_utente());
+			statement.setString(1, u.getUser_name());
 
 			resultset = statement.executeQuery(query);
 
@@ -82,7 +82,7 @@ public class PostDaoDb implements IPostDAO {
 		ArrayList<Post> post = new ArrayList<Post>();
 
 		//CONNESSIONE DB
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 
@@ -143,7 +143,7 @@ public class PostDaoDb implements IPostDAO {
 		ResultSet resultset;
 
 		boolean success = false;
-		Connection conn = DatabaseManager.getConnetcion();
+		Connection conn = DatabaseManager.getConnection();
 
 
 		try {
@@ -161,7 +161,7 @@ public class PostDaoDb implements IPostDAO {
 			PreparedStatement psCu = conn.prepareStatement(queryContenutoUtente);
 
 			psCu.setString(1, p.getId_contenuto_utente());
-			psCu.setString(2, p.getAutore().getNome_utente()); //CONTROLLARE SE VA BENE!!!!!!!!!!!!!!!!!!!!!!!!!
+			psCu.setString(2, p.getAutore().getUser_name()); //CONTROLLARE SE VA BENE!!!!!!!!!!!!!!!!!!!!!!!!!
 			psCu.setString(3, p.getTesto());
 			psCu.setObject(4, p.getData_pubblicazione());
 

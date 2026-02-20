@@ -11,6 +11,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 //	@author teopacchiega
 
 public class Componente extends Prodotto{
+	private final static int DIM_ID_TIPO = 3;
+	private final static int DIM_ID_MARCA = 5;
+	private final static int DIM_ID_MODELLO = 5;
 	private String marca;
 	private String modello;
 	private TipoComponente tipo;
@@ -82,10 +85,11 @@ public class Componente extends Prodotto{
 
 	@Override
 	protected String generaId() {
-		String tipo = formattazione(this.tipo.name(), 5);
-		String marca = formattazione(this.marca, 5);
-		String modello = formattazione(this.modello, 5);
-		String extra = formattazione((int)(Math.random()*100000)+"", 5);
+		String tipo = formattazione(this.tipo.name(), DIM_ID_TIPO);
+		String marca = formattazione(this.marca, DIM_ID_MARCA);
+		String modello = formattazione(this.modello, DIM_ID_MODELLO);
+		int dimensione_extra = getDimIdProdotto() - DIM_ID_TIPO - DIM_ID_MARCA - DIM_ID_MODELLO;
+		String extra = formattazione((int)(Math.random()*100000)+"", dimensione_extra);
 		String id = tipo+marca+modello+extra;
 		return id;
 	}
@@ -147,5 +151,6 @@ public class Componente extends Prodotto{
 		info.append(getPotenza()+" W");
 		return info.toString();
 	}
+
 }
 
