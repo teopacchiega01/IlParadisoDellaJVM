@@ -11,8 +11,6 @@ public class ForumView extends JFrame {
 	
 	private CardLayout cardLayout;
 	
-	private JPanel forumView;
-	
 	private ForumPanelView postView;
 
 
@@ -25,8 +23,9 @@ public class ForumView extends JFrame {
 		
 		cardLayout = new CardLayout();
 		
-		forumView = new JPanel(cardLayout);
 		postView = new ForumPanelView();
+		
+		add(postView);
 		
 
 	}

@@ -51,12 +51,9 @@ public class Forum {
 
 
 
-	public boolean inizializzaForum() throws ForumException{
-
-		post = postDao.getPost();
-
-		return true;
-
+	public ArrayList<Post> inizializzaForum() throws ForumException{
+		
+		return postDao.getPost();
 
 	}
 

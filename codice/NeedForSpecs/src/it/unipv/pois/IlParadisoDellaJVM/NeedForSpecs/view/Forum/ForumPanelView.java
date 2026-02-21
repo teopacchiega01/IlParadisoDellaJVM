@@ -16,7 +16,7 @@ public class ForumPanelView extends JPanel {
     public ForumPanelView() {
         this.setLayout(new BorderLayout()); 
 
-        // 1. IL NORD: I bottoni generali
+        //TOP: bottoni generali
         JPanel pannelloTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
         btnTornaHome = new JButton("Torna alla Home");
         btnNuovoPost = new JButton("Scrivi un Post");
@@ -24,7 +24,7 @@ public class ForumPanelView extends JPanel {
         pannelloTop.add(btnNuovoPost);
         this.add(pannelloTop, BorderLayout.NORTH);
 
-        // 2. IL CENTRO: La lista interattiva (Tabella) dentro uno ScrollPane
+        //CENTER: lista interattiva (Tabella) dentro uno ScrollPane
         tabellaPost = new JTable();
         tabellaPost.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Selezioni un post alla volta
         
@@ -32,7 +32,7 @@ public class ForumPanelView extends JPanel {
         JScrollPane scrollPane = new JScrollPane(tabellaPost);
         this.add(scrollPane, BorderLayout.CENTER);
 
-        // 3. IL SUD: Il bottone per "Espandere" il post e cambiare finestra
+        //BOTTOM: bottone per "Espandere" il post e cambiare finestra
         JPanel pannelloBot = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnApriPost = new JButton("Espandi Post Selezionato 📖");
         pannelloBot.add(btnApriPost);

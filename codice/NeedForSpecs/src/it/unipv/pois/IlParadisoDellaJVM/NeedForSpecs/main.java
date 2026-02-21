@@ -1,5 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs;
 
+import javax.swing.JFrame;
+
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.controller.ControllerAssistenza;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
@@ -41,7 +43,7 @@ public class main {
 		Forum f = Forum.getInstance(factory);
 		
 		ForumView fFrame = new ForumView(f);
-		
+		fFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fFrame.setVisible(true);
 		
 		
