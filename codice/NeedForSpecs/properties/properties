@@ -1,3 +1,10 @@
 
 COMPONENTE=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componentiComponente 
 BUILD=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.Build
+
+AUTORE=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaAutoreStrategy
+DATA=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaDataStrategy
+TESTO=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaTestoStrategy
+
+
+

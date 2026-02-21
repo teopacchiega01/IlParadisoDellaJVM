@@ -27,12 +27,16 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.Persistenza;
  * 4)Sinconizzazine della chat tra staff e utente (data dell'utlimo messaggio inserito)
  * 5)assegnazione casuale dello staff a un ticket
  * 6)controllo conversazione vuota nel metodo di aggiornamento;
+ * 
+ * 
+ * Non mostrare i ticket chiusi all'utente generico
  */
 public class Assistenza {
 	
 	private Map<String,Ticket> richieste_assistenza;
 	private IMessaggioDAO msg_dao;
 	private ITicketDAO  ticket_dao; 
+	private Utente utente_loggato;
 	
 	
 
@@ -41,6 +45,15 @@ public class Assistenza {
 		richieste_assistenza = new HashMap<String, Ticket>();
 		this.msg_dao = factory.getMessaggioDAO();
 		this.ticket_dao = factory.getTicketDAO();
+		
+	}
+	public Assistenza(DAOFactory factory,Utente utente_loggato) {
+		// TODO Auto-generated constructor stub
+		richieste_assistenza = new HashMap<String, Ticket>();
+		this.msg_dao = factory.getMessaggioDAO();
+		this.ticket_dao = factory.getTicketDAO();
+		
+		this.utente_loggato = utente_loggato;
 		
 	}
 	
@@ -131,6 +144,23 @@ public class Assistenza {
 		
 		
 	}
+	/* TODO Manca il metodo per decidere l'utet ne
+	public boolean assegnaTicketToUtente() {
+		
+	-->	if(utente_loggato.Metodo) {
+			UtenteStaff staff = (UtenteStaff) utente_loggato;
+			inizializzaTicketDaUtenteStaff(staff);
+			
+			
+		}else {
+			UtenteGenerico generico = (UtenteGenerico) utente_loggato;
+			inizializzaTicketDaUtenteGenerico(generico);
+		}
+	}
+	
+	*/
+	
+	
 	
 	public boolean assegnaTicketToGestore(UtenteStaff staff) {
 		
@@ -165,6 +195,43 @@ public class Assistenza {
 		
 	
 	}
+	
+	/* TODO Manca il metodo per distringuere l'utente
+	public boolean assegnaTicketToGestore() {
+	-->	if(utente_loggato.Metodo) {
+			UtenteStaff staff  = (UtenteStaff) utente_loggato;
+			ArrayList<Ticket> ticket_da_assegnare = ticket_dao.getTicketSenzaGestore();
+			int ticket_assegnati = 0;
+			if(ticket_da_assegnare != null) {
+				for(Ticket t : ticket_da_assegnare) {
+					boolean salvato = ticket_dao.aggiornaGestoreTicket(staff, t);
+					if(salvato ) {
+						t.setGestore(staff);
+						richieste_assistenza.put(t.getId_ticket(), t);
+						ticket_assegnati++;
+					}else {
+						t.setGestore(null);
+						System.err.println("Errore DB: Impossibile assegnare il ticket " + t.getId_ticket());
+						break;
+					}
+
+				}
+
+				System.out.println("Assegnazione COMPLETATA, sono stati assegnati"+ticket_assegnati+ "allo staff"+staff.getUser_name());	
+				return ticket_assegnati ==  ticket_da_assegnare.size();
+
+			}else {
+				System.err.println("L'assegnazione ha riscontrato dei problemi controllare");
+				return false;
+			}
+
+		}else {
+			System.err.println("L'utente non è uno staff");
+		}
+	}
+	*/
+
+	
 	
 	public boolean creaMessaggio(Utente autore,String testo,String id_ticket) {
 		if (!esisteTicket(id_ticket)) {
@@ -234,5 +301,13 @@ public class Assistenza {
 		
 		
 	}
+	public Utente getUtente_loggato() {
+		return utente_loggato;
+	}
+	public void setUtente_loggato(Utente utente_loggato) {
+		this.utente_loggato = utente_loggato;
+	}
+	
+	
 
 }
