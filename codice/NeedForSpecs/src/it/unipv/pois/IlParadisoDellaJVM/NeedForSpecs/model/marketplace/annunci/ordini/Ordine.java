@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.Annuncio;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.ISaleStrategy;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.SaleFactory;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreId;
 
 //	@author teopacchiega
@@ -14,6 +16,7 @@ public class Ordine {
 	private ArrayList<Annuncio> prodotti_acquistati;
 	private double prezzo_totale;
 	private UtenteGenerico acquirente;
+	private ISaleStrategy sale_strategy;
 	
 	public Ordine(UtenteGenerico acquirente) {
 		super();
@@ -21,6 +24,9 @@ public class Ordine {
 		this.prodotti_acquistati = acquirente.getCarr().getAcquisti();
 		this.prezzo_totale = acquirente.getCarr().getPrezzo_totale();
 		this.acquirente = acquirente;
+		SaleFactory sf = new SaleFactory();
+		this.sale_strategy = sf.getDiscountStrategy();
+		this.prezzo_totale = sale_strategy.getTotaleElaborato(this);
 	}
 
 	public Ordine() {
@@ -59,7 +65,5 @@ public class Ordine {
 	public void setId_ordine(String id_ordine) {
 		this.id_ordine = id_ordine;
 	}
-	
-	
 	
 }
