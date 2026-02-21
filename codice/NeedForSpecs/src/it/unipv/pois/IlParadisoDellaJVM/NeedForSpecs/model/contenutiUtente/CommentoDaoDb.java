@@ -8,17 +8,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.ForumException;
 
 public class CommentoDaoDb implements ICommentoDAO {
-
-	private String schema;
-
-	public CommentoDaoDb() {
-		super();
-		this.schema = "Commento";
-	}
 
 	@Override
 	public ArrayList<Commento> getCommenti(Post p) throws ForumException{
@@ -26,52 +21,59 @@ public class CommentoDaoDb implements ICommentoDAO {
 
 		ArrayList<Commento> commenti = new ArrayList<Commento>();
 
-		 
+
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 
 
-		String query = "SELECT u.user_name, u.email, u.psw, u.nome, u.cognome, c.id_contenutoUtente, c.testo, c.data_pubblicazione"
-				+ "FROM ContenutoUtente AS c"
-				+ "JOIN Commento AS com ON c.id_contenutoUtente = com.id_commento"
-				+ "JOIN Post AS p ON com.id_post_di_riferimento = p.id_post"
-				+ "JOIN Utente AS u ON u.id_utente = c.id_utente"
+		String query = "SELECT u.user_name, u.email, u.pw, u.nome, u.cognome, " 
+				+ "ug.user_name AS id_generico, "                           
+				+ "c.id_contenutoUtente, c.testo, c.data_pubblicazione "       
+				+ "FROM ContenutoUtente AS c "
+				+ "JOIN Commento AS com ON c.id_contenutoUtente = com.id_commento "
+				+ "JOIN Post AS p ON com.id_post_di_riferimento = p.id_contenutoUtente " 
+				+ "JOIN Utente AS u ON u.user_name = c.id_utente "
+				+ "LEFT JOIN UtenteGenerico AS ug ON u.user_name = ug.user_name "
 				+ "WHERE p.titolo = ?;";
-		;
 
 		try {
-
+			
 			statement = conn.prepareStatement(query);
-
+			
 			statement.setString(1, p.getTitolo());
+			
+			resultset = statement.executeQuery();
 
-			resultset = statement.executeQuery(query);
+			while (resultset.next()) {
+				
+				Utente u;
 
-			while(resultset.next()) {
+				if (resultset.getString(6) != null) {
 
-				Utente u = new Utente(resultset.getString(1), resultset.getString(2), resultset.getString(3), resultset.getString(4),
-						resultset.getString(5));
+					u = new UtenteGenerico(resultset.getString(1), resultset.getString(2), 
+							resultset.getString(3), resultset.getString(4), resultset.getString(5));
+				} else {
 
-				LocalDateTime d = resultset.getTimestamp(8).toLocalDateTime();
+					u = new UtenteStaff(resultset.getString(1), resultset.getString(2), 
+							resultset.getString(3), resultset.getString(4), resultset.getString(5));
+				}
 
-				Commento c = new Commento(resultset.getString(6), u, resultset.getString(7), d, p, p);
 
+				LocalDateTime d = resultset.getTimestamp(9).toLocalDateTime();
+				Commento c = new Commento(resultset.getString(7), u, resultset.getString(8), d, p, p);
 				commenti.add(c);
-
 			}
-
-			conn.close();
-
-
+			
 		} catch (SQLException e) {
-
-			throw new ForumException("errore caricamento dei commenti", e);
-
+			
+			throw new ForumException("Errore caricamento dei commenti", e);
+			
+		} finally {
+			
+			DatabaseManager.closeConnection(conn);
 		}
-
-		DatabaseManager.closeConnection(conn);
-
+		
 		return commenti;
 
 	}
@@ -83,48 +85,63 @@ public class CommentoDaoDb implements ICommentoDAO {
 
 		ArrayList<Commento> commenti = new ArrayList<Commento>();
 
-		 
+
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 
-		String query = "SELECT u.user_name, u.email, u.psw, u.nome, u.cognome, c.id_contenutoUtente, c.testo, c.data_pubblicazione"
-				+ "FROM ContenutoUtente AS c"
-				+ "JOIN Commento AS com ON c.id_contenutoUtente = com.id"
-				+ "JOIN Utente AS u ON u.id_utente = c.id_utente"
-				+ "WHERE com.id_post_riferimento = ?"
-				+ "AND com.id_contenuto_parent = ?"
-				;
+		String query = "SELECT u.user_name, u.email, u.pw, u.nome, u.cognome, " 
+	            + "ug.user_name AS id_generico, "
+	            + "c.id_contenutoUtente, c.testo, c.data_pubblicazione "
+	            + "FROM ContenutoUtente AS c "
+	            + "JOIN Commento AS com ON c.id_contenutoUtente = com.id_commento "
+	            + "JOIN Utente AS u ON u.user_name = c.id_utente "
+	            + "LEFT JOIN UtenteGenerico AS ug ON u.user_name = ug.user_name "
+	            + "WHERE com.id_post_riferimento = ? AND com.id_contenuto_parent = ?;";
 
-		try {
+	    try {
+	    	
+	        statement = conn.prepareStatement(query);
+	        
+	        statement.setString(1, p.getId_contenuto_utente());
+	        statement.setString(2, c.getId_contenuto_utente());
+	        
+	        resultset = statement.executeQuery();
 
-			statement = conn.prepareStatement(query);
+	        while (resultset.next()) {
+	        	
+	            Utente u;
+	            
+	            if (resultset.getString(6) != null) {
+	            	
+	                u = new UtenteGenerico(resultset.getString(1), resultset.getString(2), 
+	                        resultset.getString(3), resultset.getString(4), resultset.getString(5));
+	            
+	            } else {
+	            	
+	                u = new UtenteStaff(resultset.getString(1), resultset.getString(2), 
+	                        resultset.getString(3), resultset.getString(4), resultset.getString(5));
+	            
+	            }
 
-			statement.setString(1, p.getId_contenuto_utente());
-			statement.setString(2, c.getId_contenuto_utente());
-
-			resultset = statement.executeQuery(query);
-
-			while(resultset.next()) {
-
-				Utente u = new Utente(resultset.getString(1), resultset.getString(2), resultset.getString(3), resultset.getString(4),
-						resultset.getString(5));
-
-				LocalDateTime d = resultset.getTimestamp(8).toLocalDateTime();
-
-				Commento c2 = new Commento(resultset.getString(6), u, resultset.getString(7), d, p, c);
-
-				commenti.add(c2);
-
-			}
-
-			return commenti;
-
-		} catch (SQLException e) {
-			
-			throw new ForumException("errore caricamento dei commenti", e);
-
-		}
+	            LocalDateTime d = resultset.getTimestamp(9).toLocalDateTime();
+	            
+	            Commento c2 = new Commento(resultset.getString(7), u, resultset.getString(8), d, p, c);
+	            
+	            commenti.add(c2);
+	            
+	        }
+	        
+	    } catch (SQLException e) {
+	    	
+	        throw new ForumException("Errore caricamento dei commenti dei commenti", e);
+	        
+	    } finally {
+	    	
+	        DatabaseManager.closeConnection(conn);
+	    }
+	    
+	    return commenti;
 
 	}
 
@@ -168,7 +185,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 		} catch (SQLException e) {
 
 			DatabaseManager.rollbackConnection(conn);
-			
+
 			throw new ForumException("Errore creazione commento", e);
 
 		}finally {
@@ -214,7 +231,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 		} catch (SQLException e) {
 
 			DatabaseManager.rollbackConnection(conn);
-			
+
 			throw new ForumException("Errore eliminazione commento", e);
 
 		}finally {

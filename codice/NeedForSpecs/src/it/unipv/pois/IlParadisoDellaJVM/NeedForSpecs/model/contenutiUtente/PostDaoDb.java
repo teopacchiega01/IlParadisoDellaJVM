@@ -8,17 +8,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.ForumException;
 
 public class PostDaoDb implements IPostDAO {
-
-	private String schema;
-
-	public PostDaoDb() {
-		super();
-		this.schema = "Post";
-	}
 
 	@Override
 	public ArrayList<Post> getPostUtente(Utente u) throws ForumException{
@@ -26,7 +21,7 @@ public class PostDaoDb implements IPostDAO {
 
 		ArrayList<Post> post = new ArrayList<Post>();
 
-		 
+
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
@@ -77,60 +72,64 @@ public class PostDaoDb implements IPostDAO {
 
 
 	@Override
-	public ArrayList<Post> getPost() throws ForumException{
-		// TODO Auto-generated method stub
-
+	public ArrayList<Post> getPost() throws ForumException {
+		
 		ArrayList<Post> post = new ArrayList<Post>();
-
-		 
+		
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement statement;
 		ResultSet resultset;
 
 
-		String query = "SELECT c.id_contenuto_utente, c.testo, c.data_pubblicazione, p.titolo, p.sottotitolo,"
-				+ "u.user_name, u.email, u.pw, u.nome, u.cognome"
-				+ "FROM ContenutoUtente AS c"
-				+ "JOIN Utente AS u ON c.id_utente = u.user_name"
-				+ "JOIN Post AS p ON c.id_contenuto_utente = p.id_contenuto_utente"
-				+ ";"
-				;
-
+		String query = "SELECT c.id_contenuto_utente, c.testo, c.data_pubblicazione, p.titolo, p.sottotitolo, "
+				+ "u.user_name, u.email, u.pw, u.nome, u.cognome, "
+				+ "ug.user_name AS id_generico "
+				+ "FROM ContenutoUtente AS c "
+				+ "JOIN Utente AS u ON u.user_name = c.id_utente "
+				+ "JOIN Post AS p ON c.id_contenuto_utente = p.id_contenuto_utente "
+				+ "LEFT JOIN UtenteGenerico AS ug ON u.user_name = ug.user_name;";
 
 		try {
-
+			
 			statement = conn.prepareStatement(query);
+			resultset = statement.executeQuery();
 
-			resultset = statement.executeQuery(query);
+			while (resultset.next()) {
+				
+				Utente u;
 
-			while(resultset.next()) {
+				if (resultset.getString(11) != null) {
+					
+					u = new UtenteGenerico(resultset.getString(6), resultset.getString(7),
+							resultset.getString(8), resultset.getString(9), resultset.getString(10));
+					
+				} else {
+					
+					u = new UtenteStaff(resultset.getString(6), resultset.getString(7),
+							resultset.getString(8), resultset.getString(9), resultset.getString(10));
+					
+				}
 
 				LocalDateTime d = resultset.getTimestamp(3).toLocalDateTime();
-
-				Utente u = new Utente(resultset.getString(6), resultset.getString(7),
-						resultset.getString(8), resultset.getString(9), resultset.getString(10));
-
-				Post p = new Post(resultset.getString(1), u, resultset.getString(2), d, resultset.getString(4), resultset.getString(5));
-
+				
+				Post p = new Post(resultset.getString(1), u, resultset.getString(2), d, 
+						resultset.getString(4), resultset.getString(5));
+				
 				post.add(p);
-
+				
 			}
-
-			conn.close();
-
-
-
-
+			
 		} catch (SQLException e) {
-
+			
 			throw new ForumException("Errore caricamento dei post", e);
-
+			
+		} finally {
+			
+			DatabaseManager.closeConnection(conn);
+			
 		}
-
-		DatabaseManager.closeConnection(conn);
-
+		
 		return post;
-
 	}
 
 
@@ -140,7 +139,7 @@ public class PostDaoDb implements IPostDAO {
 		String queryPost = "INSERT INTO Post VALUES (?, ?, ?)";
 		String queryContenutoUtente = "INSERT INTO ContenutoUtente VALUES (?, ?, ?, ?)";
 
-		 
+
 		ResultSet resultset;
 
 		boolean success = false;
@@ -174,7 +173,7 @@ public class PostDaoDb implements IPostDAO {
 		} catch (SQLException e) {
 
 			DatabaseManager.rollbackConnection(conn);
-			
+
 			throw new ForumException("Errore creazione post", e);
 
 		}finally {
@@ -220,7 +219,7 @@ public class PostDaoDb implements IPostDAO {
 		} catch (SQLException e) {
 
 			DatabaseManager.rollbackConnection(conn);
-			
+
 			throw new ForumException("Errore eliminazione post", e);
 
 		}finally {

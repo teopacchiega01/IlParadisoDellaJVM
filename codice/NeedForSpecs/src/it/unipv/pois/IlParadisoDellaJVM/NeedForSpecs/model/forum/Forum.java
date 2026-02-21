@@ -5,12 +5,11 @@ import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Commento;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.CommentoDaoDb;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.ContenutoUtente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.ICommentoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IPostDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.PostDaoDb;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
 
 public class Forum {
 
@@ -20,18 +19,18 @@ public class Forum {
 	private IPostDAO postDao;
 	private ICommentoDAO commentoDao;
 
-	public Forum() {
+	public Forum(DAOFactory factory) {
 		super();
 		this.post = new ArrayList<Post>();
-		postDao = new PostDaoDb();
-		commentoDao = new CommentoDaoDb();
+		this.postDao = factory.getPostDAO();
+		this.commentoDao = factory.getCommentoDAO();
 	}
 
-	public static Forum getInstance() {
+	public static Forum getInstance(DAOFactory factory) {
 
 		if(instance == null) {
 
-			instance = new Forum();
+			instance = new Forum(factory);
 		}
 
 		return instance;
@@ -54,19 +53,9 @@ public class Forum {
 
 	public boolean inizializzaForum() throws ForumException{
 
-		try {
+		post = postDao.getPost();
 
-			post = postDao.getPost();
-
-			return true;
-
-		} catch (Exception e) {
-			// TODO: handle exception
-
-			throw new ForumException("Errore caricamento dati da DB: " + e.getMessage());
-
-		}
-
+		return true;
 
 
 	}
@@ -130,32 +119,32 @@ public class Forum {
 
 
 	public boolean eliminaPost(Post p) {
-	    
-	    if(p == null || p.getId_contenuto_utente() == null || p.getId_contenuto_utente().isEmpty()) {
-	        throw new IllegalArgumentException("Parametro non valido");
-	    }
 
-	    try {
+		if(p == null || p.getId_contenuto_utente() == null || p.getId_contenuto_utente().isEmpty()) {
+			throw new IllegalArgumentException("Parametro non valido");
+		}
 
-	        postDao.eliminaPost(p);
+		try {
+
+			postDao.eliminaPost(p);
 
 
-	        for (Post pst : post) {
-	        	
-	            if(pst.getId_contenuto_utente().equals(p.getId_contenuto_utente())) {
-	                
-	                post.remove(pst); 
-	                
-	                break; 
-	            }
-	        }
-	        
-	        return true;
-	        
-	    } catch (ForumException e) {
-	        System.out.println("Errore durante l'eliminazione del post: " + e.getMessage());
-	        return false;
-	    }
+			for (Post pst : post) {
+
+				if(pst.getId_contenuto_utente().equals(p.getId_contenuto_utente())) {
+
+					post.remove(pst); 
+
+					break; 
+				}
+			}
+
+			return true;
+
+		} catch (ForumException e) {
+			System.out.println("Errore durante l'eliminazione del post: " + e.getMessage());
+			return false;
+		}
 	}
 
 
@@ -195,6 +184,9 @@ public class Forum {
 
 
 	}
+	
+	
+	
 
 
 

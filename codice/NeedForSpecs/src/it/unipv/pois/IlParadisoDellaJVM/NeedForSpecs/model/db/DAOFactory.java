@@ -3,7 +3,9 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi.IIndirizzoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagamento.ICartaDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.ITicketDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.ICommentoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IMessaggioDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IPostDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.IAnnuncioDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.IOrdineDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.IProdottoDAO;
@@ -21,6 +23,8 @@ public abstract class DAOFactory{
     public abstract IOrdineDAO getOrdineDAO();
     public abstract ICartaDAO getCartaDAO();
     public abstract IIndirizzoDAO getIndirizzoDAO();
+    public abstract IPostDAO getPostDAO();
+    public abstract ICommentoDAO getCommentoDAO();
 //    public abstract IUtenteDAO getUtenteDAO();
 //    public abstract IUtenteGenericoDAO getUtenteGenericoDAO();
     

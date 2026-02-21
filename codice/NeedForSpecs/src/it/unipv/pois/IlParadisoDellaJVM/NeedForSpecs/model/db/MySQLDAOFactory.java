@@ -6,8 +6,12 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagam
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagamento.ICartaDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.ITicketDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.TicketDAOdb;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.CommentoDaoDb;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.ICommentoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IMessaggioDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IPostDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.MessaggioDAOdb;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.PostDaoDb;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.AnnuncioDAOdb;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.IAnnuncioDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.IOrdineDAO;
@@ -15,10 +19,6 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.o
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.IProdottoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.ProdottoDAOdb;
 
-
-/*
- * @author: Persy
- */
 
 public class MySQLDAOFactory extends DAOFactory {
 	public ITicketDAO getTicketDAO() {
@@ -41,6 +41,12 @@ public class MySQLDAOFactory extends DAOFactory {
 	}
 	public IIndirizzoDAO getIndirizzoDAO() {
 		return new IndirizzoDAOdb();
+	}
+	public IPostDAO getPostDAO() {
+		return new PostDaoDb();
+	}
+	public ICommentoDAO getCommentoDAO() {
+		return new CommentoDaoDb();
 	}
 	
 
