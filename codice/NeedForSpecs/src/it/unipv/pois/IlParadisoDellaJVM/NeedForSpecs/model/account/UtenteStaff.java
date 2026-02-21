@@ -7,4 +7,9 @@ public class UtenteStaff extends Utente {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public boolean isStaff() {
+		return true;
+	}
+
 }

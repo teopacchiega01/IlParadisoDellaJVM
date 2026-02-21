@@ -66,4 +66,9 @@ public class UtenteGenerico extends Utente {
 		this.metodo_di_pagamento = metodo_di_pagamento;
 	}
 
+	@Override
+	public boolean isStaff() {
+		return true;
+	}
+
 }

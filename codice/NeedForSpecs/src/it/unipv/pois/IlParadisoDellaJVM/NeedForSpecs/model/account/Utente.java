@@ -63,6 +63,8 @@ public abstract class Utente {
 		this.cognome = cognome;
 	}
 
+	public abstract boolean isStaff();
+	
 	//	TODO
 	public Utente login(String user_name, String pw) {
 		//		pesca dal db l'utente corrispondente

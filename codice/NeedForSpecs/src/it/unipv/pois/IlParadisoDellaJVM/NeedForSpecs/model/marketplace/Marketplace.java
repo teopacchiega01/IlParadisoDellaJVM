@@ -19,14 +19,14 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 
 //	@author teopacchiega
 
-public class MarketPlace {
+public class Marketplace {
 	private IProdottoDAO prod_dao;
 	private IAnnuncioDAO ann_dao;
 	private IOrdineDAO ord_dao;
 	private ArrayList<Prodotto> prodotti;
 	private ArrayList<Annuncio> annunci;
 
-	public MarketPlace(ArrayList<Prodotto> prodotti, ArrayList<Annuncio> annunci, DAOFactory factory) {
+	public Marketplace(ArrayList<Prodotto> prodotti, ArrayList<Annuncio> annunci, DAOFactory factory) {
 		super();
 		this.prodotti = prodotti;
 		this.annunci = annunci;
@@ -35,7 +35,7 @@ public class MarketPlace {
 		this.ord_dao = factory.getOrdineDAO();
 	}
 
-	public MarketPlace(DAOFactory factory) {
+	public Marketplace(DAOFactory factory) {
 		super();
 		this.prod_dao = factory.getProdottoDAO();
 		this.ann_dao = factory.getAnnuncioDAO();
@@ -162,8 +162,9 @@ public class MarketPlace {
 		}
 	}
 
+	//TODO implementare degli errori specifici
 	public boolean effettuaOrdine(UtenteGenerico acquirente) {
-		if(acquirente.getCarr().getAcquisti().isEmpty()) {
+		if(acquirente.getCarr().getAcquisti().isEmpty() || (acquirente.getMetodo_di_pagamento()==null) || (acquirente.getInd_di_spedizione()==null)) {
 			return false;
 		}else {
 			Ordine nuovo_ordine = new Ordine(acquirente);
@@ -178,7 +179,7 @@ public class MarketPlace {
 
 
 
-	public void inizializzaMarketPlace() {
+	public void inizializzaMarketplace() {
 		setProdotti(prod_dao.getProdotti());
 		setAnnunci(ann_dao.getAnnunci());
 	}
