@@ -16,38 +16,31 @@ public class main {
 
 	public static void main(String[] args) {
 		
-		 
-		
-		Persistenza scelta =  Persistenza.MYSQL_DB;
-		
+		Persistenza scelta = Persistenza.MYSQL_DB;
 		DAOFactory factory = DAOFactory.getPersistenceFactory(scelta);
 		
-//		Assistenza ass  = new Assistenza(factory);
+		// 1. Creo gli utenti simulati
+		UtenteGenerico utenteSimulato = new UtenteGenerico("GiuliaBianchi", "giulia.b@email.com", "qwerty", "Giulia", "Bianchi");
+		UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@paradiso.com", "adminpass", "Luca", "Verdi");
+
+		
+		
+		Assistenza ass = new Assistenza(factory, utenteSimulato); 
+		FrameAssistenza frame = new FrameAssistenza();
+		new ControllerAssistenza(frame, ass);
+
+//		
+//		Assistenza ass = new Assistenza(factory, luca); 
 //		
 //		FrameAssistenza frame = new FrameAssistenza();
-        
-		
-        //frame.mostraHomeStaff(); 
-        
-       //frame.mostraChatStaff();
-       // frame.mostraHomeUtente();
-        
-//        frame.setVisible(true);
-//        UtenteGenerico utenteSimulato = new UtenteGenerico("GiuliaBianchi", "giulia.b@email.com", "qwerty", "Giulia", "Bianchi");
-//        UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@paradiso.com", "adminpass", "Luca", "Verdi");
+//		 new ControllerAssistenza(frame, ass);
 //		
-//        //new ControllerAssistenza(frame, ass, utenteSimulato);
-//      
-//        new ControllerAssistenza(frame, ass, luca);
 		
-		Forum f = Forum.getInstance(factory);
-		
-		ForumView fFrame = new ForumView(f);
-		fFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		fFrame.setVisible(true);
-		
-		
-		
+
+//		Forum f = Forum.getInstance(factory);
+//		
+//		ForumView fFrame = new ForumView(f);
+//		fFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		fFrame.setVisible(true);
 	}
-	
 }

@@ -1,12 +1,5 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.controller;
 
-
-
-// @author Persy 
-
-// implementare il controller che riceve un utente U e poi chiama i metodi in base alla tipologia 
-
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,12 +7,12 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Assistenza;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Stato;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
 
 public class ControllerAssistenza {
 	
@@ -27,93 +20,85 @@ public class ControllerAssistenza {
 	private Assistenza model;
 	private Timer chatUpdater;
 
-	public ControllerAssistenza(FrameAssistenza view, Assistenza model, UtenteGenerico utente) {
-		this.view = view;
-		this.model = model;
-		
-		ArrayList<Ticket> tickets = model.inizializzaTicketDaUtenteGenerico(utente);
-		view.getHomePanelUtente().inizializzaTicketCombo(tickets);
-		
-		addListenersUtente(utente);
-		
-		view.mostraHomeUtente();
-		view.setVisible(true);
-		avviaTimerSincronizzazioneUtente();
-	}
-
-	public ControllerAssistenza(FrameAssistenza view, Assistenza model, UtenteStaff staff) {
-	    this.view = view;
-	    this.model = model;
-	    
-	    model.assegnaTicketToGestore(staff); 
-	    
-	    ArrayList<Ticket> tickets = model.inizializzaTicketDaUtenteStaff(staff);
-	    view.getHomePanelStaff().inizializzaTicketCombo(tickets);
-	    
-	    addListenersStaff(staff);
-	    
-	    view.mostraHomeStaff(); 
-	    view.setVisible(true);
-	    avviaTimerSincronizzazioneStaff();
-	}
+	// COSTRUTTORE UNICO A 2 PARAMETRI (MVC PURO)
 	public ControllerAssistenza(FrameAssistenza view, Assistenza model) {
 		this.view = view;
 		this.model = model;
-//		addListenersUtenteAbs();
 		
+		// 1. Il model carica i ticket usando la sua logica interna (isStaff)
+		this.model.caricaTicketUtenteLoggato();
+		
+		// 2. Il controller instrada la grafica chiamando un metodo separato e pulito
+		inizializzaInterfaccia();
+		
+		this.view.setVisible(true);
+	}
+	
+	// ==========================================================
+	// METODO DI ROUTING GRAFICO
+	// ==========================================================
+	private void inizializzaInterfaccia() {
+		Utente u = model.getUtente_loggato();
+		ArrayList<Ticket> tickets = model.getTuttiITicketCaricati();
+		
+		if (u.isStaff()) {
+			view.getHomePanelStaff().inizializzaTicketCombo(tickets);
+			addListenersStaff();
+			view.mostraHomeStaff(); 
+			avviaTimerSincronizzazioneStaff();
+		} else {
+			view.getHomePanelUtente().inizializzaTicketCombo(tickets);
+			addListenersUtente();
+			view.mostraHomeUtente();
+			avviaTimerSincronizzazioneUtente();
+		}
 	}
 	
 	/*==========================================================
-	 * 	LOGICA UTENTE
+	 * LOGICA UTENTE GENERICO
 	 *==========================================================
 	 */
-	
-	
-//	public void addListenersUtenteAbs(){
-//		Utente loggato = model.getUtente_loggato();
-//		if(loggato.Metodo) {
-//			UtenteGenerico utente = (UtenteGenerico) loggato;
-//			ArrayList<Ticket> tickets = model.inizializzaTicketDaUtenteGenerico(utente);
-//			view.getHomePanelUtente().inizializzaTicketCombo(tickets);
-//			
-//			addListenersUtente(utente);
-//			
-//			view.mostraHomeUtente();
-//			view.setVisible(true);
-//			avviaTimerSincronizzazioneUtente();
-//		}else {
-//			UtenteStaff staff = (UtenteStaff) loggato;
-//			model.assegnaTicketToGestore(staff); 
-//
-//			ArrayList<Ticket> tickets = model.inizializzaTicketDaUtenteStaff(staff);
-//			view.getHomePanelStaff().inizializzaTicketCombo(tickets);
-//
-//			addListenersStaff(staff);
-//
-//			view.mostraHomeStaff(); 
-//			view.setVisible(true);
-//			avviaTimerSincronizzazioneStaff();
-//		}
-//	}
-//	
-	private void addListenersUtente(UtenteGenerico utente) {
-		
-		//
+	private void addListenersUtente() {
 		view.getHomePanelUtente().getCrea_ticket_butt().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				boolean creato = model.apriTicket(utente);
+				boolean creato = model.apriTicket();
 				if(creato) {
-					view.getHomePanelUtente().inizializzaTicketCombo(model.inizializzaTicketDaUtenteGenerico(utente));
+					view.getHomePanelUtente().inizializzaTicketCombo(model.getTuttiITicketCaricati());
 					view.getHomePanelUtente().setLabelOutUtente("Ticket creato con successo!");
 				}
 			}
 		});
 
-
 		view.getHomePanelUtente().getVai_a_ticket_butt().addActionListener(e -> caricaChatUtente());
-		view.getTicketUtentePanel().getInvia_messaggio_utente().addActionListener(e -> gestisciInvioMessaggioUtente(utente));
-		view.getTicketUtentePanel().getIndietro_butt().addActionListener(e -> view.mostraHomeUtente());
+		view.getTicketUtentePanel().getInvia_messaggio_utente().addActionListener(e -> gestisciInvioMessaggioUtente());
+		
+		view.getTicketUtentePanel().getIndietro_butt().addActionListener(e -> {
+			chatUpdater.start(); 
+			view.mostraHomeUtente();
+		});
+
+		view.getTicketUtentePanel().getCerca_butt().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Ticket t = view.getHomePanelUtente().getTicketSelezionato();
+				Ricerca tipo = (Ricerca) view.getTicketUtentePanel().getCombo_ricerca().getSelectedItem();
+				String parametro = StringChecker.pulisciInput(view.getTicketUtentePanel().getTesto_ricerca().getText());
+
+				if (t != null && !parametro.isEmpty()) {
+					chatUpdater.stop(); 
+					String risultati = model.eseguiRicercaSuTicket(t.getId_ticket(), tipo, parametro);
+					view.getTicketUtentePanel().pulisciChat();
+					view.getTicketUtentePanel().setConversazioneTicket("--- RISULTATI RICERCA ---\n\n" + risultati);
+				}
+			}
+		});
+
+		view.getTicketUtentePanel().getReset_ricerca_butt().addActionListener(e -> {
+			view.getTicketUtentePanel().getTesto_ricerca().setText("");
+			caricaChatUtente();
+			chatUpdater.start(); 
+		});
 	}
 	
 	private void caricaChatUtente() {
@@ -125,24 +110,22 @@ public class ControllerAssistenza {
 		}
 	}
 
-	private void gestisciInvioMessaggioUtente(UtenteGenerico utente) {
-	    String testo = view.getTicketUtentePanel().getTestoUtente(); 
-	    Ticket t = view.getHomePanelUtente().getTicketSelezionato();
-	    if (t != null && !testo.isEmpty()) {
-	        if (model.creaMessaggio(utente, testo, t.getId_ticket())) {
-	            view.getTicketUtentePanel().pulisciInput();
-	        }
-	    }
+	private void gestisciInvioMessaggioUtente() {
+		String testo = StringChecker.pulisciInput(view.getTicketUtentePanel().getTestoUtente()); 
+		Ticket t = view.getHomePanelUtente().getTicketSelezionato();
+		if (t != null && !testo.isEmpty()) {
+			if (model.creaMessaggio(testo, t.getId_ticket())) {
+				view.getTicketUtentePanel().pulisciInput();
+			}
+		}
 	}
 
 	/*==========================================================
 	 * LOGICA STAFF
 	 *==========================================================
 	 */
-
-	private void addListenersStaff(UtenteStaff staff) {
+	private void addListenersStaff() {
 		view.getHomePanelStaff().getVai_a_ticket_butt().addActionListener(e -> caricaChatStaff());
-
 		
 		view.getHomePanelStaff().getCambia_stato_butt().addActionListener(new ActionListener() {
 			@Override
@@ -152,12 +135,10 @@ public class ControllerAssistenza {
 				if(t != null && s != null) {
 					model.cambioStatoTicket(t.getId_ticket(), s);
 					view.getHomePanelStaff().setLabelOutStaff("Stato aggiornato a: " + s);
-
 					view.getHomePanelStaff().aggiornaGrafica(); 
 				}
 			}
 		});
-
 		
 		view.getHomePanelStaff().getChiudi_ticket_butt().addActionListener(new ActionListener() {
 			@Override
@@ -165,8 +146,7 @@ public class ControllerAssistenza {
 				Ticket t = view.getHomePanelStaff().getTicketSelezionato();
 				if(t != null) {
 					if(model.chiudiTicket(t.getId_ticket())) {
-						ArrayList<Ticket> ticket_aggiornati = model.inizializzaTicketDaUtenteStaff(staff);
-						view.getHomePanelStaff().inizializzaTicketCombo(ticket_aggiornati);
+						view.getHomePanelStaff().inizializzaTicketCombo(model.getTuttiITicketCaricati());
 						view.getHomePanelStaff().setLabelOutStaff("Ticket " + t.getId_ticket() + " chiuso.");
 						view.getTicketStaffPanel().setLabeOutTicketStaff("Stato Chat: " + t.getStato_ticket());
 						view.getTicketUtentePanel().setLabelOutUtente("Stato Chat " + t.getStato_ticket());
@@ -175,8 +155,34 @@ public class ControllerAssistenza {
 			}
 		});
 
-		view.getTicketStaffPanel().getInvia_messaggio_staff().addActionListener(e -> gestisciInvioMessaggioStaff(staff));
-		view.getTicketStaffPanel().getIndietro_butt().addActionListener(e -> view.mostraHomeStaff());
+		view.getTicketStaffPanel().getInvia_messaggio_staff().addActionListener(e -> gestisciInvioMessaggioStaff());
+		
+		view.getTicketStaffPanel().getIndietro_butt().addActionListener(e -> {
+			chatUpdater.start(); 
+			view.mostraHomeStaff();
+		});
+
+		view.getTicketStaffPanel().getCerca_butt().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Ticket t = view.getHomePanelStaff().getTicketSelezionato();
+				Ricerca tipo = (Ricerca) view.getTicketStaffPanel().getCombo_ricerca().getSelectedItem();
+				String parametro = StringChecker.pulisciInput(view.getTicketStaffPanel().getTesto_ricerca().getText());
+
+				if (t != null && !parametro.isEmpty()) {
+					chatUpdater.stop(); 
+					String risultati = model.eseguiRicercaSuTicket(t.getId_ticket(), tipo, parametro);
+					view.getTicketStaffPanel().pulisciChat();
+					view.getTicketStaffPanel().setConversazioneTicket("--- RISULTATI RICERCA ---\n\n" + risultati);
+				}
+			}
+		});
+
+		view.getTicketStaffPanel().getReset_ricerca_butt().addActionListener(e -> {
+			view.getTicketStaffPanel().getTesto_ricerca().setText("");
+			caricaChatStaff();
+			chatUpdater.start(); 
+		});
 	}
 
 	private void caricaChatStaff() {
@@ -188,52 +194,48 @@ public class ControllerAssistenza {
 		}
 	}
 
-	private void gestisciInvioMessaggioStaff(UtenteStaff staff) {
-		String testo = view.getTicketStaffPanel().getTesto_messaggio_staff().getText().trim();
+	private void gestisciInvioMessaggioStaff() {
+		String testo = StringChecker.pulisciInput(view.getTicketStaffPanel().getTesto_messaggio_staff().getText());
 		Ticket t = view.getHomePanelStaff().getTicketSelezionato();
 		if (t != null && !testo.isEmpty()) {
-			if (model.creaMessaggio(staff, testo, t.getId_ticket())) {
+			if (model.creaMessaggio(testo, t.getId_ticket())) {
 				view.getTicketStaffPanel().pulisciInput();
 			}
 		}
 	}
 
 	// ==========================================================
-	// 				AGGIORNAMENTO DELLA CHAT  
+	// 				AGGIORNAMENTO DELLA CHAT (Timer)
 	// ==========================================================
 	private void avviaTimerSincronizzazioneUtente() {
-	    chatUpdater = new Timer(3000, new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            if (view.getTicketUtentePanel().isPannelloVisibile()) {
-	                Ticket t = view.getHomePanelUtente().getTicketSelezionato();
-	                if (t != null) {
-	                    model.aggiornaConversazioneDatoTicket(t.getId_ticket());
-	                    view.getTicketUtentePanel().setConversazioneTicket(t.getCronologiaMessaggiFormattata());
-	                }
-	            }
-	        }
-	    });
-	    chatUpdater.start();
+		chatUpdater = new Timer(3000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (view.getTicketUtentePanel().isPannelloVisibile()) {
+					Ticket t = view.getHomePanelUtente().getTicketSelezionato();
+					if (t != null) {
+						model.aggiornaConversazioneDatoTicket(t.getId_ticket());
+						view.getTicketUtentePanel().setConversazioneTicket(t.getCronologiaMessaggiFormattata());
+					}
+				}
+			}
+		});
+		chatUpdater.start();
 	}
 
 	private void avviaTimerSincronizzazioneStaff() {
-	    chatUpdater = new Timer(3000, new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	        	
-	            if (view.getTicketStaffPanel().isPannelloVisibile()) {
-	                Ticket t = view.getHomePanelStaff().getTicketSelezionato();
-	                if (t != null) {
-	                    model.aggiornaConversazioneDatoTicket(t.getId_ticket());
-	                    view.getTicketStaffPanel().setConversazioneTicket(t.getCronologiaMessaggiFormattata());
-	                }
-	            }
-	        }
-	    });
-	    chatUpdater.start();
+		chatUpdater = new Timer(3000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (view.getTicketStaffPanel().isPannelloVisibile()) {
+					Ticket t = view.getHomePanelStaff().getTicketSelezionato();
+					if (t != null) {
+						model.aggiornaConversazioneDatoTicket(t.getId_ticket());
+						view.getTicketStaffPanel().setConversazioneTicket(t.getCronologiaMessaggiFormattata());
+					}
+				}
+			}
+		});
+		chatUpdater.start();
 	}
-	
-	
-	
 }

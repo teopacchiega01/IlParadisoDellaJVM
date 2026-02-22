@@ -68,7 +68,7 @@ public class UtenteGenerico extends Utente {
 
 	@Override
 	public boolean isStaff() {
-		return true;
+		return false;
 	}
 
 }
