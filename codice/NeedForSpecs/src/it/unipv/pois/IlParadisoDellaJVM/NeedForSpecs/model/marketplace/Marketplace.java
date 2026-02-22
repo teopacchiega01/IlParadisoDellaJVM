@@ -37,6 +37,8 @@ public class Marketplace {
 
 	public Marketplace(DAOFactory factory) {
 		super();
+		this.prodotti = new ArrayList<Prodotto>();
+		this.annunci = new ArrayList<Annuncio>();
 		this.prod_dao = factory.getProdottoDAO();
 		this.ann_dao = factory.getAnnuncioDAO();
 		this.ord_dao = factory.getOrdineDAO();

@@ -13,24 +13,18 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarket
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarketplace.MarketplaceStaffPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarketplace.MarketplaceUserPanel;
 
+// @Author teopacchiega
 
 public class FrameMarketplace extends JFrame {
 
     private CardLayout cardLayout;
-    private JPanel pannelloPrincipale;
-
-    // --- I 7 PANNELLI DEL PROGETTO ---
+    private JPanel mkMainPanel;
     
-    // Marketplace
     private MarketplaceGuestPanel mkGuestPanel;
     private MarketplaceUserPanel mkUserPanel;
     private MarketplaceStaffPanel mkStaffPanel;
-    
-    // Configuratore
     private ConfiguratoreGuestPanel confGuestPanel;
     private ConfiguratoreUserPanel confUserPanel;
-    
-    // Altri
     private AggiuntaAnnuncioPanel aggiuntaAnnuncioPanel;
     private GestioneCarrelloPanel carrelloPanel;
 
@@ -38,61 +32,46 @@ public class FrameMarketplace extends JFrame {
         super("Il Paradiso della JVM - Hardware & Build");
         setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centra la finestra nello schermo
+        setLocationRelativeTo(null);
 
-        // Inizializzo il CardLayout
         cardLayout = new CardLayout();
-        pannelloPrincipale = new JPanel(cardLayout);
+        mkMainPanel = new JPanel(cardLayout);
 
-        // 1. Inizializzo le istanze di tutti i pannelli
         mkGuestPanel = new MarketplaceGuestPanel();
         mkUserPanel = new MarketplaceUserPanel();
         mkStaffPanel = new MarketplaceStaffPanel();
-        
         confGuestPanel = new ConfiguratoreGuestPanel();
         confUserPanel = new ConfiguratoreUserPanel();
-        
         aggiuntaAnnuncioPanel = new AggiuntaAnnuncioPanel();
         carrelloPanel = new GestioneCarrelloPanel();
 
-        // 2. Aggiungo i pannelli al "mazzo di carte" con i loro ID univoci
-        pannelloPrincipale.add(mkGuestPanel, "MK_GUEST");
-        pannelloPrincipale.add(mkUserPanel, "MK_USER");
-        pannelloPrincipale.add(mkStaffPanel, "MK_STAFF");
-        
-        pannelloPrincipale.add(confGuestPanel, "CONF_GUEST");
-        pannelloPrincipale.add(confUserPanel, "CONF_USER");
-        
-        pannelloPrincipale.add(aggiuntaAnnuncioPanel, "AGGIUNTA_ANNUNCIO");
-        pannelloPrincipale.add(carrelloPanel, "CARRELLO");
+        mkMainPanel.add(mkGuestPanel, PannelliMarketplace.MK_GUEST.name());
+        mkMainPanel.add(mkUserPanel, PannelliMarketplace.MK_USER.name());
+        mkMainPanel.add(mkStaffPanel, PannelliMarketplace.MK_STAFF.name());
+        mkMainPanel.add(confGuestPanel, PannelliMarketplace.CONF_GUEST.name());
+        mkMainPanel.add(confUserPanel, PannelliMarketplace.CONF_USER.name());
+        mkMainPanel.add(aggiuntaAnnuncioPanel, PannelliMarketplace.AGGIUNTA_ANNUNCIO.name());
+        mkMainPanel.add(carrelloPanel, PannelliMarketplace.CARRELLO.name());
 
-        add(pannelloPrincipale);
+        add(mkMainPanel);
     }
 
-    // --- METODO JOLLY PER CAMBIARE SCHERMATA (Consigliato per il Controller) ---
-    public void cambiaSchermata(String nomeSchermata) {
-        cardLayout.show(pannelloPrincipale, nomeSchermata);
-    }
+    // --- METODI PER CAMBIARE SCHERMATA ---
+    public void mostraMarketplaceGuest() { cardLayout.show(mkMainPanel, PannelliMarketplace.MK_GUEST.name()); }
+    public void mostraMarketplaceUser() { cardLayout.show(mkMainPanel, PannelliMarketplace.MK_USER.name()); }
+    public void mostraMarketplaceStaff() { cardLayout.show(mkMainPanel, PannelliMarketplace.MK_STAFF.name()); }
+    public void mostraConfiguratoreGuest() { cardLayout.show(mkMainPanel, PannelliMarketplace.CONF_GUEST.name()); }
+    public void mostraConfiguratoreUser() { cardLayout.show(mkMainPanel, PannelliMarketplace.CONF_USER.name()); }
+    public void mostraAggiuntaAnnuncio() { cardLayout.show(mkMainPanel, PannelliMarketplace.AGGIUNTA_ANNUNCIO.name()); }
+    public void mostraCarrello() { cardLayout.show(mkMainPanel, PannelliMarketplace.CARRELLO.name()); }
+    public void cambiaSchermata(PannelliMarketplace schermata) { cardLayout.show(mkMainPanel, schermata.name()); }
 
-    // --- METODI SPECIFICI PER CAMBIARE SCHERMATA (Opzionali) ---
-    public void mostraMarketplaceGuest() { cardLayout.show(pannelloPrincipale, "MK_GUEST"); }
-    public void mostraMarketplaceUser() { cardLayout.show(pannelloPrincipale, "MK_USER"); }
-    public void mostraMarketplaceStaff() { cardLayout.show(pannelloPrincipale, "MK_STAFF"); }
-    
-    public void mostraConfiguratoreGuest() { cardLayout.show(pannelloPrincipale, "CONF_GUEST"); }
-    public void mostraConfiguratoreUser() { cardLayout.show(pannelloPrincipale, "CONF_USER"); }
-    
-    public void mostraAggiuntaAnnuncio() { cardLayout.show(pannelloPrincipale, "AGGIUNTA_ANNUNCIO"); }
-    public void mostraCarrello() { cardLayout.show(pannelloPrincipale, "CARRELLO"); }
-
-    // --- GETTER PER I PANNELLI (Fondamentali per i Controller) ---
+    // --- GETTER ---
     public MarketplaceGuestPanel getMkGuestPanel() { return mkGuestPanel; }
     public MarketplaceUserPanel getMkUserPanel() { return mkUserPanel; }
     public MarketplaceStaffPanel getMkStaffPanel() { return mkStaffPanel; }
-    
     public ConfiguratoreGuestPanel getConfGuestPanel() { return confGuestPanel; }
     public ConfiguratoreUserPanel getConfUserPanel() { return confUserPanel; }
-    
     public AggiuntaAnnuncioPanel getAggiuntaAnnuncioPanel() { return aggiuntaAnnuncioPanel; }
     public GestioneCarrelloPanel getCarrelloPanel() { return carrelloPanel; }
 }

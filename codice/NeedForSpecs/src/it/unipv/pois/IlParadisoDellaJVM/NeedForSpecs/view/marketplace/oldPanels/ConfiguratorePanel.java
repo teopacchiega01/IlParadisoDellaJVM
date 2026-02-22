@@ -1,4 +1,4 @@
-package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.configuratore;
+package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.oldPanels;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -16,21 +16,25 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+//	@Author teopacchiega
+
 public class ConfiguratorePanel extends JPanel {
 	
 	private JButton btnLogin, btnTornaMarketplace, btnForum, btnCarrello;
 	private JTextField txtCerca;
 	private JButton btnCerca;
+	
 	private JList<String> listCatalogo, listBuild;
-	private JButton btnMostraInfo, btnAggiungiBuild, btnRimuovi, btnSvuotaBuild, btnSalvaBuild;
+	private JButton btnMostraInfo, btnAggiungiBuild, btnRimuovi, btnSvuotaBuild;
 	private JTextArea txtAreaInfo;
+	
+	private JButton btnSalvaBuild;
 	private JTextField txtNomeBuild, txtPrezzoBuild;
 	private JLabel lblMessaggio;
 
 	public ConfiguratorePanel() {
 		setLayout(new BorderLayout(10, 10));
 
-		// NORD
 		JPanel pnlNord = new JPanel(new GridLayout(2, 1));
 		JPanel pnlBottoniTop = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
 		btnLogin = new JButton("LOGIN");
@@ -38,24 +42,18 @@ public class ConfiguratorePanel extends JPanel {
 		btnForum = new JButton("FORUM");
 		btnCarrello = new JButton("CARRELLO");
 		pnlBottoniTop.add(btnLogin); pnlBottoniTop.add(btnTornaMarketplace); pnlBottoniTop.add(btnForum); pnlBottoniTop.add(btnCarrello);
-
 		JPanel pnlRicerca = new JPanel(new FlowLayout());
 		txtCerca = new JTextField(30);
 		btnCerca = new JButton("CERCA");
 		pnlRicerca.add(txtCerca); pnlRicerca.add(btnCerca);
-
 		pnlNord.add(pnlBottoniTop); pnlNord.add(pnlRicerca);
 		add(pnlNord, BorderLayout.NORTH);
 
-		// CENTRO (Diviso in due: Sopra il catalogo, Sotto la build attuale)
 		JPanel pnlCentro = new JPanel();
 		pnlCentro.setLayout(new BoxLayout(pnlCentro, BoxLayout.Y_AXIS));
-
-		// Centro-Top: Catalogo e Info
 		JPanel pnlCatalogo = new JPanel(new BorderLayout(5, 5));
 		listCatalogo = new JList<>();
 		pnlCatalogo.add(new JScrollPane(listCatalogo), BorderLayout.WEST);
-
 		JPanel pnlInfo = new JPanel(new BorderLayout());
 		JPanel pnlAzioniCat = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		btnMostraInfo = new JButton("MOSTRA INFO");
@@ -66,27 +64,21 @@ public class ConfiguratorePanel extends JPanel {
 		pnlInfo.add(pnlAzioniCat, BorderLayout.NORTH);
 		pnlInfo.add(new JScrollPane(txtAreaInfo), BorderLayout.CENTER);
 		pnlCatalogo.add(pnlInfo, BorderLayout.CENTER);
-
-		// Centro-Bottom: Lista Build Corrente
 		JPanel pnlLaMiaBuild = new JPanel(new BorderLayout(5, 5));
 		pnlLaMiaBuild.setBorder(BorderFactory.createTitledBorder("Componenti nella Build"));
 		listBuild = new JList<>();
 		pnlLaMiaBuild.add(new JScrollPane(listBuild), BorderLayout.CENTER);
-
 		JPanel pnlAzioniBuild = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		btnRimuovi = new JButton("RIMUOVI");
 		btnSvuotaBuild = new JButton("SVUOTA BUILD");
 		pnlAzioniBuild.add(btnRimuovi); pnlAzioniBuild.add(btnSvuotaBuild);
 		pnlLaMiaBuild.add(pnlAzioniBuild, BorderLayout.EAST);
-
 		pnlCentro.add(pnlCatalogo);
-		pnlCentro.add(Box.createVerticalStrut(15)); // Spazio
+		pnlCentro.add(Box.createVerticalStrut(15));
 		pnlCentro.add(pnlLaMiaBuild);
 		add(pnlCentro, BorderLayout.CENTER);
 
-		// SUD: Dati finali e Salvataggio
 		JPanel pnlSud = new JPanel(new GridLayout(4, 1, 5, 5));
-
 		JPanel pnlDati = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
 		pnlDati.add(new JLabel("NOME BUILD:"));
 		txtNomeBuild = new JTextField(15);
@@ -95,13 +87,10 @@ public class ConfiguratorePanel extends JPanel {
 		txtPrezzoBuild = new JTextField(10);
 		txtPrezzoBuild.setEditable(false);
 		pnlDati.add(txtPrezzoBuild);
-
 		btnSalvaBuild = new JButton("SALVA BUILD");
 		JPanel pnlSalva = new JPanel(new FlowLayout());
 		pnlSalva.add(btnSalvaBuild);
-
 		lblMessaggio = new JLabel(" ", SwingConstants.CENTER);
-
 		pnlSud.add(pnlDati);
 		pnlSud.add(pnlSalva);
 		pnlSud.add(lblMessaggio);
