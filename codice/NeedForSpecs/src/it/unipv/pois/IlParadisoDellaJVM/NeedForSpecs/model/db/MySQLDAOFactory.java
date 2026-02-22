@@ -1,5 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.IUtenteDAO;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteDaoDb;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi.IIndirizzoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi.IndirizzoDAOdb;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagamento.CartaDAOdb;
@@ -47,6 +49,11 @@ public class MySQLDAOFactory extends DAOFactory {
 	}
 	public ICommentoDAO getCommentoDAO() {
 		return new CommentoDaoDb();
+	}
+	@Override
+	public IUtenteDAO getUtenteDAO() {
+		// TODO Auto-generated method stub
+		return new UtenteDaoDb();
 	}
 	
 

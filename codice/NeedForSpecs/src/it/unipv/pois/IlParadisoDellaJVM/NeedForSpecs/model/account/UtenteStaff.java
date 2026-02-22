@@ -11,5 +11,7 @@ public class UtenteStaff extends Utente {
 	public boolean isStaff() {
 		return true;
 	}
+	
+	
 
 }
