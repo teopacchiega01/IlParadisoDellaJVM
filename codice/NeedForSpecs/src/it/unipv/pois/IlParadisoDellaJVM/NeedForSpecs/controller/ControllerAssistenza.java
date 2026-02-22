@@ -20,23 +20,21 @@ public class ControllerAssistenza {
 	private Assistenza model;
 	private Timer chatUpdater;
 
-	// COSTRUTTORE UNICO A 2 PARAMETRI (MVC PURO)
+	
 	public ControllerAssistenza(FrameAssistenza view, Assistenza model) {
 		this.view = view;
 		this.model = model;
 		
-		// 1. Il model carica i ticket usando la sua logica interna (isStaff)
+	
 		this.model.caricaTicketUtenteLoggato();
 		
-		// 2. Il controller instrada la grafica chiamando un metodo separato e pulito
+		
 		inizializzaInterfaccia();
 		
 		this.view.setVisible(true);
 	}
 	
-	// ==========================================================
-	// METODO DI ROUTING GRAFICO
-	// ==========================================================
+
 	private void inizializzaInterfaccia() {
 		Utente u = model.getUtente_loggato();
 		ArrayList<Ticket> tickets = model.getTuttiITicketCaricati();
