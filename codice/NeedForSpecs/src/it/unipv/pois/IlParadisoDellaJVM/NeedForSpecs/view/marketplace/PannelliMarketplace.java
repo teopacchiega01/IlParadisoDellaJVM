@@ -7,5 +7,6 @@ public enum PannelliMarketplace {
 	CONF_GUEST,
 	CONF_USER,
 	AGGIUNTA_ANNUNCIO,
-	CARRELLO;
+	CARRELLO,
+	LOGIN;
 }

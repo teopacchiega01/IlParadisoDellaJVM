@@ -3,9 +3,11 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti
 import java.io.FileInputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Properties;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.Componente;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.ComponentiException;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
 
 //	@author teopacchiega
@@ -36,10 +38,28 @@ public class ProdottiFactory {
 
 		return b;
 	}
+	
+	public static Prodotto creaBuild() {
+		return new Build();
+	}
 
 	public static Prodotto creaBuild(String nomeBuild, double prezzo) {
 
 		Build b = new Build(prezzo, nomeBuild);
+
+		return b;
+	}
+	
+	public static Prodotto creaBuild(String nomeBuild, double prezzo, ArrayList<Componente> lista_componenti) {
+		Build b = new Build(prezzo, nomeBuild);
+		for(Componente c : lista_componenti) {
+			try {
+				b.aggiungiComponente(c);
+			} catch (ComponentiException e) {
+				System.out.println("C'è stato un errore nella creazione della build");
+				e.printStackTrace();
+			}
+		}
 
 		return b;
 	}

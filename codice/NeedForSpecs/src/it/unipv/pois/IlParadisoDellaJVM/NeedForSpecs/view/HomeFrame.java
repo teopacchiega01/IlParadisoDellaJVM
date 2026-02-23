@@ -1,6 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view;
 
 import javax.swing.JFrame;
+<<<<<<< HEAD
 import javax.swing.JPanel;
 import java.awt.CardLayout;
 
@@ -20,6 +21,10 @@ public class HomeFrame extends JFrame {
 	private HomePanel homePanel;
 	private RegistrazioneUtentePanel regUtentePanel;
 	private RegistrazioneStaffPanel regStaffPanel;
+=======
+
+public class HomeFrame extends JFrame{
+>>>>>>> branch 'main' of https://github.com/teopacchiega01/IlParadisoDellaJVM.git
 
 	public HomeFrame() {
 		super("Il Paradiso della JVM - Home Principale");

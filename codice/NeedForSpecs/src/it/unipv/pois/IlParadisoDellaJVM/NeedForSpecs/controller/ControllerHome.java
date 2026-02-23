@@ -1,5 +1,6 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.controller;
 
+<<<<<<< HEAD
 import java.time.LocalDate;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.GestoreAccount;
@@ -8,12 +9,17 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Assistenza
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
+=======
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
+>>>>>>> branch 'main' of https://github.com/teopacchiega01/IlParadisoDellaJVM.git
 
 public class ControllerHome {
 	
 	private GestoreAccount model;
 	private HomeFrame view; 
 
+<<<<<<< HEAD
 	public ControllerHome(GestoreAccount model,HomeFrame view) {
 		this.model = model;
 		this.view = view;
@@ -22,6 +28,10 @@ public class ControllerHome {
 		addListenersRegistrazioneUtentePanel();
 		addListenersRegistrazioneStaffPanel();
 		this.view.setVisible(true);
+=======
+	public ControllerHome(Utente utente_loggato, HomeFrame hf) {
+		// TODO Auto-generated constructor stub
+>>>>>>> branch 'main' of https://github.com/teopacchiega01/IlParadisoDellaJVM.git
 	}
 	
 	public void addListenersHomePanel() {

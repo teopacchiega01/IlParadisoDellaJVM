@@ -5,6 +5,8 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.LoginPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.carrello.GestioneCarrelloPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.configuratore.ConfiguratoreGuestPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.configuratore.ConfiguratoreUserPanel;
@@ -17,16 +19,17 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarket
 
 public class FrameMarketplace extends JFrame {
 
-    private CardLayout cardLayout;
-    private JPanel mkMainPanel;
+    private CardLayout card_layout;
+    private JPanel mk_main_panel;
     
-    private MarketplaceGuestPanel mkGuestPanel;
-    private MarketplaceUserPanel mkUserPanel;
-    private MarketplaceStaffPanel mkStaffPanel;
-    private ConfiguratoreGuestPanel confGuestPanel;
-    private ConfiguratoreUserPanel confUserPanel;
-    private AggiuntaAnnuncioPanel aggiuntaAnnuncioPanel;
-    private GestioneCarrelloPanel carrelloPanel;
+    private MarketplaceGuestPanel mk_guest_panel;
+    private MarketplaceUserPanel mk_user_panel;
+    private MarketplaceStaffPanel mk_staff_panel;
+    private ConfiguratoreGuestPanel conf_guest_panel;
+    private ConfiguratoreUserPanel conf_user_panel;
+    private AggiuntaAnnuncioPanel aggiunta_annuncio_panel;
+    private GestioneCarrelloPanel carrello_panel;
+    private LoginPanel login_panel;
 
     public FrameMarketplace() {
         super("Il Paradiso della JVM - Hardware & Build");
@@ -34,44 +37,51 @@ public class FrameMarketplace extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        cardLayout = new CardLayout();
-        mkMainPanel = new JPanel(cardLayout);
+        card_layout = new CardLayout();
+        mk_main_panel = new JPanel(card_layout);
 
-        mkGuestPanel = new MarketplaceGuestPanel();
-        mkUserPanel = new MarketplaceUserPanel();
-        mkStaffPanel = new MarketplaceStaffPanel();
-        confGuestPanel = new ConfiguratoreGuestPanel();
-        confUserPanel = new ConfiguratoreUserPanel();
-        aggiuntaAnnuncioPanel = new AggiuntaAnnuncioPanel();
-        carrelloPanel = new GestioneCarrelloPanel();
+        mk_guest_panel = new MarketplaceGuestPanel();
+        mk_user_panel = new MarketplaceUserPanel();
+        mk_staff_panel = new MarketplaceStaffPanel();
+        conf_guest_panel = new ConfiguratoreGuestPanel();
+        conf_user_panel = new ConfiguratoreUserPanel();
+        aggiunta_annuncio_panel = new AggiuntaAnnuncioPanel();
+        carrello_panel = new GestioneCarrelloPanel();
+        login_panel = new LoginPanel();
 
-        mkMainPanel.add(mkGuestPanel, PannelliMarketplace.MK_GUEST.name());
-        mkMainPanel.add(mkUserPanel, PannelliMarketplace.MK_USER.name());
-        mkMainPanel.add(mkStaffPanel, PannelliMarketplace.MK_STAFF.name());
-        mkMainPanel.add(confGuestPanel, PannelliMarketplace.CONF_GUEST.name());
-        mkMainPanel.add(confUserPanel, PannelliMarketplace.CONF_USER.name());
-        mkMainPanel.add(aggiuntaAnnuncioPanel, PannelliMarketplace.AGGIUNTA_ANNUNCIO.name());
-        mkMainPanel.add(carrelloPanel, PannelliMarketplace.CARRELLO.name());
+        mk_main_panel.add(mk_guest_panel, PannelliMarketplace.MK_GUEST.name());
+        mk_main_panel.add(mk_user_panel, PannelliMarketplace.MK_USER.name());
+        mk_main_panel.add(mk_staff_panel, PannelliMarketplace.MK_STAFF.name());
+        mk_main_panel.add(conf_guest_panel, PannelliMarketplace.CONF_GUEST.name());
+        mk_main_panel.add(conf_user_panel, PannelliMarketplace.CONF_USER.name());
+        mk_main_panel.add(aggiunta_annuncio_panel, PannelliMarketplace.AGGIUNTA_ANNUNCIO.name());
+        mk_main_panel.add(carrello_panel, PannelliMarketplace.CARRELLO.name());
+        mk_main_panel.add(login_panel, PannelliMarketplace.LOGIN.name());
 
-        add(mkMainPanel);
+        add(mk_main_panel);
     }
 
     // --- METODI PER CAMBIARE SCHERMATA ---
-    public void mostraMarketplaceGuest() { cardLayout.show(mkMainPanel, PannelliMarketplace.MK_GUEST.name()); }
-    public void mostraMarketplaceUser() { cardLayout.show(mkMainPanel, PannelliMarketplace.MK_USER.name()); }
-    public void mostraMarketplaceStaff() { cardLayout.show(mkMainPanel, PannelliMarketplace.MK_STAFF.name()); }
-    public void mostraConfiguratoreGuest() { cardLayout.show(mkMainPanel, PannelliMarketplace.CONF_GUEST.name()); }
-    public void mostraConfiguratoreUser() { cardLayout.show(mkMainPanel, PannelliMarketplace.CONF_USER.name()); }
-    public void mostraAggiuntaAnnuncio() { cardLayout.show(mkMainPanel, PannelliMarketplace.AGGIUNTA_ANNUNCIO.name()); }
-    public void mostraCarrello() { cardLayout.show(mkMainPanel, PannelliMarketplace.CARRELLO.name()); }
-    public void cambiaSchermata(PannelliMarketplace schermata) { cardLayout.show(mkMainPanel, schermata.name()); }
+    public void mostraMarketplaceGuest() { card_layout.show(mk_main_panel, PannelliMarketplace.MK_GUEST.name()); }
+    public void mostraMarketplaceUser() { card_layout.show(mk_main_panel, PannelliMarketplace.MK_USER.name()); }
+    public void mostraMarketplaceStaff() { card_layout.show(mk_main_panel, PannelliMarketplace.MK_STAFF.name()); }
+    public void mostraConfiguratoreGuest() { card_layout.show(mk_main_panel, PannelliMarketplace.CONF_GUEST.name()); }
+    public void mostraConfiguratoreUser() { card_layout.show(mk_main_panel, PannelliMarketplace.CONF_USER.name()); }
+    public void mostraAggiuntaAnnuncio() { card_layout.show(mk_main_panel, PannelliMarketplace.AGGIUNTA_ANNUNCIO.name()); }
+    public void mostraCarrello() { card_layout.show(mk_main_panel, PannelliMarketplace.CARRELLO.name()); }
+    public void mostraLogin() { card_layout.show(mk_main_panel, PannelliMarketplace.LOGIN.name()); }
+    public void cambiaSchermata(PannelliMarketplace schermata) { card_layout.show(mk_main_panel, schermata.name()); }
 
     // --- GETTER ---
-    public MarketplaceGuestPanel getMkGuestPanel() { return mkGuestPanel; }
-    public MarketplaceUserPanel getMkUserPanel() { return mkUserPanel; }
-    public MarketplaceStaffPanel getMkStaffPanel() { return mkStaffPanel; }
-    public ConfiguratoreGuestPanel getConfGuestPanel() { return confGuestPanel; }
-    public ConfiguratoreUserPanel getConfUserPanel() { return confUserPanel; }
-    public AggiuntaAnnuncioPanel getAggiuntaAnnuncioPanel() { return aggiuntaAnnuncioPanel; }
-    public GestioneCarrelloPanel getCarrelloPanel() { return carrelloPanel; }
+    public MarketplaceGuestPanel getMarketplaceGuestPanel() { return mk_guest_panel; }
+    public MarketplaceUserPanel getMarketplaceUserPanel() { return mk_user_panel; }
+    public MarketplaceStaffPanel getMarketplaceStaffPanel() { return mk_staff_panel; }
+    public ConfiguratoreGuestPanel getConfiguratoreGuestPanel() { return conf_guest_panel; }
+    public ConfiguratoreUserPanel getConfiguratoreUserPanel() { return conf_user_panel; }
+    public AggiuntaAnnuncioPanel getAggiuntaAnnuncioPanel() { return aggiunta_annuncio_panel; }
+    public GestioneCarrelloPanel getCarrelloPanel() { return carrello_panel; }
+    public LoginPanel getLoginPanel() { return login_panel; }
+    
+    // --- METODI PER CHIAMARE ALTRI FRAME
+    public HomeFrame getHomeFrame() { return new HomeFrame(); }
 }

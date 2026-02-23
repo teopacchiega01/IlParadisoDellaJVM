@@ -12,6 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.Annuncio;
+
 //	@Author teopacchiega
 
 public class GestioneCarrelloPanel extends JPanel {
@@ -19,7 +21,7 @@ public class GestioneCarrelloPanel extends JPanel {
 	private JButton btnLogout;
 	
 	private JButton btnEliminaLista;
-	private JList<String> listAnnunci;
+	private JList<Annuncio> listAnnunci;
 	
 	private JButton btnEffettuaOrdine, btnTornaMarketplace;
     private JTextField txtPrezzoTotale;
@@ -64,10 +66,10 @@ public class GestioneCarrelloPanel extends JPanel {
 
     // --- GETTER ---
     public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
-	public JButton getBtnLogin() { return btnLogout; }
+	public JButton getBtnLogout() { return btnLogout; }
 	public JButton getBtnEliminaLista() { return btnEliminaLista; }
 	public JButton getBtnEffettuaOrdine() { return btnEffettuaOrdine; }
-	public JList<String> getListAnnunci() { return listAnnunci; }
+	public JList<Annuncio> getListAnnunci() { return listAnnunci; }
 	public JTextField getTxtPrezzoTotale() { return txtPrezzoTotale; }
 	public JLabel getLblMessaggio() { return lblMessaggio; }
     

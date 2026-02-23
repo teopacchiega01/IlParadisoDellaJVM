@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class ConfiguratoreUserPanel extends ConfiguratoreBasePanel {
 
-    private JTextField txtNomeBuild, txtPrezzoBuild;
+    private JTextField txtNomeBuild;
     private JButton btnSalvaBuild;
 
     public ConfiguratoreUserPanel() {
@@ -17,8 +17,6 @@ public class ConfiguratoreUserPanel extends ConfiguratoreBasePanel {
 
     private void initUserComponents() {
         txtNomeBuild = new JTextField(15);
-        txtPrezzoBuild = new JTextField(10);
-        txtPrezzoBuild.setEditable(true);
         btnSalvaBuild = new JButton("SALVA BUILD");
     }
 
@@ -34,13 +32,6 @@ public class ConfiguratoreUserPanel extends ConfiguratoreBasePanel {
         gbc.gridx = 2; gbc.weightx = 0.5;
         add(txtNomeBuild, gbc);
 
-        // Prezzo
-        gbc.gridy = 5;
-        gbc.gridx = 1; gbc.weightx = 0.0;
-        add(new JLabel("Prezzo:"), gbc);
-        gbc.gridx = 2; gbc.weightx = 0.5;
-        add(txtPrezzoBuild, gbc);
-
         // Salva Build
         gbc.gridy = 6;
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1.0;
@@ -55,6 +46,5 @@ public class ConfiguratoreUserPanel extends ConfiguratoreBasePanel {
     }
 
     public JTextField getTxtNomeBuild() { return txtNomeBuild; }
-    public JTextField getTxtPrezzoBuild() { return txtPrezzoBuild; }
     public JButton getBtnSalvaBuild() { return btnSalvaBuild; }
 }
