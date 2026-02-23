@@ -6,6 +6,8 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
+
 
 /*
  * @author: Persy
@@ -57,6 +59,12 @@ public class FrameAssistenza extends JFrame {
 	
 	public void mostraChatUtente() {
 		cardLayout.show(contenitorePrincipale, "CHAT_UTENTE");
+	}
+	
+	
+	public HomeFrame creaHomeFrame() {
+		
+		return new HomeFrame();
 	}
 
 	public HomePanelStaff getHomePanelStaff() {

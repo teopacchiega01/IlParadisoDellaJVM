@@ -19,23 +19,28 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
 
 public class Assistenza {
 	
+	private static Assistenza instance;
+	
+	
 	private Map<String,Ticket> richieste_assistenza;
 	private IMessaggioDAO msg_dao;
 	private ITicketDAO ticket_dao; 
 	private Utente utente_loggato;
 
-	public Assistenza(DAOFactory factory) {
-		richieste_assistenza = new HashMap<String, Ticket>();
-		this.msg_dao = factory.getMessaggioDAO();
-		this.ticket_dao = factory.getTicketDAO();
-	}
+	private Assistenza() {
+        
+        DAOFactory factory = DAOFactory.getInstance();
+        this.msg_dao = factory.getMessaggioDAO();
+        this.ticket_dao = factory.getTicketDAO();
+        richieste_assistenza = new HashMap<>();
+    }
 
-	public Assistenza(DAOFactory factory, Utente utente_loggato) {
-		richieste_assistenza = new HashMap<String, Ticket>();
-		this.msg_dao = factory.getMessaggioDAO();
-		this.ticket_dao = factory.getTicketDAO();
-		this.utente_loggato = utente_loggato;
-	}
+    public static Assistenza getInstance() {
+        if (instance == null) {
+            instance = new Assistenza();
+        }
+        return instance;
+    }
 	
 	private boolean esisteTicket(String id_ticket) {
 		return richieste_assistenza.containsKey(id_ticket);
@@ -67,15 +72,15 @@ public class Assistenza {
 	}
 	
 	public boolean apriTicket() {
-		// Il ticket viene aperto direttamente dall'utente loggato nel model
+		
 		if (this.utente_loggato == null || this.utente_loggato.isStaff()) {
 			System.err.println("Errore: Solo un utente generico loggato può aprire un ticket.");
 			return false;
 		}
 		
 		Ticket t = new Ticket((UtenteGenerico) this.utente_loggato, null, Stato.IN_ASSEGNAZIONE, null);
-		boolean inseritoNelDb = ticket_dao.inserisciTicket(t);
-		if (inseritoNelDb) {
+		boolean inserito_nel_db = ticket_dao.inserisciTicket(t);
+		if (inserito_nel_db) {
 			richieste_assistenza.put(t.getId_ticket(), t);
 			System.out.println("Ticket Creato e salvato con Successo! ID: " + t.getId_ticket());
 			return true;
@@ -134,7 +139,6 @@ public class Assistenza {
 		}
 		
 		Ticket t = richieste_assistenza.get(id_ticket);
-		// Usa direttamente l'utente loggato nel Model
 		Messaggio msg = t.creaMessaggio(this.utente_loggato, testo);
 		boolean salvatoNelDb = msg_dao.inserisciMessaggioInTicketRiferimento(msg);
 		
@@ -192,14 +196,12 @@ public class Assistenza {
 	
 	public void aggiornaConversazioneDatoTicket(String id_ticket) {
 		Ticket t = visualizzaTicketDaId(id_ticket);
-		if(t.getConversazione().isEmpty() || t.getConversazione() == null) {
-			return;
-		}
 		
-		Messaggio m = t.getUltimoMessaggio();
-		ArrayList<Messaggio> messaggi = msg_dao.getMessaggiNuovi(t, m.getData_pubblicazione());
-		if(!messaggi.isEmpty() && messaggi != null) {	
-			t.agguiungiMessessaggiAllaConversazione(messaggi);
+		
+		ArrayList<Messaggio> tuttiIMessaggiDb = msg_dao.getMessaggiDaTicket(t);
+		
+		if (tuttiIMessaggiDb != null && !tuttiIMessaggiDb.isEmpty()) {
+			t.setConversazione(tuttiIMessaggiDb);
 		}
 	}
 
@@ -220,6 +222,9 @@ public class Assistenza {
 		
 		return ticketAttivi;
 	}
+	
+	
+	
 
 	public Utente getUtente_loggato() {
 		return utente_loggato;

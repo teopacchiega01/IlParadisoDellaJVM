@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
 
 /*
  * @author: Persy
@@ -87,6 +88,28 @@ public class TicketStaffPanel extends JPanel {
 		this.add(sud, BorderLayout.SOUTH);
 	}
 
+	// ==========================================================
+	// METODI DI ESTRAZIONE DATI SANIFICATI
+	// ==========================================================
+	public String getTestoMessaggioDaInviare() {
+		return StringChecker.pulisciInput(testo_messaggio_staff.getText());
+	}
+	
+	public Ricerca getTipoRicercaSelezionata() {
+		return (Ricerca) combo_ricerca.getSelectedItem();
+	}
+	
+	public String getParametroRicerca() {
+		return StringChecker.pulisciInput(testo_ricerca.getText());
+	}
+	
+	public void resetCampoRicerca() {
+		testo_ricerca.setText("");
+	}
+
+	// ==========================================================
+	// METODI DI GESTIONE GRAFICA
+	// ==========================================================
 	public boolean isPannelloVisibile() {
 	    return this.isShowing();
 	}
@@ -113,18 +136,13 @@ public class TicketStaffPanel extends JPanel {
 	
 	public void setLabeOutTicketStaff(String text) {
 		out_ticket_staff.setText(text);
-	}
+	}	
 
-	// GETTER
-	public JLabel getOut_ticket_staff() { return out_ticket_staff; }
-	public JTextArea getConversazione_staff() { return conversazione_staff; }
-	public JTextArea getTesto_messaggio_staff() { return testo_messaggio_staff; }
+	// ==========================================================
+	// GETTER DEI BOTTONI PER I LISTENER DEL CONTROLLER
+	// ==========================================================
 	public JButton getInvia_messaggio_staff() { return invia_messaggio_staff; }
 	public JButton getIndietro_butt() { return indietro_butt; }
-	
-	// GETTER PER LA RICERCA
-	public JComboBox<Ricerca> getCombo_ricerca() { return combo_ricerca; }
-	public JTextField getTesto_ricerca() { return testo_ricerca; }
 	public JButton getCerca_butt() { return cerca_butt; }
 	public JButton getReset_ricerca_butt() { return reset_ricerca_butt; }
 }

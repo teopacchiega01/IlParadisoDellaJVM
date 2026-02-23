@@ -1,7 +1,11 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.util.regex.Pattern;
 
 public class StringChecker {
@@ -47,5 +51,35 @@ public class StringChecker {
 			return false;
 		}
 		return Pattern.matches(regex, input.trim());
+	}
+	
+	
+	public static LocalDate convertiInLocalDate(String data, String formato) {
+		String dataPulita = pulisciInput(data);
+		if (dataPulita.isEmpty()) {
+			return null;
+		}
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formato);
+			return LocalDate.parse(dataPulita, formatter);
+		} catch (DateTimeParseException e) {
+			return null;
+		}
+	}
+
+	public static LocalDate convertiScadenzaCarta(String scadenza) {
+		String scadenzaPulita = pulisciInput(scadenza);
+		if (scadenzaPulita.isEmpty()) {
+			return null;
+		}
+		try {
+			DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+					.appendPattern("MM/yy")
+					.parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+					.toFormatter();
+			return LocalDate.parse(scadenzaPulita, formatter);
+		} catch (DateTimeParseException e) {
+			return null;
+		}
 	}
 }

@@ -69,6 +69,12 @@ public class Ticket {
 	public void setConversazione(ArrayList<Messaggio> conversazione) { this.conversazione = conversazione; }
 	
 	public void aggiungiMessaggioAllaConversazione(Messaggio msg) {
+		for (Messaggio m : this.conversazione) {
+			if (m.getId_contenuto_utente().equals(msg.getId_contenuto_utente())) {
+				return; 
+			}
+		}
+		
 		conversazione.add(msg);
 		System.out.println("Messaggio aggiunto alla conversazione");
 	}

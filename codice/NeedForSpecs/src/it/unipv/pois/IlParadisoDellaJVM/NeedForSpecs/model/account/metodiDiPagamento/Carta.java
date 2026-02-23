@@ -22,6 +22,7 @@ public class Carta {
         this.cvv = cvv;
     }
 
+    
     public String getNumeroCarta() {
         return numeroCarta;
     }

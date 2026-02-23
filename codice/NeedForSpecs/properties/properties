@@ -16,3 +16,12 @@ discount.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model
 AUTORE=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaAutoreStrategy
 DATA=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaDataStrategy
 TESTO=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaTestoStrategy
+
+
+
+# -- DAOFACTORY
+persistenza = it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.MySQLDAOFactory
+#persistenza = it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.TxtDAOFactory
+
+
+

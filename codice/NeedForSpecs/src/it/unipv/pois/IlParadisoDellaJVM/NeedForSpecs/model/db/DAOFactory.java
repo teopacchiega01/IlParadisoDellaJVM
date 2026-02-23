@@ -1,5 +1,8 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db;
 
+
+import java.util.Properties;
+
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.IUtenteDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi.IIndirizzoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagamento.ICartaDAO;
@@ -17,6 +20,13 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
  */
 
 public abstract class DAOFactory{
+	
+	
+	private static DAOFactory instance;
+	
+	
+	
+	
 	public abstract ITicketDAO getTicketDAO();
     public abstract IMessaggioDAO getMessaggioDAO();
     public abstract IProdottoDAO getProdottoDAO();
@@ -33,21 +43,39 @@ public abstract class DAOFactory{
     
     
     
-    
-    
     public static DAOFactory getPersistenceFactory(Persistenza persistenza_scelta) {
-    	
-    	switch(persistenza_scelta) {
-    	case MYSQL_DB:
-    		return new MySQLDAOFactory();
-    	default:
-    		throw new IllegalArgumentException("Persistenza non ancora implementata dall'applicazione");
 		
-    		
-    	}
-    	
-    }
+		if (instance == null) {
+			switch(persistenza_scelta) {
+				case MYSQL_DB:
+					instance = new MySQLDAOFactory();
+					break;
+				default:
+					throw new IllegalArgumentException("Persistenza non ancora implementata dall'applicazione");
+			}
+		}
+		
+		return instance;
+	}
 	
+	
+	
+	
+	public static DAOFactory getInstance() {
+
+		if (instance == null) {
+			Properties p = new Properties(); 
+			try (java.io.FileInputStream fis = new java.io.FileInputStream("properties/properties")) {
+				p.load(fis);
+				String factoryClassName = p.getProperty("persistenza");
+				java.lang.reflect.Constructor<?> c = Class.forName(factoryClassName).getConstructor();
+				instance = (DAOFactory) c.newInstance();
+			} catch (Exception e) { 
+				throw new RuntimeException("ERRORE CRITICO: Impossibile avviare la persistenza dal file properties. Controlla il nome della classe!", e);
+			}
+		}
+		return instance;
+	}
 
 	
 }

@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
 
 /*
  * @author: Persy
@@ -87,13 +88,30 @@ public class TicketUtentePanel extends JPanel {
 		this.add(sud, BorderLayout.SOUTH);
 	}
 	
-	public boolean isPannelloVisibile() {
-	    return this.isShowing();
+	// ==========================================================
+	// METODI DI ESTRAZIONE DATI SANIFICATI
+	// ==========================================================
+	public String getTestoMessaggioDaInviare() {
+		return StringChecker.pulisciInput(testo_messaggio_utente.getText()); 
 	}
 	
-	// Nota: qui restituiamo la stringa grezza per poi pulirla nel Controller con StringChecker
-	public String getTestoUtente() {
-		return testo_messaggio_utente.getText(); 
+	public Ricerca getTipoRicercaSelezionata() {
+		return (Ricerca) combo_ricerca.getSelectedItem();
+	}
+	
+	public String getParametroRicerca() {
+		return StringChecker.pulisciInput(testo_ricerca.getText());
+	}
+	
+	public void resetCampoRicerca() {
+		testo_ricerca.setText("");
+	}
+
+	// ==========================================================
+	// METODI DI GESTIONE GRAFICA
+	// ==========================================================
+	public boolean isPannelloVisibile() {
+	    return this.isShowing();
 	}
 	
 	public void setConversazioneTicket(String cronologia) {
@@ -120,16 +138,11 @@ public class TicketUtentePanel extends JPanel {
 		out_ticket_utente.setText(text);
 	}
 	
-	// GETTER
-	public JLabel getOut_ticket_utente() { return out_ticket_utente; }
-	public JTextArea getConversazione_utente() { return conversazione_utente; }
-	public JTextArea getTesto_messaggio_utente() { return testo_messaggio_utente; }
+	// ==========================================================
+	// GETTER DEI BOTTONI PER I LISTENER DEL CONTROLLER
+	// ==========================================================
 	public JButton getInvia_messaggio_utente() { return invia_messaggio_utente; }
 	public JButton getIndietro_butt() { return indietro_butt; }
-	
-	// GETTER PER LA RICERCA
-	public JComboBox<Ricerca> getCombo_ricerca() { return combo_ricerca; }
-	public JTextField getTesto_ricerca() { return testo_ricerca; }
 	public JButton getCerca_butt() { return cerca_butt; }
 	public JButton getReset_ricerca_butt() { return reset_ricerca_butt; }
 }

@@ -6,13 +6,18 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.GestoreAccount;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Assistenza;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Stato;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
+
+/*
+ * TODO Ricontrollare 
+ */
 
 public class ControllerAssistenza {
 	
@@ -20,21 +25,14 @@ public class ControllerAssistenza {
 	private Assistenza model;
 	private Timer chatUpdater;
 
-	
 	public ControllerAssistenza(FrameAssistenza view, Assistenza model) {
 		this.view = view;
 		this.model = model;
-		
-	
 		this.model.caricaTicketUtenteLoggato();
-		
-		
 		inizializzaInterfaccia();
-		
 		this.view.setVisible(true);
 	}
 	
-
 	private void inizializzaInterfaccia() {
 		Utente u = model.getUtente_loggato();
 		ArrayList<Ticket> tickets = model.getTuttiITicketCaricati();
@@ -71,6 +69,21 @@ public class ControllerAssistenza {
 		view.getHomePanelUtente().getVai_a_ticket_butt().addActionListener(e -> caricaChatUtente());
 		view.getTicketUtentePanel().getInvia_messaggio_utente().addActionListener(e -> gestisciInvioMessaggioUtente());
 		
+		view.getHomePanelUtente().getLogout_butt().addActionListener(e ->{
+			view.getHomePanelUtente().setLabelOutUtente("Logout effettuato con successo. Arrivederci!");
+			
+			
+			GestoreAccount gest = GestoreAccount.getInstance();
+			HomeFrame hf = view.creaHomeFrame();
+			view.setVisible(false);
+			hf.mostraHome();
+			new ControllerHome(gest, hf);
+			
+			
+		});
+		
+		
+		
 		view.getTicketUtentePanel().getIndietro_butt().addActionListener(e -> {
 			chatUpdater.start(); 
 			view.mostraHomeUtente();
@@ -80,8 +93,10 @@ public class ControllerAssistenza {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Ticket t = view.getHomePanelUtente().getTicketSelezionato();
-				Ricerca tipo = (Ricerca) view.getTicketUtentePanel().getCombo_ricerca().getSelectedItem();
-				String parametro = StringChecker.pulisciInput(view.getTicketUtentePanel().getTesto_ricerca().getText());
+				
+			
+				Ricerca tipo = view.getTicketUtentePanel().getTipoRicercaSelezionata();
+				String parametro = view.getTicketUtentePanel().getParametroRicerca();
 
 				if (t != null && !parametro.isEmpty()) {
 					chatUpdater.stop(); 
@@ -93,10 +108,14 @@ public class ControllerAssistenza {
 		});
 
 		view.getTicketUtentePanel().getReset_ricerca_butt().addActionListener(e -> {
-			view.getTicketUtentePanel().getTesto_ricerca().setText("");
+			view.getTicketUtentePanel().resetCampoRicerca();
 			caricaChatUtente();
 			chatUpdater.start(); 
 		});
+		
+		
+		
+		
 	}
 	
 	private void caricaChatUtente() {
@@ -109,15 +128,18 @@ public class ControllerAssistenza {
 	}
 
 	private void gestisciInvioMessaggioUtente() {
-		String testo = StringChecker.pulisciInput(view.getTicketUtentePanel().getTestoUtente()); 
+		
+		String testo = view.getTicketUtentePanel().getTestoMessaggioDaInviare(); 
 		Ticket t = view.getHomePanelUtente().getTicketSelezionato();
 		if (t != null && !testo.isEmpty()) {
 			if (model.creaMessaggio(testo, t.getId_ticket())) {
 				view.getTicketUtentePanel().pulisciInput();
+				view.getTicketUtentePanel().setConversazioneTicket(t.getCronologiaMessaggiFormattata());			
 			}
 		}
 	}
 
+	
 	/*==========================================================
 	 * LOGICA STAFF
 	 *==========================================================
@@ -152,6 +174,21 @@ public class ControllerAssistenza {
 				}
 			}
 		});
+		
+		
+
+		view.getHomePanelStaff().getLogout_butt().addActionListener(e ->{
+			view.getHomePanelStaff().setLabelOutStaff("Logout effettuato con successo. Arrivederci!");
+			GestoreAccount gen = GestoreAccount.getInstance();
+			gen.logout();
+			HomeFrame hf = view.creaHomeFrame();
+			view.setVisible(false);
+			new ControllerHome(gen, hf);
+			
+			
+		});
+		
+		
 
 		view.getTicketStaffPanel().getInvia_messaggio_staff().addActionListener(e -> gestisciInvioMessaggioStaff());
 		
@@ -164,8 +201,10 @@ public class ControllerAssistenza {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Ticket t = view.getHomePanelStaff().getTicketSelezionato();
-				Ricerca tipo = (Ricerca) view.getTicketStaffPanel().getCombo_ricerca().getSelectedItem();
-				String parametro = StringChecker.pulisciInput(view.getTicketStaffPanel().getTesto_ricerca().getText());
+				
+
+				Ricerca tipo = view.getTicketStaffPanel().getTipoRicercaSelezionata();
+				String parametro = view.getTicketStaffPanel().getParametroRicerca();
 
 				if (t != null && !parametro.isEmpty()) {
 					chatUpdater.stop(); 
@@ -177,7 +216,7 @@ public class ControllerAssistenza {
 		});
 
 		view.getTicketStaffPanel().getReset_ricerca_butt().addActionListener(e -> {
-			view.getTicketStaffPanel().getTesto_ricerca().setText("");
+			view.getTicketStaffPanel().resetCampoRicerca();
 			caricaChatStaff();
 			chatUpdater.start(); 
 		});
@@ -193,11 +232,12 @@ public class ControllerAssistenza {
 	}
 
 	private void gestisciInvioMessaggioStaff() {
-		String testo = StringChecker.pulisciInput(view.getTicketStaffPanel().getTesto_messaggio_staff().getText());
+		String testo = view.getTicketStaffPanel().getTestoMessaggioDaInviare();
 		Ticket t = view.getHomePanelStaff().getTicketSelezionato();
 		if (t != null && !testo.isEmpty()) {
 			if (model.creaMessaggio(testo, t.getId_ticket())) {
 				view.getTicketStaffPanel().pulisciInput();
+				view.getTicketStaffPanel().setConversazioneTicket(t.getCronologiaMessaggiFormattata());
 			}
 		}
 	}
