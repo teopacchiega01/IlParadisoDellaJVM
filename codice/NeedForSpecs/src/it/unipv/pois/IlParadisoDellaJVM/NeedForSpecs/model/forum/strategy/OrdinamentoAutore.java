@@ -1,28 +1,50 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy;
 
 import java.util.ArrayList;
-
+import java.util.Comparator;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;
 
-public class OrdinamentoAutore implements ForumStrategy{
+public class OrdinamentoAutore implements ForumStrategy {
 
 	@Override
 	public void ordinamento(ArrayList<Post> p) {
 
-		p.sort((p1, p2) -> {
-			
-			if (p1.getAutore() == null || p2.getAutore() == null) {
+		p.sort(new Comparator<Post>() {
+
+			@Override
+			public int compare(Post p1, Post p2) {
+
+				String autore1;
+				String autore2;
 				
-				return 0;
+				if (p1.getAutore() != null) {
+
+					autore1 = getAutore(p1);
+				} else {
+
+					autore1 = ""; 
+					
+				}
+
 				
+				if (p2.getAutore() != null) {
+					
+					autore2 = getAutore(p2);
+					
+				} else {
+					
+					autore2 = "";
+					
+				}
+
+				return autore1.compareToIgnoreCase(autore2);
 			}
-
-			String autore1 = p1.getAutore().getUser_name();
-			String autore2 = p2.getAutore().getUser_name();
-
-			return autore1.compareToIgnoreCase(autore2);
 		});
-
 	}
-
+	
+	private String getAutore(Post p) {
+		
+		return p.getAutore().getUser_name();
+		
+	}
 }

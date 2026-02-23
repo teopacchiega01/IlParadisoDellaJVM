@@ -27,10 +27,10 @@ public class PostDaoDb implements IPostDAO {
 		ResultSet resultset;
 
 
-		String query = "SELECT c.id_contenuto_utente, c.testo, c.data_pubblicazione, p.titolo, p.sottotitolo"
+		String query = "SELECT c.id_contenutoUtente, c.testo, c.data_pubblicazione, p.titolo, p.sottotitolo"
 				+ "FROM ContenutoUtente AS c"
 				+ "JOIN Utente AS u ON c.id_utente = u.user_name"
-				+ "JOIN Post AS p ON c.id_contenuto_utente = p.id_contenuto_utente"
+				+ "JOIN Post AS p ON c.id_contenutoUtente = p.id_contenutoUtente"
 				+ "WHERE u.user_name = ?" 
 				;
 
@@ -81,12 +81,12 @@ public class PostDaoDb implements IPostDAO {
 		ResultSet resultset;
 
 
-		String query = "SELECT c.id_contenuto_utente, c.testo, c.data_pubblicazione, p.titolo, p.sottotitolo, "
+		String query = "SELECT c.id_contenutoUtente, c.testo, c.data_pubblicazione, p.titolo, p.sottotitolo, "
 				+ "u.user_name, u.email, u.pw, u.nome, u.cognome, "
 				+ "ug.user_name AS id_generico "
 				+ "FROM ContenutoUtente AS c "
 				+ "JOIN Utente AS u ON u.user_name = c.id_utente "
-				+ "JOIN Post AS p ON c.id_contenuto_utente = p.id_contenuto_utente "
+				+ "JOIN Post AS p ON c.id_contenutoUtente = p.id_contenutoUtente "
 				+ "LEFT JOIN UtenteGenerico AS ug ON u.user_name = ug.user_name;";
 
 		try {
@@ -134,63 +134,63 @@ public class PostDaoDb implements IPostDAO {
 
 
 	@Override
-	public boolean creaPost(Post p) throws ForumException{
+	public boolean creaPost(Post p) throws ForumException {
 
-		String queryPost = "INSERT INTO Post VALUES (?, ?, ?)";
-		String queryContenutoUtente = "INSERT INTO ContenutoUtente VALUES (?, ?, ?, ?)";
+	    String queryContenutoUtente = "INSERT INTO ContenutoUtente (id_contenutoUtente, id_utente, testo, data_pubblicazione) VALUES (?, ?, ?, ?)";
+	    String queryPost = "INSERT INTO Post (id_contenutoUtente, titolo, sottotitolo) VALUES (?, ?, ?)";
 
+	    boolean success = false;
+	    Connection conn = DatabaseManager.getConnection();
 
-		ResultSet resultset;
+	    try {
 
-		boolean success = false;
-		Connection conn = DatabaseManager.getConnection();
+	        DatabaseManager.setAutoCommit(conn, false);
 
+	        PreparedStatement psCu = conn.prepareStatement(queryContenutoUtente);
 
-		try {
+	        psCu.setString(1, p.getId_contenuto_utente());
+	        psCu.setString(2, p.getAutore().getUser_name()); 
+	        psCu.setString(3, p.getTesto());
+	        psCu.setObject(4, p.getData_pubblicazione());
 
-			DatabaseManager.setAutoCommit(conn, false);
+	        psCu.executeUpdate();
 
-			PreparedStatement psPost = conn.prepareStatement(queryPost);
+	        PreparedStatement psPost = conn.prepareStatement(queryPost);
 
-			psPost.setString(1, p.getId_contenuto_utente());
-			psPost.setString(2, p.getTitolo());
-			psPost.setString(3, p.getSottotitolo());
+	        psPost.setString(1, p.getId_contenuto_utente());
+	        psPost.setString(2, p.getTitolo());
+	        psPost.setString(3, p.getSottotitolo());
 
-			psPost.executeUpdate();
+	        psPost.executeUpdate();
 
-			PreparedStatement psCu = conn.prepareStatement(queryContenutoUtente);
+	        DatabaseManager.commitConnection(conn);
+	        success = true;
 
-			psCu.setString(1, p.getId_contenuto_utente());
-			psCu.setString(2, p.getAutore().getUser_name());
-			psCu.setString(3, p.getTesto());
-			psCu.setObject(4, p.getData_pubblicazione());
+	    } catch (SQLException e) {
+	        
+	        DatabaseManager.rollbackConnection(conn);
 
-			psCu.executeUpdate();
+	        e.printStackTrace();
 
-			DatabaseManager.commitConnection(conn);
-			success = true;
+	        throw new ForumException("Errore creazione post: " + e.getMessage(), e);
 
-		} catch (SQLException e) {
+	    } finally {
 
-			DatabaseManager.rollbackConnection(conn);
+	        DatabaseManager.setAutoCommit(conn, true);
+	        DatabaseManager.closeConnection(conn);
+	    }
 
-			throw new ForumException("Errore creazione post", e);
-
-		}finally {
-
-			DatabaseManager.setAutoCommit(conn, true);
-			DatabaseManager.closeConnection(conn);
-		}
-
-		return success;
-
+	    return success;
 	}
+	
+	
+	
+	
 
 	@Override
 	public boolean eliminaPost(Post p) throws ForumException{
 
-		String queryPost = "DELETE FROM Post WHERE contenuto_utente = ?";
-		String queryContenutoUtente = "DELETE FROM ContenutiUtente WHERE id_contenutoUtente = ?";
+		String query = "DELETE FROM ContenutoUtente WHERE id_contenutoUtente = ?";
 
 
 
@@ -201,22 +201,18 @@ public class PostDaoDb implements IPostDAO {
 
 			DatabaseManager.setAutoCommit(conn, false);
 
-			PreparedStatement psPost = conn.prepareStatement(queryPost);
+			PreparedStatement psPost = conn.prepareStatement(query);
 
 			psPost.setString(1, p.getId_contenuto_utente());
 
 			psPost.executeUpdate();
 
-			PreparedStatement psCu = conn.prepareStatement(queryContenutoUtente);
-
-			psCu.setString(1, p.getId_contenuto_utente());
-
-			psCu.executeUpdate();
-
 			DatabaseManager.commitConnection(conn);
 			success = true;
 
 		} catch (SQLException e) {
+			
+			e.printStackTrace();
 
 			DatabaseManager.rollbackConnection(conn);
 

@@ -9,9 +9,9 @@ public class Post extends ContenutoUtente {
 
 	private String titolo; 
 	private String sottotitolo;
-	private ArrayList<Commento> commenti;
 
 
+	private ArrayList<Commento> commenti = new ArrayList<>();
 
 	public Post(String titolo, String sottotitolo, ArrayList<Commento> commenti) {
 		super();
@@ -19,7 +19,6 @@ public class Post extends ContenutoUtente {
 		this.sottotitolo = sottotitolo;
 		this.commenti = commenti;
 	}
-
 
 	public Post(Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo, String sottotitolo,
 			ArrayList<Commento> commenti) {
@@ -34,7 +33,6 @@ public class Post extends ContenutoUtente {
 		this.titolo = titolo;
 		this.sottotitolo = sottotitolo;
 	}
-
 
 	public Post(String id_contenuto_utente, Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo,
 			String sottotitolo, ArrayList<Commento> commenti) {
@@ -51,72 +49,29 @@ public class Post extends ContenutoUtente {
 		this.sottotitolo = sottotitolo;
 	}
 
-
-
-
-
-
-
 	public String getTitolo() {
 		return titolo;
 	}
-
-
-
-
-
-
-
 
 	public void setTitolo(String titolo) {
 		this.titolo = titolo;
 	}
 
-
-
-
-
-
-
-
 	public String getSottotitolo() {
 		return sottotitolo;
 	}
-
-
-
-
-
-
-
 
 	public void setSottotitolo(String sottotitolo) {
 		this.sottotitolo = sottotitolo;
 	}
 
-
-
-
-
-
-
-
 	public ArrayList<Commento> getCommenti() {
 		return commenti;
 	}
 
-
-
-
-
-
-
-
 	public void setCommenti(ArrayList<Commento> commenti) {
 		this.commenti = commenti;
 	}
-
-
 
 	public void aggiungiCommento(Commento c) {
 
@@ -127,10 +82,5 @@ public class Post extends ContenutoUtente {
 		this.commenti.add(c);
 
 	}
-
-
-
-
-
 
 }

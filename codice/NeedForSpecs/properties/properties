@@ -24,4 +24,7 @@ persistenza = it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.MySQLDAOFac
 #persistenza = it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.TxtDAOFactory
 
 
-
+# -- OrdinamentoPost
+PIU_RECENTI=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.OrdinamentoData
+TITOLO=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.OrdinamentoAlfabetico
+AUTORE=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.OrdinamentoAutore

@@ -47,19 +47,15 @@ public class Forum {
 
 
 
-
-
-
-
 	public ArrayList<Post> inizializzaForum() throws ForumException{
-		
+
 		return postDao.getPost();
 
 	}
 
 
 
-	public boolean creaPost(Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo, String sottotitolo) {
+	public boolean creaPost(Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo, String sottotitolo) throws ForumException {
 
 		if (autore == null || titolo == null || titolo.isEmpty()) {
 			throw new IllegalArgumentException("Dati del post non validi");
@@ -79,7 +75,8 @@ public class Forum {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
 
-			return false;
+			throw e;
+
 		}
 
 
@@ -115,7 +112,7 @@ public class Forum {
 
 
 
-	public boolean eliminaPost(Post p) {
+	public boolean eliminaPost(Post p) throws ForumException{
 
 		if(p == null || p.getId_contenuto_utente() == null || p.getId_contenuto_utente().isEmpty()) {
 			throw new IllegalArgumentException("Parametro non valido");
@@ -181,9 +178,20 @@ public class Forum {
 
 
 	}
-	
-	
-	
+
+	public ArrayList<Commento> getCommenti(Post p) throws ForumException {
+
+		return commentoDao.getCommenti(p); 
+
+	}
+
+	public ArrayList<Commento> getCommentiDiCommenti(Post p, Commento c) throws ForumException {
+
+		return commentoDao.getCommentiDiCommenti(p, c); 
+	}
+
+
+
 
 
 

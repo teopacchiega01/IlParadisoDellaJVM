@@ -32,7 +32,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 				+ "c.id_contenutoUtente, c.testo, c.data_pubblicazione "       
 				+ "FROM ContenutoUtente AS c "
 				+ "JOIN Commento AS com ON c.id_contenutoUtente = com.id_commento "
-				+ "JOIN Post AS p ON com.id_post_di_riferimento = p.id_contenutoUtente " 
+				+ "JOIN Post AS p ON com.id_post_riferimento = p.id_contenutoUtente " 
 				+ "JOIN Utente AS u ON u.user_name = c.id_utente "
 				+ "LEFT JOIN UtenteGenerico AS ug ON u.user_name = ug.user_name "
 				+ "WHERE p.titolo = ?;";
@@ -148,9 +148,10 @@ public class CommentoDaoDb implements ICommentoDAO {
 
 	@Override
 	public boolean creaCommento(Commento c, Post p, ContenutoUtente parent) throws ForumException{
-
-		String queryCommento = "INSERT INTO Commento VALUES (?, ?, ?)";
+		
 		String queryContenutoUtente = "INSERT INTO ContenutoUtente VALUES (?, ?, ?, ?)";
+		String queryCommento = "INSERT INTO Commento VALUES (?, ?, ?)";
+		
 
 		//CONNESSIONE DB
 
@@ -161,15 +162,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 		try {
 
 			DatabaseManager.setAutoCommit(conn, false);
-
-			PreparedStatement psComm = conn.prepareStatement(queryCommento);
-
-			psComm.setString(1, c.getId_contenuto_utente());
-			psComm.setString(2, p.getId_contenuto_utente());
-			psComm.setString(3, parent.getId_contenuto_utente());
-
-			psComm.executeUpdate();
-
+			
 			PreparedStatement psCu = conn.prepareStatement(queryContenutoUtente);
 
 			psCu.setString(1, c.getId_contenuto_utente());
@@ -179,10 +172,22 @@ public class CommentoDaoDb implements ICommentoDAO {
 
 			psCu.executeUpdate();
 
+			PreparedStatement psComm = conn.prepareStatement(queryCommento);
+
+			psComm.setString(1, c.getId_contenuto_utente());
+			psComm.setString(2, p.getId_contenuto_utente());
+			psComm.setString(3, parent.getId_contenuto_utente());
+
+			psComm.executeUpdate();
+
+			
+
 			DatabaseManager.commitConnection(conn);
 			success = true;
 
 		} catch (SQLException e) {
+			
+			e.printStackTrace();
 
 			DatabaseManager.rollbackConnection(conn);
 
@@ -202,7 +207,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 	public boolean eliminaCommento(Commento c) throws ForumException{
 
 		String queryCommento = "DELETE FROM Commento WHERE id_commento = ?";
-		String queryContenutoUtente = "DELETE FROM ContenutiUtente WHERE id_contenutoUtente = ?";
+		String queryContenutoUtente = "DELETE FROM ContenutoUtente WHERE id_contenutoUtente = ?";
 
 
 
@@ -229,7 +234,8 @@ public class CommentoDaoDb implements ICommentoDAO {
 			success = true;
 
 		} catch (SQLException e) {
-
+			
+			e.printStackTrace();			
 			DatabaseManager.rollbackConnection(conn);
 
 			throw new ForumException("Errore eliminazione commento", e);
