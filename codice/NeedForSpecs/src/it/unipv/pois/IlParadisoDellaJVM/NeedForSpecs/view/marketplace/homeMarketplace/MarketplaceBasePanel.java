@@ -17,14 +17,17 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.Annuncio;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.Prodotto;
+
 public abstract class MarketplaceBasePanel extends JPanel {
 
     // Componenti Fissi (Comuni a tutti)
     protected JButton btnLoginLogout, btnTornaHome;
-    protected JList<String> listTuttiProdotti;
-    protected JButton btnCercaAnnunci;
-    protected JList<String> listAnnunciProdottoSelezionato;
-    protected JButton btnMostraInfo;
+    protected JList<Prodotto> listTuttiProdotti;
+//    protected JButton btnCercaAnnunci;
+    protected JList<Annuncio> listAnnunciProdottoSelezionato;
+//    protected JButton btnMostraInfo;
     protected JTextArea txtAreaInfoAnnuncio;
     protected JButton btnAccediConfiguratore;
     protected JLabel lblMessaggio;
@@ -53,10 +56,10 @@ public abstract class MarketplaceBasePanel extends JPanel {
         btnTornaHome = new JButton("TORNA ALLA HOME");
         
         listTuttiProdotti = new JList<>();
-        btnCercaAnnunci = new JButton("CERCA ANNUNCI");
+//        btnCercaAnnunci = new JButton("CERCA ANNUNCI");
         
         listAnnunciProdottoSelezionato = new JList<>();
-        btnMostraInfo = new JButton("MOSTRA INFO");
+//        btnMostraInfo = new JButton("MOSTRA INFO");
         
         txtAreaInfoAnnuncio = new JTextArea(8, 30);
         txtAreaInfoAnnuncio.setEditable(false);
@@ -72,7 +75,7 @@ public abstract class MarketplaceBasePanel extends JPanel {
         pnlBottomLeft = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         
         // Aggiungo subito il bottone "Mostra Info" al suo pannellino
-        pnlInfoActions.add(btnMostraInfo);
+//        pnlInfoActions.add(btnMostraInfo);
     }
 
     private void layoutComponents() {
@@ -103,7 +106,7 @@ public abstract class MarketplaceBasePanel extends JPanel {
         add(new JScrollPane(listTuttiProdotti), gbc);
         
         gbc.gridx = 2; gbc.gridwidth = 1; gbc.weightx = 0.3; gbc.weighty = 0.0;
-        add(btnCercaAnnunci, gbc);
+//        add(btnCercaAnnunci, gbc);
 
         // --- RIGA 3: Catalogo Annunci e Info ---
         gbc.gridy = 2; gbc.weighty = 0.6;
@@ -139,10 +142,10 @@ public abstract class MarketplaceBasePanel extends JPanel {
     // Getter Fissi (comuni a tutti)
     public JButton getBtnLoginLogout() { return btnLoginLogout; }
     public JButton getBtnTornaHome() { return btnTornaHome; }
-    public JList<String> getListTuttiProdotti() { return listTuttiProdotti; }
-    public JButton getBtnCercaAnnunci() { return btnCercaAnnunci; }
-    public JList<String> getListAnnunciProdottoSelezionato() { return listAnnunciProdottoSelezionato; }
-    public JButton getBtnMostraInfo() { return btnMostraInfo; }
+    public JList<Prodotto> getListTuttiProdotti() { return listTuttiProdotti; }
+//    public JButton getBtnCercaAnnunci() { return btnCercaAnnunci; }
+    public JList<Annuncio> getListAnnunciProdottoSelezionato() { return listAnnunciProdottoSelezionato; }
+//    public JButton getBtnMostraInfo() { return btnMostraInfo; }
     public JTextArea getTxtAreaInfoAnnuncio() { return txtAreaInfoAnnuncio; }
     public JButton getBtnAccediConfiguratore() { return btnAccediConfiguratore; }
     public JLabel getLblMessaggio() { return lblMessaggio; }

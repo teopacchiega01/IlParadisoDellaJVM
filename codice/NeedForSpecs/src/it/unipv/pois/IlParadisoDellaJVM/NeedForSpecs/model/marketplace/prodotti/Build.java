@@ -74,16 +74,17 @@ public class Build extends Prodotto{
 		this.componenti = componenti;
 	}
 
-	public boolean aggiungiComponente(Componente nuovoComponente) throws ComponentiException {
-		TipoComponente tipoNuovoComponente = nuovoComponente.getTipo();
-		ArrayList<Componente> componentiPresenti = componenti.get(tipoNuovoComponente);
+	public boolean aggiungiComponente(Componente nuovo_componente) throws ComponentiException {
+		TipoComponente tipo_nuovo_componente = nuovo_componente.getTipo();
+		ArrayList<Componente> componenti_presenti = componenti.get(tipo_nuovo_componente);
 
 		//	Prima di tutto controllo se l'utente sta cercando di aggiungere una scheda madre
-		if(tipoNuovoComponente==TipoComponente.MOBO) {
+		if(tipo_nuovo_componente==TipoComponente.MOBO) {
 			//	Se non c'è nessuna mobo, la può aggiungere
-			if(componentiPresenti.isEmpty()) {
-				componentiPresenti.add(nuovoComponente);
-				componenti.put(tipoNuovoComponente, componentiPresenti);
+			if(componenti_presenti.isEmpty()) {
+				componenti_presenti.add(nuovo_componente);
+				componenti.put(tipo_nuovo_componente, componenti_presenti);
+				aggiornaPrezzo();
 				return true;
 			}
 			//	Se c'è già una mobo, verrà lanciato un errore
@@ -92,7 +93,7 @@ public class Build extends Prodotto{
 			}	
 		}
 		//	Se l'utente cerca di aggiungere un componente senza aver selezionato una mobo, verrà lanciato un errore
-		else if((tipoNuovoComponente!=TipoComponente.MOBO) && componenti.get(TipoComponente.MOBO).isEmpty()) {
+		else if((tipo_nuovo_componente!=TipoComponente.MOBO) && componenti.get(TipoComponente.MOBO).isEmpty()) {
 			throw new ComponentiException("Il primo componente aggiunto deve essere una scheda madre", TipoErrore.SCHEDA_MADRE_MANCANTE);
 		}
 		/* 	Una volta scelta una mobo, l'utente può scegliere:
@@ -108,12 +109,13 @@ public class Build extends Prodotto{
 			 *  - se NON possono essercene multipli
 			 *  	> controllo se ce ne sono altri, in tal caso lancio un'eccezione
 			 */
-			switch (tipoNuovoComponente) {
+			switch (tipo_nuovo_componente) {
 			case CPU:
-				if(componentiPresenti.isEmpty()) {
-					if(verificaCompatibilità(componenti.get(TipoComponente.MOBO).get(0), nuovoComponente)) {
-						componentiPresenti.add(nuovoComponente);
-						componenti.put(tipoNuovoComponente, componentiPresenti);
+				if(componenti_presenti.isEmpty()) {
+					if(verificaCompatibilità(componenti.get(TipoComponente.MOBO).get(0), nuovo_componente)) {
+						componenti_presenti.add(nuovo_componente);
+						componenti.put(tipo_nuovo_componente, componenti_presenti);
+						aggiornaPrezzo();
 						return true;
 					}else {
 						throw new ComponentiException("Socket CPU e scheda madre incompatibili", TipoErrore.SOCKET_CPU_INCOMPATIBILE);
@@ -122,10 +124,10 @@ public class Build extends Prodotto{
 					throw new ComponentiException("CPU multiple rilevate", TipoErrore.CPU_MULTIPLE);
 				}
 			case RAM:
-				if(verificaCompatibilità(componenti.get(TipoComponente.MOBO).get(0), nuovoComponente)) {
+				if(verificaCompatibilità(componenti.get(TipoComponente.MOBO).get(0), nuovo_componente)) {
 					// Controllo se ci sono slot RAM liberi
 					int slot_ram = Integer.parseInt(componenti.get(TipoComponente.MOBO).get(0).getScheda_tecnica().get(AspettiTecnici.N_MODULI_RAM));
-					int n_stick_ram_da_aggiungere = Integer.parseInt(nuovoComponente.getScheda_tecnica().get(AspettiTecnici.N_MODULI_RAM));
+					int n_stick_ram_da_aggiungere = Integer.parseInt(nuovo_componente.getScheda_tecnica().get(AspettiTecnici.N_MODULI_RAM));
 
 					int n_stick_ram_presenti = 0;
 					for(Componente appoggio : componenti.get(TipoComponente.RAM)) {
@@ -135,8 +137,9 @@ public class Build extends Prodotto{
 					int tot_stick_ram = n_stick_ram_da_aggiungere + n_stick_ram_presenti;
 
 					if(tot_stick_ram<=slot_ram) {
-						componentiPresenti.add(nuovoComponente);
-						componenti.put(tipoNuovoComponente, componentiPresenti);
+						componenti_presenti.add(nuovo_componente);
+						componenti.put(tipo_nuovo_componente, componenti_presenti);
+						aggiornaPrezzo();
 						return true;
 					}else {
 						throw new ComponentiException("Slot RAM insufficienti per l'aggiunta della RAM richiesta", TipoErrore.SLOT_RAM_INSUFFICIENTI);
@@ -145,10 +148,10 @@ public class Build extends Prodotto{
 					throw new ComponentiException("Tipo RAM incompatibile con la scheda madre", TipoErrore.TIPO_RAM_INCOMPATIBILE);
 				}
 			case GPU:
-				if(verificaCompatibilità(componenti.get(TipoComponente.MOBO).get(0), nuovoComponente)) {
+				if(verificaCompatibilità(componenti.get(TipoComponente.MOBO).get(0), nuovo_componente)) {
 					// Controllo se ci sono slot PCIe liberi
 					int slot_pcie = Integer.parseInt(componenti.get(TipoComponente.MOBO).get(0).getScheda_tecnica().get(AspettiTecnici.N_SLOT_PCIE));
-					int n_slot_pcie_da_aggiungere = Integer.parseInt(nuovoComponente.getScheda_tecnica().get(AspettiTecnici.N_SLOT_PCIE));
+					int n_slot_pcie_da_aggiungere = Integer.parseInt(nuovo_componente.getScheda_tecnica().get(AspettiTecnici.N_SLOT_PCIE));
 
 
 					int n_slot_pcie_occupati = 0;
@@ -159,8 +162,9 @@ public class Build extends Prodotto{
 					int tot_slot_pcie_occupati = n_slot_pcie_occupati + n_slot_pcie_da_aggiungere;
 
 					if(tot_slot_pcie_occupati<slot_pcie) {
-						componentiPresenti.add(nuovoComponente);
-						componenti.put(tipoNuovoComponente, componentiPresenti);
+						componenti_presenti.add(nuovo_componente);
+						componenti.put(tipo_nuovo_componente, componenti_presenti);
+						aggiornaPrezzo();
 						return true;
 					}else {
 						throw new ComponentiException("Slot PCIe insufficienti per l'aggiunta della GPU richiesta", TipoErrore.SLOT_PCIE_INSUFFICIENTI);
@@ -171,7 +175,8 @@ public class Build extends Prodotto{
 			case PSU:
 				//	Controllo se c'è già un alimentatore
 				if(componenti.get(TipoComponente.PSU).isEmpty()) {
-					componenti.get(TipoComponente.PSU).add(nuovoComponente);
+					componenti.get(TipoComponente.PSU).add(nuovo_componente);
+					aggiornaPrezzo();
 					if(controllaPotenza()) {
 						return true;
 					}else {
@@ -186,18 +191,66 @@ public class Build extends Prodotto{
 			}
 
 		}
+		
 
 	}
 
 
-	public void rimuoviTipoDiComponenti(TipoComponente componente_da_rimuovere) {
-		componenti.put(componente_da_rimuovere, new ArrayList<Componente>());
+	public boolean rimuoviTipoDiComponenti(TipoComponente componente_da_rimuovere) {
+		if(!componente_da_rimuovere.equals(TipoComponente.MOBO)) {
+			componenti.put(componente_da_rimuovere, new ArrayList<Componente>());
+			aggiornaPrezzo();
+			return true;
+		}else {
+			return false;
+		}
 	}
 
-	//TODO
-	//	public boolean rimuoviComponente(TipoComponente componente_da_rimuovere, int posizione_comp_da_rim) {
-	//		return false;
-	//	}
+
+	public boolean rimuoviComponente(Componente componente_da_rimuovere) {
+		if (componente_da_rimuovere == null) return false;
+
+		ArrayList<Componente> componenti_del_tipo = componenti.get(componente_da_rimuovere.getTipo());
+
+		if (componenti_del_tipo == null) {
+			System.err.println("Impossibile rimuovere: categoria inesistente.");
+			return false;
+		}
+
+		if (componente_da_rimuovere.getTipo() == TipoComponente.MOBO) { 
+			boolean altri_componenti_presenti = false;
+
+			for (Map.Entry<TipoComponente, ArrayList<Componente>> entry : componenti.entrySet()) {
+				if (entry.getKey() != TipoComponente.MOBO) {
+					if (!entry.getValue().isEmpty()) {
+						aggiornaPrezzo();
+						altri_componenti_presenti = true;
+						break; 
+					}
+				}
+			}
+
+			if (altri_componenti_presenti) {
+				System.out.println("Impossibile rimuovere la scheda madre quando altre componenti sono presenti");
+				return false;
+			} else {
+				componenti_del_tipo.remove(componente_da_rimuovere);
+				System.out.println("Componente rimossa (MOBO)");
+				aggiornaPrezzo();
+				return true;
+			}
+
+		} else {
+			if (componenti_del_tipo.remove(componente_da_rimuovere)) {
+				System.out.println("Componente rimossa");
+				aggiornaPrezzo();
+				return true;
+			} else {
+				System.err.println("Impossibile rimuovere componente (non trovato nella lista)");
+				return false;
+			}
+		}
+	}
 
 	private boolean verificaCompatibilità(Componente c1, Componente c2) throws ComponentiException{
 
@@ -280,6 +333,24 @@ public class Build extends Prodotto{
 
 	}
 
+	public void aggiornaPrezzo() {
+		double totale = 0;
+		for (ArrayList<Componente> lista_di_un_tipo : componenti.values()) {
+			for (Componente singolo_pezzo : lista_di_un_tipo) {
+				totale += singolo_pezzo.getPrezzo();
+			}
+		}
+		this.setPrezzo(totale);
+	}
+	
+	public int getNumeroTotaleComponenti() {
+	    int n_componenti = 0;
+	    for (ArrayList<Componente> lista : componenti.values()) {
+	    	n_componenti += lista.size();
+	    }
+	    return n_componenti;
+	}
+
 	public int getPotenzaDisponibile() {
 		return componenti.get(TipoComponente.PSU).get(0).getPotenza();
 	}
@@ -298,18 +369,6 @@ public class Build extends Prodotto{
 	}
 
 	public boolean controllaPotenza() {
-		//		int potenza_disponibile = componenti.get(TipoComponente.PSU).get(0).getPotenza();
-		//		int potenza_richiesta = 0;
-		//
-		//		for(TipoComponente tipo_appoggio : TipoComponente.values()) {
-		//			if(tipo_appoggio==TipoComponente.MOBO || tipo_appoggio==TipoComponente.PSU) {
-		//				continue;
-		//			}
-		//			for(Componente comp_appoggio : componenti.get(tipo_appoggio)) {
-		//				potenza_richiesta += comp_appoggio.getPotenza();
-		//			}
-		//		}
-
 		int potenza_disponibile = getPotenzaDisponibile();
 		int potenza_richiesta = getPotenzaRichiesta();
 
@@ -321,17 +380,6 @@ public class Build extends Prodotto{
 	}
 
 	public boolean controllaPotenza(Componente nuovoComponente) {
-		//		int potenza_disponibile = componenti.get(TipoComponente.PSU).get(0).getPotenza();
-		//		int potenza_richiesta = nuovoComponente.getPotenza();
-		//
-		//		for(TipoComponente tipo_appoggio : TipoComponente.values()) {
-		//			if(tipo_appoggio==TipoComponente.MOBO || tipo_appoggio==TipoComponente.PSU) {
-		//				continue;
-		//			}
-		//			for(Componente comp_appoggio : componenti.get(tipo_appoggio)) {
-		//				potenza_richiesta += comp_appoggio.getPotenza();
-		//			}
-		//		}
 
 		int potenza_disponibile = getPotenzaDisponibile();
 		int potenza_richiesta = getPotenzaRichiesta() + nuovoComponente.getPotenza();

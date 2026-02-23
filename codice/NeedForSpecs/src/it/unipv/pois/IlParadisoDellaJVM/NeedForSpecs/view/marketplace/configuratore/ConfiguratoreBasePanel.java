@@ -16,21 +16,26 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.Componente;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
+
 public abstract class ConfiguratoreBasePanel extends JPanel {
 
     // Componenti Comuni
     protected JButton btnLoginLogout, btnTornaMarketplace, btnCarrello;
-    protected JList<String> listTipiComponente;
+    protected JList<TipoComponente> listTipiComponente;
     protected JButton btnAggiungiTipoAllaBuild;
 
     // Catalogo
-    protected JList<String> listComponentiDisponibili;
-    protected JButton btnMostraInfoCatalogo, btnAggiungiComponenteAllaBuild;
+    protected JList<Componente> listComponentiDisponibili;
+//    protected JButton btnMostraInfoCatalogo; 
+    protected JButton AggiungiComponenteAllaBuild;
     protected JTextArea txtAreaInfoCatalogo;
 
     // Build
-    protected JList<String> listComponentiBuild;
-    protected JButton btnMostraInfoBuild, btnRimuoviDaBuild;
+    protected JList<Componente> listComponentiBuild;
+//    protected JButton btnMostraInfoBuild; 
+    protected JButton btnRimuoviDaBuild;
     protected JTextArea txtAreaInfoBuild;
 
     protected JLabel lblMessaggio;
@@ -49,19 +54,19 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
         btnCarrello = new JButton("CARRELLO");
 
         // Tipo Componente
-        listTipiComponente = new JList<>(); // Placeholder
+        listTipiComponente = new JList<TipoComponente>();
         btnAggiungiTipoAllaBuild = new JButton("AGGIUNGI ALLA BUILD");
 
         // Catalogo
-        listComponentiDisponibili = new JList<>(); // Placeholder
-        btnMostraInfoCatalogo = new JButton("MOSTRA INFO");
-        btnAggiungiComponenteAllaBuild = new JButton("AGGIUNGI ALLA BUILD");
+        listComponentiDisponibili = new JList<Componente>();
+//        btnMostraInfoCatalogo = new JButton("MOSTRA INFO");
+//        btnAggiungiComponenteAllaBuild = new JButton("AGGIUNGI ALLA BUILD");
         txtAreaInfoCatalogo = new JTextArea(5, 20);
         txtAreaInfoCatalogo.setEditable(false);
 
         // Build
-        listComponentiBuild = new JList<>(); // Empty initially
-        btnMostraInfoBuild = new JButton("MOSTRA INFO");
+        listComponentiBuild = new JList<Componente>();
+//        btnMostraInfoBuild = new JButton("MOSTRA INFO");
         btnRimuoviDaBuild = new JButton("RIMUOVI DALLA BUILD");
         txtAreaInfoBuild = new JTextArea(5, 20);
         txtAreaInfoBuild.setEditable(false);
@@ -95,9 +100,9 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
 
         JPanel pnlInfoCatalogo = new JPanel(new BorderLayout(5, 5));
         JPanel pnlBtnInfoCat = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        pnlBtnInfoCat.add(btnMostraInfoCatalogo);
+//        pnlBtnInfoCat.add(btnMostraInfoCatalogo);
         pnlBtnInfoCat.add(Box.createHorizontalStrut(5));
-        pnlBtnInfoCat.add(btnAggiungiComponenteAllaBuild);
+//        pnlBtnInfoCat.add(btnAggiungiComponenteAllaBuild);
         pnlInfoCatalogo.add(pnlBtnInfoCat, BorderLayout.NORTH);
         pnlInfoCatalogo.add(new JScrollPane(txtAreaInfoCatalogo), BorderLayout.CENTER);
 
@@ -110,7 +115,7 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
 
         JPanel pnlInfoBuild = new JPanel(new BorderLayout(5, 5));
         JPanel pnlBtnInfoBuild = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        pnlBtnInfoBuild.add(btnMostraInfoBuild);
+//        pnlBtnInfoBuild.add(btnMostraInfoBuild);
         pnlBtnInfoBuild.add(Box.createHorizontalStrut(5));
         pnlBtnInfoBuild.add(btnRimuoviDaBuild);
         pnlInfoBuild.add(pnlBtnInfoBuild, BorderLayout.NORTH);
@@ -128,14 +133,14 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
     public JButton getBtnLoginLogout() { return btnLoginLogout; }
     public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
     public JButton getBtnCarrello() { return btnCarrello; }
-	public JList<String> getListTipiComponente() { return listTipiComponente; }
+	public JList<TipoComponente> getListTipiComponente() { return listTipiComponente; }
 	public JButton getBtnAggiungiTipoAllaBuild() { return btnAggiungiTipoAllaBuild; }
-	public JList<String> getListComponentiDisponibili() { return listComponentiDisponibili; }
-	public JButton getBtnMostraInfoCatalogo() {	return btnMostraInfoCatalogo; }
-	public JButton getBtnAggiungiComponenteAllaBuild() { return btnAggiungiComponenteAllaBuild; }
+	public JList<Componente> getListComponentiDisponibili() { return listComponentiDisponibili; }
+//	public JButton getBtnMostraInfoCatalogo() {	return btnMostraInfoCatalogo; }
+//	public JButton getBtnAggiungiComponenteAllaBuild() { return btnAggiungiComponenteAllaBuild; }
 	public JTextArea getTxtAreaInfoCatalogo() { return txtAreaInfoCatalogo; }
-	public JList<String> getListComponentiBuild() { return listComponentiBuild; }
-	public JButton getBtnMostraInfoBuild() { return btnMostraInfoBuild; }
+	public JList<Componente> getListComponentiBuild() { return listComponentiBuild; }
+//	public JButton getBtnMostraInfoBuild() { return btnMostraInfoBuild; }
 	public JButton getBtnRimuoviDaBuild() { return btnRimuoviDaBuild; }
 	public JTextArea getTxtAreaInfoBuild() { return txtAreaInfoBuild; }
 	public JLabel getLblMessaggio() { return lblMessaggio; }

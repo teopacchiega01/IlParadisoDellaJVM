@@ -2,6 +2,7 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace;
 
 import java.util.ArrayList;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.Annuncio;
@@ -25,23 +26,29 @@ public class Marketplace {
 	private IOrdineDAO ord_dao;
 	private ArrayList<Prodotto> prodotti;
 	private ArrayList<Annuncio> annunci;
+	private Utente utente_loggato;
+	private Build build_configuratore;
 
-	public Marketplace(ArrayList<Prodotto> prodotti, ArrayList<Annuncio> annunci, DAOFactory factory) {
+	public Marketplace(ArrayList<Prodotto> prodotti, ArrayList<Annuncio> annunci, Utente utente_loggato, DAOFactory factory) {
 		super();
 		this.prodotti = prodotti;
 		this.annunci = annunci;
+		this.utente_loggato = utente_loggato;
 		this.prod_dao = factory.getProdottoDAO();
 		this.ann_dao = factory.getAnnuncioDAO();
 		this.ord_dao = factory.getOrdineDAO();
+		this.build_configuratore = (Build)creaBuild();
 	}
 
-	public Marketplace(DAOFactory factory) {
+	public Marketplace(Utente utente_loggato, DAOFactory factory) {
 		super();
+		this.utente_loggato = utente_loggato;
 		this.prodotti = new ArrayList<Prodotto>();
 		this.annunci = new ArrayList<Annuncio>();
 		this.prod_dao = factory.getProdottoDAO();
 		this.ann_dao = factory.getAnnuncioDAO();
 		this.ord_dao = factory.getOrdineDAO();
+		this.build_configuratore = (Build)creaBuild();
 	}
 
 	public Prodotto aggiungiComponente(double prezzo, String marca, String modello, TipoComponente tipo,
@@ -55,6 +62,10 @@ public class Marketplace {
 		Prodotto nuova_build = ProdottiFactory.creaBuild(nome);
 		prodotti.add(nuova_build);
 		return nuova_build;
+	}
+	
+	public Prodotto creaBuild() {
+		return ProdottiFactory.creaBuild();
 	}
 
 	public boolean aggiungiComponenteABuild(Build build_da_aggiornare, Componente componente_da_aggiungere) throws ComponentiException {
@@ -121,6 +132,14 @@ public class Marketplace {
 			return false;
 		}
 	}
+	
+	public boolean rimuoviAnnuncio(Annuncio annuncio_da_rimuovere) {
+		if(annunci.remove(annuncio_da_rimuovere)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 	public String mostraAnnunci() {
 		if(annunci.isEmpty()) {
@@ -147,7 +166,19 @@ public class Marketplace {
 		}
 	}
 
-
+	public void resetBuild() {
+		this.build_configuratore = (Build)creaBuild();
+	}
+	
+	public boolean salvaBuildConfiguratore() {
+		if (build_configuratore != null && build_configuratore.getNumeroTotaleComponenti() >= 2) {
+	        this.prodotti.add(build_configuratore);
+	        resetBuild();
+	        return true;
+	    }
+	    return false;
+	}
+	
 	public boolean aggiungiAlCarrello(UtenteGenerico utente_loggato, Annuncio annuncio_da_acquistare) {
 		if(utente_loggato.aggiungiElementoAlCarrello(annuncio_da_acquistare)){
 			return true;
@@ -224,6 +255,22 @@ public class Marketplace {
 
 	public void setAnn_dao(IAnnuncioDAO ann_dao) {
 		this.ann_dao = ann_dao;
+	}
+
+	public Utente getUtente_loggato() {
+		return utente_loggato;
+	}
+
+	public void setUtente_loggato(Utente utente_loggato) {
+		this.utente_loggato = utente_loggato;
+	}
+
+	public Build getBuild_configuratore() {
+		return build_configuratore;
+	}
+
+	public void setBuild_configuratore(Build build_configuratore) {
+		this.build_configuratore = build_configuratore;
 	}
 
 }

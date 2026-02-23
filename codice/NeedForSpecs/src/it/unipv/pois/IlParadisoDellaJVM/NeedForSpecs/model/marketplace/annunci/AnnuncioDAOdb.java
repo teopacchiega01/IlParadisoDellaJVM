@@ -21,7 +21,8 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 		String query = "SELECT A.id_annuncio, A.id_utente_venditore, A.id_prodotto, A.prezzo,  "
 				+ "FROM Annuncio AS A JOIN Utente AS U ON A.id_utente_venditore = U.user_name"
 				+ "JOIN Prodotto AS P ON A.id_prodotto = P.id_prodotto"
-				+ "WHERE id_annuncio=?;";	
+				+ "WHERE id_annuncio=? "
+				+ "AND A.id_ordine IS NULL;";	
 		Annuncio annuncio_trovato;
 		
 		try {

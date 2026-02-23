@@ -1,6 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.gestioneAnnunci;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
@@ -8,58 +9,82 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
-//	@Author teopacchiega
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.Prodotto;
 
 public class AggiuntaAnnuncioPanel extends JPanel {
 	
 	private JButton btnLogout, btnCarrello;
-
-	private JButton btnCerca, btnAggiungiAnnuncio;
-	private JTextField txtCerca, txtPrezzo;
+	private JList<Prodotto> listProdotti; 
 	
+	private JTextField txtPrezzo;
+	private JButton btnAggiungiAnnuncio;
 	private JLabel lblMessaggio;
 	private JButton btnTornaMarketplace;
 
 	public AggiuntaAnnuncioPanel() {
 		setLayout(new BorderLayout(10, 10));
 
+		// --- TOP ---
 		JPanel pnlBottoniTop = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
 		btnLogout = new JButton("LOGOUT");
 		btnCarrello = new JButton("CARRELLO");
-		pnlBottoniTop.add(btnLogout); pnlBottoniTop.add(btnCarrello);
+		pnlBottoniTop.add(btnLogout); 
+		pnlBottoniTop.add(btnCarrello);
 		add(pnlBottoniTop, BorderLayout.NORTH);
-		JPanel pnlCentro = new JPanel();
-		pnlCentro.setLayout(new BoxLayout(pnlCentro, BoxLayout.Y_AXIS));
-		pnlCentro.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
-		JPanel pnlRicerca = new JPanel(new FlowLayout());
-		pnlRicerca.add(new JLabel("Prodotto da vendere:"));
-		txtCerca = new JTextField(20);
-		btnCerca = new JButton("CERCA PRODOTTO");
-		pnlRicerca.add(txtCerca); 
-		pnlRicerca.add(btnCerca);
-		JPanel pnlPrezzo = new JPanel(new FlowLayout());
+
+		// --- CENTRO ---
+		// Uso BorderLayout per dare più respiro alla lista
+		JPanel pnlCentro = new JPanel(new BorderLayout(10, 10));
+		pnlCentro.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
+
+		// 1. Area Lista Prodotti (CENTER)
+		JPanel pnlLista = new JPanel(new BorderLayout(5, 5));
+		pnlLista.add(new JLabel("Seleziona il prodotto che vuoi vendere:"), BorderLayout.NORTH);
+		
+		listProdotti = new JList<>();
+		listProdotti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // L'utente può venderne uno alla volta
+		JScrollPane scrollLista = new JScrollPane(listProdotti);
+		pnlLista.add(scrollLista, BorderLayout.CENTER);
+
+		// 2. Area Inserimento Prezzo e Bottone (SOUTH)
+		JPanel pnlAzione = new JPanel();
+		pnlAzione.setLayout(new BoxLayout(pnlAzione, BoxLayout.Y_AXIS));
+		
+		JPanel pnlPrezzo = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		pnlPrezzo.add(new JLabel("Prezzo di vendita (€):"));
 		txtPrezzo = new JTextField(10);
 		pnlPrezzo.add(txtPrezzo);
-		JPanel pnlAggiungi = new JPanel(new FlowLayout());
+		
+		JPanel pnlAggiungi = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		btnAggiungiAnnuncio = new JButton("PUBBLICA ANNUNCIO");
 		pnlAggiungi.add(btnAggiungiAnnuncio);
-		pnlCentro.add(pnlRicerca);
-		pnlCentro.add(Box.createVerticalStrut(20));
-		pnlCentro.add(pnlPrezzo);
-		pnlCentro.add(Box.createVerticalStrut(30));
-		pnlCentro.add(pnlAggiungi);
+
+		pnlAzione.add(Box.createVerticalStrut(10));
+		pnlAzione.add(pnlPrezzo);
+		pnlAzione.add(pnlAggiungi);
+
+		// Assemblo il centro
+		pnlCentro.add(pnlLista, BorderLayout.CENTER);
+		pnlCentro.add(pnlAzione, BorderLayout.SOUTH);
+		
 		add(pnlCentro, BorderLayout.CENTER);
 
+		// --- SUD ---
 		JPanel pnlSud = new JPanel(new BorderLayout());
 		lblMessaggio = new JLabel(" ", SwingConstants.CENTER);
+		lblMessaggio.setForeground(Color.RED); // Colore rosso per gli errori
+		
 		JPanel pnlTorna = new JPanel(new FlowLayout());
 		btnTornaMarketplace = new JButton("TORNA AL MARKETPLACE");
 		pnlTorna.add(btnTornaMarketplace);
+		
 		pnlSud.add(lblMessaggio, BorderLayout.NORTH);
 		pnlSud.add(pnlTorna, BorderLayout.SOUTH);
 		add(pnlSud, BorderLayout.SOUTH);
@@ -67,12 +92,10 @@ public class AggiuntaAnnuncioPanel extends JPanel {
 
 	// --- GETTER ---
 	public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
-	public JButton getBtnLogin() { return btnLogout; }
+	public JButton getBtnLogout() { return btnLogout; }
 	public JButton getBtnCarrello() { return btnCarrello; }
-	public JButton getBtnCerca() { return btnCerca; }
+	public JList<Prodotto> getListProdotti() { return listProdotti; }
 	public JButton getBtnAggiungiAnnuncio() { return btnAggiungiAnnuncio; }
-	public JTextField getTxtCerca() { return txtCerca; }
 	public JTextField getTxtPrezzo() { return txtPrezzo; }
 	public JLabel getLblMessaggio() { return lblMessaggio; }
-
 }
