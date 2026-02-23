@@ -11,7 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringChecker;
 
 public class RegistrazioneStaffPanel extends JPanel {
 

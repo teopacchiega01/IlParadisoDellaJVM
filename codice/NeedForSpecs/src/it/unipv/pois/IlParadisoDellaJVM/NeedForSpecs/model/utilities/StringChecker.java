@@ -1,4 +1,4 @@
-package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili;
+package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

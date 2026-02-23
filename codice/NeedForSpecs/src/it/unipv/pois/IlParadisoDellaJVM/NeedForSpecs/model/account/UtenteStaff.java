@@ -6,6 +6,10 @@ public class UtenteStaff extends Utente {
 		super(nome_utente, email, psw, nome, cognome);
 	}
 
+	public UtenteStaff() {
+		super();
+	}
+
 	@Override
 	public boolean isStaff() {
 		return true;

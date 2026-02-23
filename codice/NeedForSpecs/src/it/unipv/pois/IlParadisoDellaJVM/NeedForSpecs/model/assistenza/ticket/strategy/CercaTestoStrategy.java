@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringChecker;
 
 public class CercaTestoStrategy implements IRicercaMessaggiStrategy {
 

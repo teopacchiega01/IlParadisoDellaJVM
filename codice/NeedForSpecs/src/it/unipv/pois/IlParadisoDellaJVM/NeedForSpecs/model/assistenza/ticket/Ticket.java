@@ -11,7 +11,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.str
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.RicercaStrategyFactory;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringChecker;
 
 /*
  * @author: Persy

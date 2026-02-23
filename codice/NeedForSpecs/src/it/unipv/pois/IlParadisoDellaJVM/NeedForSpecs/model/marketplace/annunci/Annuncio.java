@@ -22,6 +22,12 @@ public class Annuncio {
 		this.venditore = venditore;
 		this.prezzo = prezzo;
 	}
+	
+	public Annuncio() {
+		super();
+	}
+
+
 
 	public String getId_annuncio() {
 		return id_annuncio;

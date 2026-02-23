@@ -21,6 +21,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 //	@author teopacchiega
 
 public class Marketplace {
+	private static Marketplace instance;
 	private IProdottoDAO prod_dao;
 	private IAnnuncioDAO ann_dao;
 	private IOrdineDAO ord_dao;
@@ -29,26 +30,46 @@ public class Marketplace {
 	private Utente utente_loggato;
 	private Build build_configuratore;
 
-	public Marketplace(ArrayList<Prodotto> prodotti, ArrayList<Annuncio> annunci, Utente utente_loggato, DAOFactory factory) {
+	private Marketplace(ArrayList<Prodotto> prodotti, ArrayList<Annuncio> annunci, Utente utente_loggato) {
 		super();
 		this.prodotti = prodotti;
 		this.annunci = annunci;
 		this.utente_loggato = utente_loggato;
+		DAOFactory factory = DAOFactory.getInstance();
 		this.prod_dao = factory.getProdottoDAO();
 		this.ann_dao = factory.getAnnuncioDAO();
 		this.ord_dao = factory.getOrdineDAO();
 		this.build_configuratore = (Build)creaBuild();
 	}
 
-	public Marketplace(Utente utente_loggato, DAOFactory factory) {
+	private Marketplace(Utente utente_loggato) {
 		super();
 		this.utente_loggato = utente_loggato;
 		this.prodotti = new ArrayList<Prodotto>();
 		this.annunci = new ArrayList<Annuncio>();
+		DAOFactory factory = DAOFactory.getInstance();
 		this.prod_dao = factory.getProdottoDAO();
 		this.ann_dao = factory.getAnnuncioDAO();
 		this.ord_dao = factory.getOrdineDAO();
 		this.build_configuratore = (Build)creaBuild();
+	}
+	
+	
+	private Marketplace() {
+		super();
+		DAOFactory factory = DAOFactory.getInstance();
+		this.prod_dao = factory.getProdottoDAO();
+		this.ann_dao = factory.getAnnuncioDAO();
+		this.ord_dao = factory.getOrdineDAO();
+		this.build_configuratore = (Build)creaBuild();
+	}
+
+	public static Marketplace getInstance() {
+		if(instance == null) {
+			instance = new Marketplace();
+			System.out.println("Istanza del Singleton di Marketplace ottenuta");
+		}
+		return instance;
 	}
 
 	public Prodotto aggiungiComponente(double prezzo, String marca, String modello, TipoComponente tipo,

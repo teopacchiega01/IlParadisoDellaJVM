@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utili.StringChecker;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringChecker;
 
 /*
  * @author: Persy

@@ -136,4 +136,22 @@ public class ControllerHome {
 			view.getHomePanel().setLabelUtenteLoggato(model.getUtenteLoggato().getUser_name());
 		}
 	}
+
+	public GestoreAccount getModel() {
+		return model;
+	}
+
+	public void setModel(GestoreAccount model) {
+		this.model = model;
+	}
+
+	public HomeFrame getView() {
+		return view;
+	}
+
+	public void setView(HomeFrame view) {
+		this.view = view;
+	}
+	
+	
 }

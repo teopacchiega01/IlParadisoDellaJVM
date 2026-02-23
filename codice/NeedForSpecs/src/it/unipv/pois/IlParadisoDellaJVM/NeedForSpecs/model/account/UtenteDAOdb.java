@@ -10,7 +10,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 
 // @author persy
 
-public class UtenteDaoDb implements IUtenteDAO {
+public class UtenteDAOdb implements IUtenteDAO {
 
 	
 	
@@ -25,6 +25,7 @@ public class UtenteDaoDb implements IUtenteDAO {
 	final String QUERY_INSERT_UTENTE = "INSERT INTO Utente (user_name, email, pw, nome, cognome) VALUES (?, ?, ?, ?, ?)";
 	final String QUERY_INSERT_UTENTE_GEN = "INSERT INTO UtenteGenerico (user_name, id_indirizzo, numero_carta) VALUES (?, ?, ?)";
 	
+	final String QUERY_GET_UTENTE_FROM_ID = "SELECT user_name, email, pw, nome, cognome FROM Utente WHERE user_name = ?;";
 
 	@Override
 	public Utente login(String email, String psw) {
@@ -138,5 +139,54 @@ public class UtenteDaoDb implements IUtenteDAO {
 		}
 
 		return success;
+	}
+
+
+	@Override
+	public Utente getUtenteFromId(String id_utente_da_trovare) {
+	    Utente utente_trovato = null;
+	    Connection conn = DatabaseManager.getConnection();
+	    PreparedStatement pr_stat = null;
+	    ResultSet res_set = null;
+	    
+	    // Ricerca tramite la chiave primaria user_name
+	    String query = "SELECT user_name, email, pw, nome, cognome FROM Utente WHERE user_name = ?;";
+	    
+	    try {
+	        pr_stat = conn.prepareStatement(query);
+	        pr_stat.setString(1, id_utente_da_trovare);
+	        
+	        res_set = pr_stat.executeQuery();
+	        
+	        if (res_set.next()) {
+	            // 1. Prima di tutto, estraggo l'email per poter fare il controllo
+	            String email_trovata = res_set.getString("email");
+	            
+	            // 2. Controllo se è uno staff o un utente generico
+	            if (email_trovata != null && email_trovata.contains("@staff")) {
+	                utente_trovato = new UtenteStaff();
+	            } else {
+	                utente_trovato = new UtenteGenerico();
+	            }
+	            
+	            // 3. Ora che l'oggetto è istanziato (con il tipo corretto), popolo gli attributi comuni
+	            // Ereditati dalla classe astratta Utente
+	            utente_trovato.setUser_name(res_set.getString("user_name"));
+	            utente_trovato.setEmail(email_trovata);
+	            utente_trovato.setPsw(res_set.getString("pw"));
+	            utente_trovato.setNome(res_set.getString("nome"));
+	            utente_trovato.setCognome(res_set.getString("cognome"));
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Chiusura sicura delle risorse per evitare memory leak
+	        try { if (res_set != null) res_set.close(); } catch (SQLException e) {}
+	        try { if (pr_stat != null) pr_stat.close(); } catch (SQLException e) {}
+	    }
+	    
+	    DatabaseManager.closeConnection(conn);
+	    return utente_trovato; 
 	}
 }
