@@ -1,13 +1,11 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view;
 
 import javax.swing.JFrame;
-<<<<<<< HEAD
 import javax.swing.JPanel;
 import java.awt.CardLayout;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.FrameMarketplace;
-
 
 public class HomeFrame extends JFrame {
 
@@ -21,10 +19,6 @@ public class HomeFrame extends JFrame {
 	private HomePanel homePanel;
 	private RegistrazioneUtentePanel regUtentePanel;
 	private RegistrazioneStaffPanel regStaffPanel;
-=======
-
-public class HomeFrame extends JFrame{
->>>>>>> branch 'main' of https://github.com/teopacchiega01/IlParadisoDellaJVM.git
 
 	public HomeFrame() {
 		super("Il Paradiso della JVM - Home Principale");
@@ -70,6 +64,7 @@ public class HomeFrame extends JFrame{
 	public FrameMarketplace creaFrameMarketplace() {
 		return new FrameMarketplace();
 	}
+    
 	public void mostraHome() {
 		cardLayout.show(mainPanel, HOME_PANEL);
 	}
