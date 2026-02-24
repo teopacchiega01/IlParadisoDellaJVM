@@ -14,7 +14,7 @@ public class main {
 
 		// 1. Creo gli utenti simulati
 		UtenteGenerico utenteSimulato = new UtenteGenerico("GiuliaBianchi", "giulia.b@email.com", "qwerty", "Giulia", "Bianchi");
-		UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@paradiso.com", "adminpass", "Luca", "Verdi");
+		UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@staff.it", "adminpass", "Luca", "Verdi");
 
 		HomeFrame hf = new HomeFrame();
 		GestoreAccount ga = GestoreAccount.getInstance();

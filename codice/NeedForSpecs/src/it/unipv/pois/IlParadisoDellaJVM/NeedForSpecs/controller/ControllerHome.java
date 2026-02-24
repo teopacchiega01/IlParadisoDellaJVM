@@ -1,13 +1,16 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.GestoreAccount;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Assistenza;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.Marketplace;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.FrameMarketplace;
 
 public class ControllerHome {
 	
@@ -21,18 +24,19 @@ public class ControllerHome {
 		addListenersHomePanel();
 		addListenersRegistrazioneUtentePanel();
 		addListenersRegistrazioneStaffPanel();
+		addListenersLogin();
+		addListenersModificaPagamento();
 		this.view.setVisible(true);
 	}
 	
 	public void addListenersHomePanel() {
 		
 		view.getHomePanel().getRegistrati_staff_butt().addActionListener(e -> view.mostraRegistrazioneStaff());
-		
 		view.getHomePanel().getRegistrati_utente_butt().addActionListener(e -> view.mostraRegistrazioneUtente());
 
 		view.getHomePanel().getLogin_butt().addActionListener(e -> {
 			if(model.getUtenteLoggato() == null) {
-				// TODO: view.mostraLogin();
+				 view.mostraLogin();
 			} else {
 				view.getHomePanel().setLabelOut("Sei già loggato");
 			}
@@ -45,6 +49,7 @@ public class ControllerHome {
 			view.getHomePanel().setVisibilitaLogin(true);
 			view.getHomePanel().setVisibilitaLogout(false);
 			view.getHomePanel().setVisibilitaRegistrati(true);
+			view.getHomePanel().setVisibilitaModificaPagamento(false); 
 		});
 		
 		view.getHomePanel().getAssistenza_butt().addActionListener(e -> {
@@ -61,19 +66,29 @@ public class ControllerHome {
 		});
 		
 		view.getHomePanel().getMarketplace_butt().addActionListener(e -> {
-			// TODO
+			
+			FrameMarketplace fm = view.creaFrameMarketplace() ;
+			Marketplace mp = Marketplace.getInstance();
+			mp.setUtente_loggato(model.getUtenteLoggato());
+			new ControllerMarketplace(mp, fm);
+			
+			this.view.setVisible(false);
+			fm.setVisible(true);
+		});
+
+
+		view.getHomePanel().getModificaPagamentoButt().addActionListener(e -> {
+			view.mostraModificaPagamento();
 		});
 	}
 	
 	public void addListenersRegistrazioneUtentePanel() {
-		
 		view.getRegUtentePanel().getIndietro_butt().addActionListener(e -> {
 			view.getRegUtentePanel().pulisciCampi();
 			view.mostraHome();
 		});
 		
 		view.getRegUtentePanel().getRegistrati_butt().addActionListener(e -> {
-			
 			if(!view.getRegUtentePanel().validaCampi()) return;
 
 			String nome = view.getRegUtentePanel().getNome();
@@ -103,20 +118,23 @@ public class ControllerHome {
 	}
 	
 	public void addListenersRegistrazioneStaffPanel() {
-		
 		view.getRegStaffPanel().getIndietro_butt().addActionListener(e -> {
 			view.getRegStaffPanel().pulisciCampi();
 			view.mostraHome();
 		});
 		
 		view.getRegStaffPanel().getRegistrati_butt().addActionListener(e -> {
-			
 			if(!view.getRegStaffPanel().validaCampi()) return;
+
+			String email = view.getRegStaffPanel().getEmail();
+			if (!email.endsWith("@staff.it")) {
+				view.getRegStaffPanel().setLabelOut("Errore: La mail dello staff deve terminare con @staff.it");
+				return; 
+			}
 
 			String nome = view.getRegStaffPanel().getNome();
 			String cognome = view.getRegStaffPanel().getCognome();
 			String username = view.getRegStaffPanel().getUsername();
-			String email = view.getRegStaffPanel().getEmail();
 			String password = view.getRegStaffPanel().getPassword();
 
 			boolean successo = model.registraStaff(nome, cognome, username, email, password);
@@ -131,27 +149,85 @@ public class ControllerHome {
 		});
 	}
 	
+	private void addListenersLogin() {
+		view.getLoginPanel().getBtnTornaHome().addActionListener(e -> view.mostraHome());
+	
+		view.getLoginPanel().getBtnEffettuaLogin().addActionListener(e -> {
+			String email = view.getLoginPanel().getTxtEmail().getText();
+			String pw = new String(view.getLoginPanel().getTxtPassword().getPassword());
+			
+			boolean successo = model.loginUtente(email, pw);
+			if(!successo) {
+				System.out.println("Login fallito");
+				view.getLoginPanel().getLblMessaggio().setText("Login fallito: email o password errate");
+			} else {
+				view.getLoginPanel().getLblMessaggio().setText(" "); 
+				view.getLoginPanel().getTxtEmail().setText("");   
+				view.getLoginPanel().getTxtPassword().setText("");
+				
+				view.getHomePanel().setLabelUtenteLoggato(model.getUtenteLoggato().getUser_name());
+				view.getHomePanel().setVisibilitaLogin(false);
+				view.getHomePanel().setVisibilitaLogout(true);
+				view.getHomePanel().setVisibilitaRegistrati(false);
+				view.getHomePanel().setLabelOut("Benvenuto, " + model.getUtenteLoggato().getNome() + "!");
+				
+				// CONTROLLO RUOLO: Mostra il tasto pagamento solo all'Utente Generico
+				if (!model.getUtenteLoggato().isStaff()) {
+					view.getHomePanel().setVisibilitaModificaPagamento(true);
+				} else {
+					view.getHomePanel().setVisibilitaModificaPagamento(false);
+				}
+				
+				view.mostraHome(); 
+			}
+		});
+	}
+	
+
+	public void addListenersModificaPagamento() {
+		view.getModificaPagamentoPanel().getIndietro_butt().addActionListener(e -> {
+			view.getModificaPagamentoPanel().pulisciCampi();
+			view.getModificaPagamentoPanel().setLabelOut(" ");
+			view.mostraHome();
+		});
+
+		view.getModificaPagamentoPanel().getAggiorna_butt().addActionListener(e -> {
+			if (!view.getModificaPagamentoPanel().validaCampi()) return;
+
+			String numero = view.getModificaPagamentoPanel().getNumeroCarta();
+			LocalDate scadenza = view.getModificaPagamentoPanel().getScadenzaCarta();
+			String cvv = view.getModificaPagamentoPanel().getCvvCarta();
+
+			boolean successo = model.aggiornaPagamentoUtenteGenerico(numero, scadenza, cvv);
+
+			if (successo) {
+				view.getModificaPagamentoPanel().pulisciCampi();
+				view.getModificaPagamentoPanel().setLabelOut(" ");
+				view.getHomePanel().setLabelOut("Metodo di pagamento aggiornato!");
+				System.out.println("Profilo Aggiornato:\n" + model.getUtenteLoggato());
+				view.mostraHome();
+			} else {
+				view.getModificaPagamentoPanel().setLabelOut("Errore durante l'aggiornamento. Riprova.");
+			}
+		});
+	}
+	
 	public void inizializzaInterfacciaHome() {
 		if(model.getUtenteLoggato() != null) {
 			view.getHomePanel().setLabelUtenteLoggato(model.getUtenteLoggato().getUser_name());
+			view.getHomePanel().setVisibilitaLogin(false);
+			view.getHomePanel().setVisibilitaLogout(true);
+			view.getHomePanel().setVisibilitaRegistrati(false);
+			
+
+			if(!model.getUtenteLoggato().isStaff()) {
+				view.getHomePanel().setVisibilitaModificaPagamento(true);
+			}
 		}
 	}
 
-	public GestoreAccount getModel() {
-		return model;
-	}
-
-	public void setModel(GestoreAccount model) {
-		this.model = model;
-	}
-
-	public HomeFrame getView() {
-		return view;
-	}
-
-	public void setView(HomeFrame view) {
-		this.view = view;
-	}
-	
-	
+	public GestoreAccount getModel() { return model; }
+	public void setModel(GestoreAccount model) { this.model = model; }
+	public HomeFrame getView() { return view; }
+	public void setView(HomeFrame view) { this.view = view; }
 }

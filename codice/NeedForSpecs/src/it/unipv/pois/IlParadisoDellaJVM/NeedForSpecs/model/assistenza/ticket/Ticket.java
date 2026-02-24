@@ -97,26 +97,30 @@ public class Ticket {
 	}
 	
 	private void ordinaConversazionePerData() {
-	    Collections.sort(conversazione); 
+
+	    if (this.conversazione != null && !this.conversazione.isEmpty()) {
+	        Collections.sort(conversazione); 
+	    }
 	}
-	
+
 	public String getCronologiaMessaggiFormattata() {
-		ordinaConversazionePerData();
-		
-		if (this.conversazione == null || this.conversazione.isEmpty()) {
-			return "Nessun messaggio presente.\n";
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for (Messaggio m : this.conversazione) {
-			sb.append(StringChecker.formattaSingoloMessaggio(
-				m.getAutore().getUser_name(), 
-				m.getData_pubblicazione(), 
-				m.getTesto()
-			));
-		}
-		
-		return sb.toString();
+
+	    if (this.conversazione == null || this.conversazione.isEmpty()) {
+	        return "Nessun messaggio presente.\n";
+	    }
+	
+	    ordinaConversazionePerData();
+	    
+	    StringBuilder sb = new StringBuilder();
+	    for (Messaggio m : this.conversazione) {
+	        sb.append(StringChecker.formattaSingoloMessaggio(
+	            m.getAutore().getUser_name(), 
+	            m.getData_pubblicazione(), 
+	            m.getTesto()
+	        ));
+	    }
+	    
+	    return sb.toString();
 	}
 	
 	public ArrayList<Messaggio> filtraConversazione(String elemento_ricerca, Ricerca scelta) {
@@ -153,7 +157,12 @@ public class Ticket {
 	
 	@Override
 	public String toString() {
-		return this.id_ticket + " - Stato: " + this.stato_ticket + " - Responsabile: " + this.gestore.getUser_name() + " - Utente Richiedente " + this.richiedente_assistenza.getUser_name();	
+
+	    String nomeGestore = (this.gestore != null) ? this.gestore.getUser_name() : "In attesa di assegnazione";
+	    
+	    
+	    return "Ticket ID: " + this.id_ticket + " | Stato: " + this.stato_ticket + " | Gestore: " + nomeGestore; 
+
 	}
 	
 }

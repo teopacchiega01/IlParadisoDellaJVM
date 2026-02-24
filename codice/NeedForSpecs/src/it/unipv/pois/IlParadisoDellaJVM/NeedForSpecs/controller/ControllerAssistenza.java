@@ -66,7 +66,18 @@ public class ControllerAssistenza {
 			}
 		});
 
-		view.getHomePanelUtente().getVai_a_ticket_butt().addActionListener(e -> caricaChatUtente());
+		view.getHomePanelUtente().getVai_a_ticket_butt().addActionListener(e -> {
+		    Ticket ticketSelezionato = view.getHomePanelUtente().getTicketSelezionato();
+		    if (ticketSelezionato != null) {
+		        
+		        if (ticketSelezionato.getGestore() == null) {
+		            view.getHomePanelUtente().setLabelOutUtente("Il ticket è in attesa di assegnazione. Attendi uno Staff.");
+		            return; 
+		        }
+
+		        caricaChatUtente();
+		    }
+		});
 		view.getTicketUtentePanel().getInvia_messaggio_utente().addActionListener(e -> gestisciInvioMessaggioUtente());
 		
 		view.getHomePanelUtente().getLogout_butt().addActionListener(e ->{

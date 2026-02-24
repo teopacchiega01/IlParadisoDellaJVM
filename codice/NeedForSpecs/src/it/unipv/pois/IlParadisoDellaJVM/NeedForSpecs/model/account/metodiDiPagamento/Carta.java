@@ -23,7 +23,15 @@ public class Carta {
     }
 
     
-    public String getNumeroCarta() {
+   
+	public Carta(String numeroCarta, LocalDate dataScadenza, String cvv) {
+		super();
+		this.numeroCarta = numeroCarta;
+		this.dataScadenza = dataScadenza;
+		this.cvv = cvv;
+	}
+
+	public String getNumeroCarta() {
         return numeroCarta;
     }
 

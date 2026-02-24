@@ -5,4 +5,5 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGeneric
 public interface ICartaDAO {
 	public Carta getCarta(UtenteGenerico utente);
 	public boolean inserisciCarta(Carta carta_da_inserire);
+	public boolean aggiornaCartaUtente(String username, Carta nuovaCarta);
 }

@@ -16,7 +16,7 @@ public class HomePanel extends JPanel {
 	private JButton login_butt;
 	private JButton registrati_utente_butt;
 	private JButton registrati_staff_butt;
-	
+	private JButton modifica_pagamento_butt;
 	private JLabel label_out;
 	
 	private JButton marketplace_butt;
@@ -37,10 +37,15 @@ public class HomePanel extends JPanel {
 		registrati_utente_butt = new JButton("Registrazione Utente");
 		registrati_staff_butt = new JButton("Registrazione Staff");
 		
+
+		modifica_pagamento_butt = new JButton("Modifica Pagamento");
+		modifica_pagamento_butt.setVisible(false);
+		
 		JPanel nordEst = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		nordEst.add(registrati_utente_butt);
 		nordEst.add(registrati_staff_butt);
 		nordEst.add(login_butt);
+		nordEst.add(modifica_pagamento_butt); 
 		nordEst.add(logout_butt);
 		
 		pannelloNord.add(label_utente_loggato, BorderLayout.WEST);
@@ -84,11 +89,17 @@ public class HomePanel extends JPanel {
 		this.registrati_utente_butt.setVisible(visibile);
 		this.registrati_staff_butt.setVisible(visibile);
 	}
+	
+
+	public void setVisibilitaModificaPagamento(boolean visibile) {
+		this.modifica_pagamento_butt.setVisible(visibile);
+	}
 
 	public JButton getLogout_butt() { return logout_butt; }
 	public JButton getLogin_butt() { return login_butt; }
 	public JButton getRegistrati_utente_butt() { return registrati_utente_butt; }
 	public JButton getRegistrati_staff_butt() { return registrati_staff_butt; }
+	public JButton getModificaPagamentoButt() { return modifica_pagamento_butt; } 
 	public JButton getMarketplace_butt() { return marketplace_butt; }
 	public JButton getAssistenza_butt() { return assistenza_butt; }
 	public JButton getForum_butt() { return forum_butt; }

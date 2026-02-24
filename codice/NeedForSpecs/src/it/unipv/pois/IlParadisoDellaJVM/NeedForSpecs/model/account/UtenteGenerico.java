@@ -86,5 +86,57 @@ public class UtenteGenerico extends Utente {
 
 		this.setMetodo_di_pagamento(cartaTrovata);
 		this.setInd_di_spedizione(indirizzoTrovato);
+		System.out.println(this);
+	}
+	
+	public boolean modificaMetodoPagamento(String nuovoNumero, LocalDate nuovaScadenza, String nuovoCvv) {
+		
+		Carta nuovaCarta = new Carta(nuovoNumero, nuovaScadenza, nuovoCvv);
+		DAOFactory factory = DAOFactory.getInstance();
+		boolean aggiornatoNelDB = factory.getCartaDAO().aggiornaCartaUtente(getUser_name(), nuovaCarta);
+		if (aggiornatoNelDB) {
+	      
+			this.setMetodo_di_pagamento(nuovaCarta);
+	        return true;
+	    }
+	    return false;
+		
+		
+		
+		
+	}
+	
+	
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("=== PROFILO UTENTE GENERICO ===\n");
+	    sb.append("Username:  ").append(getUser_name()).append("\n");
+	    sb.append("Nome:      ").append(getNome()).append(" ").append(getCognome()).append("\n");
+	    sb.append("Email:     ").append(getEmail()).append("\n");
+	    
+	   
+	    sb.append("Indirizzo: ");
+	    if (getInd_di_spedizione() != null) {
+	        sb.append(getInd_di_spedizione().getVia()).append(", ")
+	          .append(getInd_di_spedizione().getCivico()).append(" - ")
+	          .append(getInd_di_spedizione().getCitta()).append(" (")
+	          .append(getInd_di_spedizione().getProvincia()).append(")");
+	    } else {
+	        sb.append("Non specificato");
+	    }
+	    sb.append("\n");
+
+	   
+	    sb.append("Pagamento: ");
+	    if (getMetodo_di_pagamento() != null) {
+	        sb.append("Carta numero ").append(getMetodo_di_pagamento().getNumeroCarta())
+	          .append(" (Scadenza: ").append(getMetodo_di_pagamento().getDataScadenza()).append(")");
+	    } else {
+	        sb.append("Nessun metodo di pagamento registrato");
+	    }
+	    
+	    sb.append("\n===============================");
+	    return sb.toString();
 	}
 }

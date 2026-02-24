@@ -14,4 +14,14 @@ public class UtenteStaff extends Utente {
 	public boolean isStaff() {
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+	    return "=== PROFILO STAFF ===\n" +
+	           "Username: " + getUser_name() + "\n" +
+	           "Nome:     " + getNome() + " " + getCognome() + "\n" +
+	           "Email:    " + getEmail() + "\n" +
+	           "Ruolo:    Membro dello Staff\n" 
+	           ;
+	}
 }
