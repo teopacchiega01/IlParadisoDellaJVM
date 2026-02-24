@@ -24,6 +24,7 @@ public class ControllerMarketplace {
 		super();
 		this.model = model;
 		this.view = view;
+		view.setVisible(true);
 		inizializzaInterfaccia();
 	}
 
