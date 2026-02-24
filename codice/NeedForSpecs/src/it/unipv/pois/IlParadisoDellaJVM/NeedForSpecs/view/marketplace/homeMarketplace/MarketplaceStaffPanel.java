@@ -16,7 +16,9 @@ public class MarketplaceStaffPanel extends MarketplaceBasePanel {
         // Inietto Rimuovi Annuncio di fianco a Mostra Info (al posto di Aggiungi al Carrello)
         btnRimuoviAnnuncio = new JButton("RIMUOVI ANNUNCIO");
         btnRimuoviAnnuncio.setBackground(Color.RED);
-        btnRimuoviAnnuncio.setForeground(Color.WHITE);
+        btnRimuoviAnnuncio.setOpaque(true);
+        btnRimuoviAnnuncio.setBorderPainted(false);
+        btnRimuoviAnnuncio.setForeground(Color.BLACK);
         pnlInfoActions.add(btnRimuoviAnnuncio);
     }
 
