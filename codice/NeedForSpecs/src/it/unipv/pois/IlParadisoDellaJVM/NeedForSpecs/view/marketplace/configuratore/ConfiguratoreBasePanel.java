@@ -25,7 +25,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 
 public abstract class ConfiguratoreBasePanel extends JPanel {
 
-    protected JButton btnLoginLogout, btnTornaMarketplace, btnCarrello;
+    protected JButton btnLoginLogout, btnTornaMarketplace;
     protected JList<TipoComponente> listTipiComponente;
     protected JButton btnAggiungiTipoAllaBuild;
 
@@ -50,7 +50,7 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
     protected void initComponents() {
         btnLoginLogout = new JButton();
         btnTornaMarketplace = new JButton("TORNA AL MARKETPLACE");
-        btnCarrello = new JButton("CARRELLO");
+        
 
 
         listTipiComponente = new JList<TipoComponente>();
@@ -79,8 +79,7 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
         add(btnLoginLogout, gbc);
         gbc.gridx = 1;
         add(btnTornaMarketplace, gbc);
-        gbc.gridx = 2;
-        add(btnCarrello, gbc);
+        
 
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         add(new JScrollPane(listTipiComponente), gbc);
@@ -117,7 +116,6 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
 
     public JButton getBtnLoginLogout() { return btnLoginLogout; }
     public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
-    public JButton getBtnCarrello() { return btnCarrello; }
 	public JList<TipoComponente> getListTipiComponente() { return listTipiComponente; }
 	public JButton getBtnAggiungiTipoAllaBuild() { return btnAggiungiTipoAllaBuild; }
 	public JList<Componente> getListComponentiDisponibili() { return listComponentiDisponibili; }

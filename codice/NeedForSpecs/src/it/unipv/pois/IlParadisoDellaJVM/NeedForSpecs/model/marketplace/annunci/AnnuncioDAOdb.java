@@ -26,12 +26,13 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 			+ "WHERE id_ordine IS NULL;";
 	private final static String QUERY_INSERIMENTO = "INSERT INTO Annuncio (id_annuncio, id_utente_venditore, id_prodotto, prezzo) "
 			+ "VALUES (?, ?, ?, ?);";
+	private final static String QUERY_RIMOZIONE = "DELETE FROM Annuncio WHERE id_annuncio = ?;";
 
 	private IUtenteDAO utente_dao;
-    private IProdottoDAO prodotto_dao;
-    
-    
-    
+	private IProdottoDAO prodotto_dao;
+
+
+
 
 	public AnnuncioDAOdb() {
 		super();
@@ -87,7 +88,6 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 		PreparedStatement pr_stat = null;
 		ResultSet res_set = null;
 
-		// Recupero solo gli annunci non ancora venduti (id_ordine IS NULL)
 		try {
 			pr_stat = conn.prepareStatement(QUERY_GET_ANNUNCI);
 			res_set = pr_stat.executeQuery();
@@ -113,7 +113,6 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			// Chiudo PreparedStatement e ResultSet per evitare memory leak
 			try { if (res_set != null) res_set.close(); } catch (Exception e) {};
 			try { if (pr_stat != null) pr_stat.close(); } catch (Exception e) {};
 		}
@@ -124,25 +123,21 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 
 	@Override
 	public boolean inserisciAnnuncio(Annuncio annuncio_da_inserire) {
-		boolean inseritoConSuccesso = false;
+		boolean inserito_con_successo = false;
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement pr_stat = null;
 
-		// Inseriamo i 4 valori fondamentali. id_ordine prenderà il valore di DEFAULT (NULL)
 		try {
 			pr_stat = conn.prepareStatement(QUERY_INSERIMENTO);
 
-			// Uso i getter dell'oggetto Annuncio (presumendo i nomi standard)
 			pr_stat.setString(1, annuncio_da_inserire.getId_annuncio());
 			pr_stat.setString(2, annuncio_da_inserire.getVenditore().getUser_name()); 
 			pr_stat.setString(3, annuncio_da_inserire.getProdotto_in_vendita().getId_prodotto());
 			pr_stat.setDouble(4, annuncio_da_inserire.getPrezzo());
-
-			// executeUpdate() restituisce il numero di righe modificate
 			int righeModificate = pr_stat.executeUpdate();
 
 			if (righeModificate > 0) {
-				inseritoConSuccesso = true;
+				inserito_con_successo = true;
 			}
 
 		} catch (SQLException e) {
@@ -152,7 +147,36 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 		}
 
 		DatabaseManager.closeConnection(conn);
-		return inseritoConSuccesso;
+		return inserito_con_successo;
 	}
 
+	@Override
+	public boolean rimuoviAnnuncio(Annuncio annuncio_da_rimuovere) {
+
+		if (annuncio_da_rimuovere == null || annuncio_da_rimuovere.getId_annuncio() == null) {
+			return false;
+		}
+
+		boolean rimosso_con_successo = false;
+		Connection conn = DatabaseManager.getConnection();
+		PreparedStatement pr_stat = null;
+
+		try {
+			pr_stat = conn.prepareStatement(QUERY_RIMOZIONE);
+			pr_stat.setString(1, annuncio_da_rimuovere.getId_annuncio());
+			int righe_eliminate = pr_stat.executeUpdate();
+			if (righe_eliminate > 0) {
+				rimosso_con_successo = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try { if (pr_stat != null) pr_stat.close(); } catch (Exception e) {};
+		}
+
+		DatabaseManager.closeConnection(conn);
+		return rimosso_con_successo;
+	}
 }
+

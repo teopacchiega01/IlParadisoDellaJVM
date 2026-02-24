@@ -14,7 +14,7 @@ public class MarketplaceStaffPanel extends MarketplaceBasePanel {
         super();
         btnLoginLogout.setText("LOGOUT");
 
-       
+        getBtnAccediConfiguratore().setVisible(false);
         btnRimuoviAnnuncio = new JButton("RIMUOVI ANNUNCIO");
         btnRimuoviAnnuncio.setBackground(Color.RED);
         btnRimuoviAnnuncio.setOpaque(true);

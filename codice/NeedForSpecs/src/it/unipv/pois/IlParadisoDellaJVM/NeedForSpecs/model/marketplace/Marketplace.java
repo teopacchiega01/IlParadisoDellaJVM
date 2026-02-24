@@ -144,6 +144,7 @@ public class Marketplace {
 			Annuncio annuncio_nella_lista = annunci.get(i);
 			if(annuncio_nella_lista.getId_annuncio().equals(id_annuncio_da_rimuovere)) {
 				annunci.remove(i);
+				ann_dao.rimuoviAnnuncio(annuncio_nella_lista);
 				operazione_riuscita = true;
 				break;
 			}
@@ -158,6 +159,7 @@ public class Marketplace {
 	
 	public boolean rimuoviAnnuncio(Annuncio annuncio_da_rimuovere) {
 		if(annunci.remove(annuncio_da_rimuovere)) {
+			ann_dao.rimuoviAnnuncio(annuncio_da_rimuovere);
 			return true;
 		}else {
 			return false;

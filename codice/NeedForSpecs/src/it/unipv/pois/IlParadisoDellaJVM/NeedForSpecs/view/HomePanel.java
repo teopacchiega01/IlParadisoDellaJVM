@@ -51,7 +51,7 @@ public class HomePanel extends JPanel {
 		pannelloNord.add(label_utente_loggato, BorderLayout.WEST);
 		pannelloNord.add(nordEst, BorderLayout.EAST);
 
-		label_out = new JLabel("Benvenuto nel Paradiso della JVM!", SwingConstants.CENTER);
+		label_out = new JLabel("Benvenuto su NeedForSpecs!", SwingConstants.CENTER);
 		label_out.setFont(new Font("Arial", Font.BOLD, 16));
 		
 		JPanel pannelloSud = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 10));

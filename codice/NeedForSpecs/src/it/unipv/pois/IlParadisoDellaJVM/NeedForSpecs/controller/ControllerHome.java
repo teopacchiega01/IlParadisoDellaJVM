@@ -74,7 +74,9 @@ public class ControllerHome {
 			
 			FrameMarketplace fm = view.creaFrameMarketplace() ;
 			Marketplace mp = Marketplace.getInstance();
+//			System.out.println("Utente loggato nella home: "+model.getUtenteLoggato().getUser_name());
 			mp.setUtente_loggato(model.getUtenteLoggato());
+//			System.out.println("Utente loggato nel marketplace: "+mp.getUtente_loggato().getUser_name());
 			new ControllerMarketplace(mp, fm);
 			
 			this.view.setVisible(false);
@@ -125,11 +127,11 @@ public class ControllerHome {
 			String citta = view.getRegUtentePanel().getCitta();
 			String cap = view.getRegUtentePanel().getCap();
 			String provincia = view.getRegUtentePanel().getProvincia();
-			String titolareCarta = view.getRegUtentePanel().getTitolareCarta();
-			LocalDate scadenzaCarta = view.getRegUtentePanel().getScadenzaCarta();
-			String cvvCarta = view.getRegUtentePanel().getCvvCarta();
+			String titolare_carta = view.getRegUtentePanel().getTitolareCarta();
+			LocalDate scadenza_carta = view.getRegUtentePanel().getScadenzaCarta();
+			String cvv_carta = view.getRegUtentePanel().getCvvCarta();
 			
-			boolean successo = model.registraUtenteGenerico(nome, cognome, username, email, password, via, civico, citta, provincia, cap, titolareCarta, scadenzaCarta, cvvCarta);
+			boolean successo = model.registraUtenteGenerico(nome, cognome, username, email, password, via, civico, citta, provincia, cap, titolare_carta, scadenza_carta, cvv_carta);
 
 			if(successo) {
 				view.getRegUtentePanel().pulisciCampi();

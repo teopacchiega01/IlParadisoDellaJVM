@@ -30,7 +30,7 @@ public class HomeFrame extends JFrame {
 	private ModificaPagamentoPanel modificaPagamentoPanel;
 	
 	public HomeFrame() {
-		super("Il Paradiso della JVM - Home Principale");
+		super("NeedForSpecs - Home");
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(800, 600);
