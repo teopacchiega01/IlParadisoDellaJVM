@@ -5,6 +5,12 @@ import java.time.LocalDateTime;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public abstract class ContenutoUtente {
 	
 	private String id_contenuto_utente;

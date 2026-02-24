@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class OrdinamentoData implements ForumStrategy {
 
 	@Override

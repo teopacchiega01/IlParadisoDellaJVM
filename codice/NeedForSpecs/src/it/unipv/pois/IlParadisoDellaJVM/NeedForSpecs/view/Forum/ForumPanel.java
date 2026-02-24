@@ -11,6 +11,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class ForumPanel extends JPanel {
 
 	private JButton tornaAllaHome, creaPost, apriPost, ordina, eliminaPost, cercaPost;
@@ -22,7 +28,7 @@ public class ForumPanel extends JPanel {
 	public ForumPanel() {
 		this.setLayout(new BorderLayout()); 
 
-		// TOP: Navigazione e Ordinamento
+
 		JPanel pannelloTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		tornaAllaHome = new JButton("Torna alla Home");
 		creaPost = new JButton("Scrivi un Post");
@@ -42,12 +48,12 @@ public class ForumPanel extends JPanel {
 		pannelloTop.add(cercaPost);
 		this.add(pannelloTop, BorderLayout.NORTH);
 
-		// CENTER: Tabella
+
 		tabellaPost = new JTable();
 		tabellaPost.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.add(new JScrollPane(tabellaPost), BorderLayout.CENTER);
 
-		// BOTTOM: Azioni
+
 		JPanel pannelloBot = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		apriPost = new JButton("Espandi Post");
 		eliminaPost = new JButton("Elimina Post");
@@ -82,7 +88,7 @@ public class ForumPanel extends JPanel {
 		return cercaPost;
 	}
 	
-	// IMPORTANTE: Ora il getter restituisce una JComboBox<String>
+
 	public JComboBox<String> getComboOrdinamento() {
 		return comboOrdinamento;
 	}

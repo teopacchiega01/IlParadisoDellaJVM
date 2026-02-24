@@ -17,6 +17,12 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class ApriPostPanel extends JPanel {
 
 	private JLabel lTitolo;
@@ -35,7 +41,7 @@ public class ApriPostPanel extends JPanel {
 
 		JPanel leftPanel = new JPanel(new BorderLayout(0, 15));
 
-		// TOP: Bottone e Titoli
+		
 		JPanel topLefPanel = new JPanel(new BorderLayout());
 
 		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -60,7 +66,7 @@ public class ApriPostPanel extends JPanel {
 
 		leftPanel.add(topLefPanel, BorderLayout.NORTH);
 
-		// CENTER: Il testo del post
+
 		tTesto = new JTextArea();
 		tTesto.setEditable(false); 
 		tTesto.setLineWrap(true);
@@ -71,7 +77,7 @@ public class ApriPostPanel extends JPanel {
 		JScrollPane scrollTesto = new JScrollPane(tTesto);
 		leftPanel.add(scrollTesto, BorderLayout.CENTER);
 
-		// DX
+
 		JPanel rightPanel = new JPanel(new BorderLayout(0, 10));
 
 		JLabel lCommenti = new JLabel("Lista commenti");
@@ -83,7 +89,7 @@ public class ApriPostPanel extends JPanel {
 		JScrollPane scrollCommenti = new JScrollPane(tabellaCommenti);
 		rightPanel.add(scrollCommenti, BorderLayout.CENTER);
 
-		// BOTTOM RIGHT: I bottoni dei commenti
+
 		JPanel bottoniDestraPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
 		creaCommento = new JButton("Crea Commento");
 		apriCommento = new JButton("Apri Commento");
@@ -100,12 +106,58 @@ public class ApriPostPanel extends JPanel {
 		this.add(rightPanel);
 	}
 
-	public JLabel getlTitolo() { return lTitolo; }
-	public JLabel getlSottotitolo() { return lSottotitolo; }
-	public JTextArea gettTesto() { return tTesto; }
-	public JTable getTabellaCommenti() { return tabellaCommenti; }
-	public JButton getCreaCommento() { return creaCommento; }
-	public JButton getEliminaCommento() { return eliminaCommento; }
-	public JButton getTornaIndietro() { return tornaIndietro; }
-	public JButton getApriCommento() { return apriCommento; }
+	public JLabel getlTitolo() { 
+		
+		return lTitolo; 
+		
+	}
+	
+	public JLabel getlSottotitolo() { 
+		
+		return lSottotitolo; 
+		
+	}
+	
+	public JTextArea gettTesto() { 
+		
+		return tTesto; 
+		
+	}
+	
+	public JTable getTabellaCommenti() { 
+		
+		return tabellaCommenti; 
+		
+	}
+	
+	public JButton getCreaCommento() { 
+		
+		return creaCommento;
+		
+	}
+	
+	public JButton getEliminaCommento() { 
+		
+		return eliminaCommento;
+		
+	}
+	
+	public JButton getTornaIndietro() { 
+		
+		return tornaIndietro; 
+		
+	}
+	
+	public JButton getApriCommento() { 
+		
+		return apriCommento; 
+		
+	}
+	
+
+	
+	
+	
+	
+	
 }

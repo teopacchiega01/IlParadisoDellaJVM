@@ -7,8 +7,10 @@ import java.time.LocalDate;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.GestoreAccount;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.Assistenza;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.Forum;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.Marketplace;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.Forum.ForumView;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.FrameMarketplace;
 
@@ -77,6 +79,25 @@ public class ControllerHome {
 			
 			this.view.setVisible(false);
 			fm.setVisible(true);
+		});
+		
+		view.getHomePanel().getForum_butt().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				Forum f = Forum.getInstance();
+				
+				f.setU(model.getUtenteLoggato());
+				
+				ForumView fv = view.creaForumFrame();
+				
+				new ControllerForum(f, fv);
+				
+				fv.setVisible(true);
+				view.setVisible(false);
+				
+			}
 		});
 
 
@@ -174,7 +195,11 @@ public class ControllerHome {
 				view.getHomePanel().setVisibilitaRegistrati(false);
 				view.getHomePanel().setLabelOut("Benvenuto, " + model.getUtenteLoggato().getNome() + "!");
 				
+<<<<<<< HEAD
 				
+=======
+
+>>>>>>> refs/remotes/origin/main
 				if (!model.getUtenteLoggato().isStaff()) {
 					view.getHomePanel().setVisibilitaModificaPagamento(true);
 				} else {

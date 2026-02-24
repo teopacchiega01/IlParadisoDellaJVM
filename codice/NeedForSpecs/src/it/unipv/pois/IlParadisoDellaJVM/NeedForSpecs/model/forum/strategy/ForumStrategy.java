@@ -1,5 +1,11 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;

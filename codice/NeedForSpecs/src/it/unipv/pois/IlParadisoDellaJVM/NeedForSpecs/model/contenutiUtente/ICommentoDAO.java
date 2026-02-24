@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.ForumException;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public interface ICommentoDAO {
 	
 	public ArrayList<Commento> getCommenti(Post p) throws ForumException;

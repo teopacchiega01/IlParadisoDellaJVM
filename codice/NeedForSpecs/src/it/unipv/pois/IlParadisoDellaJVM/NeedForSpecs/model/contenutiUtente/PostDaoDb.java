@@ -13,6 +13,12 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.ForumException;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class PostDaoDb implements IPostDAO {
 
 	@Override

@@ -13,6 +13,12 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteStaff;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.ForumException;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class CommentoDaoDb implements ICommentoDAO {
 
 	@Override
@@ -81,7 +87,7 @@ public class CommentoDaoDb implements ICommentoDAO {
 
 	@Override
 	public ArrayList<Commento> getCommentiDiCommenti(Post p, Commento c) throws ForumException{
-		// TODO Auto-generated method stub
+
 
 		ArrayList<Commento> commenti = new ArrayList<Commento>();
 
