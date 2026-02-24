@@ -17,23 +17,33 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.Ordina
 public class Forum {
 
 	private static Forum instance = null;
-
+	
+	private Utente u;
 	private ArrayList<Post> post;
 	private IPostDAO postDao;
 	private ICommentoDAO commentoDao;
 
-	public Forum(DAOFactory factory) {
+	private Forum() {
 		super();
+		DAOFactory factory = DAOFactory.getInstance();
 		this.post = new ArrayList<Post>();
 		this.postDao = factory.getPostDAO();
 		this.commentoDao = factory.getCommentoDAO();
 	}
 
-	public static Forum getInstance(DAOFactory factory) {
+	public static Forum getInstance() {
 		if(instance == null) {
-			instance = new Forum(factory);
+			instance = new Forum();
 		}
 		return instance;
+	}
+
+	public Utente getU() {
+		return u;
+	}
+
+	public void setU(Utente u) {
+		this.u = u;
 	}
 
 	public ArrayList<Post> getPost() {
@@ -48,7 +58,7 @@ public class Forum {
 		return postDao.getPost();
 	}
 
-	// CONTROLLO PERMESSI
+
 	public boolean puoModificareOEliminare(Utente u, ContenutoUtente contenuto) {
 		if (u == null) return false;
 		if (u.isStaff()) return true;
@@ -58,9 +68,9 @@ public class Forum {
 		return false;
 	}
 
-	// CREAZIONE POST CON VALIDAZIONE BLINDATA
+
 	public boolean creaPost(Utente autore, String testo, String titolo, String sottotitolo) throws ForumException {
-		// Il Model fa da guardiano: se i dati non vanno bene, blocca tutto!
+
 		if (autore == null) {
 			throw new IllegalArgumentException("Devi effettuare il login per scrivere un post.");
 		}

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import javax.swing.SwingConstants;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Commento;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.Forum.adapter.CommentoAdapter;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.Forum.adapter.PostAdapter;
 
@@ -71,14 +73,64 @@ public class ForumView extends JFrame {
 		labelMessaggi.setText(" ");
 	}
 
-	public ForumPanel getPostView() { return postView; }
-	public CreaPostPanel creaPost() { return new CreaPostPanel(); }
-	public ApriPostPanel apriPost() { return new ApriPostPanel(); }
-	public CreaCommentoPanel creaCommento() { return new CreaCommentoPanel(); }
+	public ForumPanel getPostView() { 
+
+		return postView; 
+
+	}
+
+
+	public CreaPostPanel creaPost() { 
+
+		return new CreaPostPanel(); 
+
+	}
+
+
+	public ApriPostPanel apriPost() { 
+
+		return new ApriPostPanel(); 
+
+	}
+
+
+
+	public CreaCommentoPanel creaCommento() { 
+
+		return new CreaCommentoPanel(); 
+
+	}
+
+
 	public ApriCommentoPanel apriCommento() {
-		
+
 		return new ApriCommentoPanel();
 	}
-	public PostAdapter adaptPost(ArrayList<Post> p) { return new PostAdapter(p); }
-	public CommentoAdapter adaptCommenti(ArrayList<Commento> c) { return new CommentoAdapter(c); }
+
+
+
+	public PostAdapter adaptPost(ArrayList<Post> p) {
+
+		return new PostAdapter(p); 
+
+	}
+
+	public CommentoAdapter adaptCommenti(ArrayList<Commento> c) { 
+
+		return new CommentoAdapter(c); 
+
+	}
+
+
+	public ForumPanel getForumPanel() {
+		return postView;
+	}
+	
+	public HomeFrame getHomeFrame() {
+		
+		return new HomeFrame();
+		
+	}
+	
+
 }
