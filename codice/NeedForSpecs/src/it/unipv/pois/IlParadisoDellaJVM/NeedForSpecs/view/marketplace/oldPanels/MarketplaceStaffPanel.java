@@ -15,7 +15,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-//	@Author teopacchiega
+/**
+ * @author teopacchiega
+ */
+
 
 public class MarketplaceStaffPanel extends JPanel {
     
@@ -72,7 +75,7 @@ public class MarketplaceStaffPanel extends JPanel {
         JPanel pnlSud = new JPanel(new BorderLayout());
         JPanel pnlBottoniSud = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         btnVaiConfiguratore = new JButton("VAI AL CONFIGURATORE");
-        pnlBottoniSud.add(btnVaiConfiguratore); // Niente "Aggiungi Annuncio" per lo staff
+        pnlBottoniSud.add(btnVaiConfiguratore); 
         lblMessaggio = new JLabel("Pannello di Amministrazione Attivo.", SwingConstants.CENTER);
         lblMessaggio.setForeground(Color.RED);
         pnlSud.add(pnlBottoniSud, BorderLayout.NORTH);

@@ -14,11 +14,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Tic
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
-
-/*
- * TODO Ricontrollare 
+/**
+ * @author Persy
  */
-
 public class ControllerAssistenza {
 	
 	private FrameAssistenza view; 
@@ -50,10 +48,6 @@ public class ControllerAssistenza {
 		}
 	}
 	
-	/*==========================================================
-	 * LOGICA UTENTE GENERICO
-	 *==========================================================
-	 */
 	private void addListenersUtente() {
 		view.getHomePanelUtente().getCrea_ticket_butt().addActionListener(new ActionListener() {
 			@Override
@@ -151,10 +145,7 @@ public class ControllerAssistenza {
 	}
 
 	
-	/*==========================================================
-	 * LOGICA STAFF
-	 *==========================================================
-	 */
+	
 	private void addListenersStaff() {
 		view.getHomePanelStaff().getVai_a_ticket_butt().addActionListener(e -> caricaChatStaff());
 		
@@ -253,9 +244,7 @@ public class ControllerAssistenza {
 		}
 	}
 
-	// ==========================================================
-	// 				AGGIORNAMENTO DELLA CHAT (Timer)
-	// ==========================================================
+	
 	private void avviaTimerSincronizzazioneUtente() {
 		chatUpdater = new Timer(3000, new ActionListener() {
 			@Override

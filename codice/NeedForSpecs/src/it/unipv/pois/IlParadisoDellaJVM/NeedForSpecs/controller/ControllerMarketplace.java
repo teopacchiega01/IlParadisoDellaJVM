@@ -14,7 +14,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.FrameMarketplace;
 
-//	@Author teopacchiega
+/**
+ * @author teopacchiega
+ */
 
 public class ControllerMarketplace {
 	private Marketplace model;
@@ -135,19 +137,19 @@ public class ControllerMarketplace {
 	}
 
 
-	// --- Home del Marketplace
+
 
 	private void addListenersComuniHomeMarketplace() {
 		gestisciListenersReattiviMarketplace();
 
 
-		// PULSANTE TORNA ALLA HOME
+		
 		ActionListener tornaAllaHomeDiNeedForSpecs = e -> {
 			view.dispose();
 			GestoreAccount new_model = GestoreAccount.getInstance();
 			new_model.setUtenteLoggato(model.getUtente_loggato());
 			ControllerHome ch = new ControllerHome(new_model, view.getHomeFrame());
-			//			ch.getView().setVisible(true);
+			
 			System.out.println("Ritorno alla home");
 		};
 
@@ -159,7 +161,7 @@ public class ControllerMarketplace {
 
 	private void addListenersUserHomeMarketplace() {
 
-		// PULSANTE LOGOUT
+		
 		view.getMarketplaceUserPanel().getBtnLoginLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -171,7 +173,7 @@ public class ControllerMarketplace {
 			}
 		});
 
-		// PULSANTE ACCEDI AL CONFIGURATORE
+
 		view.getMarketplaceUserPanel().getBtnAccediConfiguratore().addActionListener(new ActionListener() {
 
 			@Override
@@ -181,7 +183,7 @@ public class ControllerMarketplace {
 			}
 		});
 
-		// PULSANTE CARRELLO
+		
 		view.getMarketplaceUserPanel().getBtnCarrello().addActionListener(new ActionListener() {
 
 			@Override
@@ -195,7 +197,7 @@ public class ControllerMarketplace {
 
 	private void addListenersGuestHomeMarketplace() {
 
-		// PULSANTE LOGIN
+		
 		view.getMarketplaceUserPanel().getBtnLoginLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -207,7 +209,7 @@ public class ControllerMarketplace {
 			}
 		});
 
-		// PULSANTE ACCEDI AL CONFIGURATORE
+	
 		view.getMarketplaceGuestPanel().getBtnAccediConfiguratore().addActionListener(new ActionListener() {
 
 			@Override
@@ -221,7 +223,7 @@ public class ControllerMarketplace {
 
 	private void addListenersStaffHomeMarketplace() {
 
-		// PULSANTE LOGOUT
+		
 		view.getMarketplaceStaffPanel().getBtnLoginLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -232,7 +234,7 @@ public class ControllerMarketplace {
 			}
 		});
 
-		// PULSANTE RIMUOVI
+		
 		view.getMarketplaceStaffPanel().getBtnRimuoviAnnuncio().addActionListener(new ActionListener() {
 
 			@Override
@@ -243,7 +245,6 @@ public class ControllerMarketplace {
 					if (model.rimuoviAnnuncio(annuncio_da_rimuovere)) {
 						view.getMarketplaceStaffPanel().getLblMessaggio().setText("Annuncio eliminato con successo!");
 						view.getMarketplaceStaffPanel().getTxtAreaInfoAnnuncio().setText("");
-						// Aggiorno la lista annunci
 						Prodotto prodottoAttuale = getProdottoSelezionato();
 						if (prodottoAttuale != null) {
 							popolaListaAnnunci(prodottoAttuale);
@@ -253,7 +254,6 @@ public class ControllerMarketplace {
 					}
 
 				} else {
-					// Se l'utente clicca il bottone senza aver selezionato nulla nella JList
 					view.getMarketplaceStaffPanel().getLblMessaggio().setText("Errore: seleziona un annuncio prima di cliccare su Rimuovi!");
 				}
 
@@ -264,14 +264,11 @@ public class ControllerMarketplace {
 
 	private void gestisciListenersReattiviMarketplace() {
 
-		// Quando clicco un Prodotto, la seconda lista (quella degli Annunci) si riempie all'istante
 		javax.swing.event.ListSelectionListener reazioneSelezionaProdotto = e -> {
-			// getValueIsAdjusting() evita che l'evento parta due volte (quando premi il clic e quando lo rilasci)
 			if (!e.getValueIsAdjusting()) {
 				Prodotto p = getProdottoSelezionato();
 				if (p != null) {
 					popolaListaAnnunci(p); 
-					// Svuoto la JTextArea per fare pulizia al cambio prodotto:
 					view.getMarketplaceGuestPanel().getTxtAreaInfoAnnuncio().setText("");
 					view.getMarketplaceUserPanel().getTxtAreaInfoAnnuncio().setText("");
 					view.getMarketplaceStaffPanel().getTxtAreaInfoAnnuncio().setText("");
@@ -283,7 +280,6 @@ public class ControllerMarketplace {
 		view.getMarketplaceStaffPanel().getListTuttiProdotti().addListSelectionListener(reazioneSelezionaProdotto);
 
 
-		// Quando clicco un Annuncio, la JTextArea si riempie di dettagli all'istante
 		javax.swing.event.ListSelectionListener reazioneSelezionaAnnuncio = e -> {
 			if (!e.getValueIsAdjusting()) {
 				Annuncio a = getAnnuncioSelezionato();
@@ -301,12 +297,9 @@ public class ControllerMarketplace {
 
 	}
 
-	// --- Configuratore
 
 	private void addListenersComuniConfiguratore() {
 		gestisciListenersReattiviConfiguratore();
-
-		// TORNA ALLA HOME DEL MARKETPLACE
 		ActionListener torna_alla_home_del_marketplace = e -> {
 			aggiornaHomeMarketplace();
 			model.resetBuild();
@@ -316,13 +309,12 @@ public class ControllerMarketplace {
 		view.getConfiguratoreGuestPanel().getBtnTornaMarketplace().addActionListener(torna_alla_home_del_marketplace);
 		view.getConfiguratoreUserPanel().getBtnTornaMarketplace().addActionListener(torna_alla_home_del_marketplace);
 
-		// AGGIUNGI ALLA BUILD
+
 		ActionListener aggiungi_alla_build = e -> {
 			System.out.println("Aggiungo componente alla build");
 			try {
 				model.getBuild_configuratore().aggiungiComponente(getComponenteCatalogoSelezionato());
 			} catch (ComponentiException exc) {
-				// TODO Auto-generated catch block
 				view.getConfiguratoreGuestPanel().getLblMessaggio().setText("ERRORE: "+exc.getMessage());
 				view.getConfiguratoreUserPanel().getLblMessaggio().setText("ERRORE: "+exc.getMessage());
 				exc.printStackTrace();
@@ -330,7 +322,6 @@ public class ControllerMarketplace {
 
 		};
 
-		// RIMUOVI DALLA BUILD
 		ActionListener rimuovi_dalla_build = e -> {
 			System.out.println("Rimuovo componente dalla build");
 			model.getBuild_configuratore().rimuoviComponente(getComponenteCatalogoSelezionato());
@@ -341,7 +332,6 @@ public class ControllerMarketplace {
 
 	private void addListenersUserConfiguratore() {
 
-		// PULSANTE LOGOUT
 		view.getConfiguratoreUserPanel().getBtnLoginLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -352,7 +342,6 @@ public class ControllerMarketplace {
 			}
 		});
 
-		// PULSANTE SALVA BUILD
 		view.getConfiguratoreUserPanel().getBtnSalvaBuild().addActionListener(new ActionListener() {
 
 			@Override
@@ -365,7 +354,6 @@ public class ControllerMarketplace {
 		});
 
 
-		// PULSANTE CARRELLO
 		view.getConfiguratoreUserPanel().getBtnCarrello().addActionListener(new ActionListener() {
 
 			@Override
@@ -378,7 +366,6 @@ public class ControllerMarketplace {
 
 	private void addListenersGuestConfiguratore() {
 
-		// PULSANTE LOGIN
 		view.getConfiguratoreGuestPanel().getBtnLoginLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -395,9 +382,7 @@ public class ControllerMarketplace {
 	private void popolaListaCatalogoConfiguratore(TipoComponente tipoScelto) {
 		DefaultListModel<Componente> modelCatalogo = new DefaultListModel<>();
 
-		// Ciclo tutti i prodotti del modello
 		for (Prodotto p : model.getProdotti()) {
-			// Controllo se il prodotto è effettivamente un Componente e se è del tipo giusto
 			if (p instanceof Componente) {
 				Componente c = (Componente) p;
 				if (c.getTipo() == tipoScelto) {
@@ -406,21 +391,19 @@ public class ControllerMarketplace {
 			}
 		}
 
-		// Inietto il modello pieno in entrambi i pannelli
+	
 		view.getConfiguratoreGuestPanel().getListComponentiDisponibili().setModel(modelCatalogo);
 		view.getConfiguratoreUserPanel().getListComponentiDisponibili().setModel(modelCatalogo);
 	}
 
 	private void gestisciListenersReattiviConfiguratore() {
 
-		// --- AZIONE 1: CLIC SUL TIPO (es. "CPU") -> SI POPOLA IL CATALOGO ---
+
 		javax.swing.event.ListSelectionListener reazioneTipoComponente = e -> {
 			if (!e.getValueIsAdjusting()) {
 				TipoComponente tipo = getTipoSelezionato();
 				if (tipo != null) {
-					popolaListaCatalogoConfiguratore(tipo); // Riempie il catalogo!
-
-					// Faccio pulizia nella TextArea del catalogo
+					popolaListaCatalogoConfiguratore(tipo); 
 					view.getConfiguratoreGuestPanel().getTxtAreaInfoCatalogo().setText("");
 					view.getConfiguratoreUserPanel().getTxtAreaInfoCatalogo().setText("");
 				}
@@ -431,12 +414,11 @@ public class ControllerMarketplace {
 		view.getConfiguratoreUserPanel().getListTipiComponente().addListSelectionListener(reazioneTipoComponente);
 
 
-		// --- AZIONE 2: CLIC NEL CATALOGO -> SI RIEMPIE LA TEXTAREA CON LE INFO ---
 		javax.swing.event.ListSelectionListener reazioneComponenteCatalogo = e -> {
 			if (!e.getValueIsAdjusting()) {
 				Componente c = getComponenteCatalogoSelezionato();
 				if (c != null) {
-					String info = c.getInfoProdotto(); // O il metodo che hai per le info
+					String info = c.getInfoProdotto();
 
 					view.getConfiguratoreGuestPanel().getTxtAreaInfoCatalogo().setText(info);
 					view.getConfiguratoreUserPanel().getTxtAreaInfoCatalogo().setText(info);
@@ -448,7 +430,6 @@ public class ControllerMarketplace {
 		view.getConfiguratoreUserPanel().getListComponentiDisponibili().addListSelectionListener(reazioneComponenteCatalogo);
 
 
-		// --- AZIONE 3: CLIC NELLA BUILD INFERIORE -> SI RIEMPIE L'ALTRA TEXTAREA ---
 		javax.swing.event.ListSelectionListener reazioneComponenteBuild = e -> {
 			if (!e.getValueIsAdjusting()) {
 				Componente c = getComponenteBuildSelezionato();
@@ -465,10 +446,8 @@ public class ControllerMarketplace {
 		view.getConfiguratoreUserPanel().getListComponentiBuild().addListSelectionListener(reazioneComponenteBuild);
 	}
 
-	// --- Gestione annunci
 
 	private void addListenersGestioneAnnunci() {
-		// PULSANTE LOGOUT
 		view.getAggiuntaAnnuncioPanel().getBtnLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -505,35 +484,24 @@ public class ControllerMarketplace {
 	private void gestisciListenersReattiviAggiuntaAnnuncio() {
 
 		javax.swing.event.ListSelectionListener reazioneSelezionaProdottoDaVendere = e -> {
-			// Solito controllo per evitare che l'evento scatti due volte
 			if (!e.getValueIsAdjusting()) {
-
-				// Pesco il prodotto dalla lista del pannello
 				Prodotto prodottoSelezionato = view.getAggiuntaAnnuncioPanel().getListProdotti().getSelectedValue();
-
 				if (prodottoSelezionato != null) {
-					// Do un feedback visivo all'utente (magari mettendo il testo in blu o nero invece che rosso errore)
 					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setForeground(java.awt.Color.BLUE);
-
-					// Assumo che Prodotto abbia un metodo getNome() o getModello()
 					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setText("Hai selezionato: " + prodottoSelezionato.toString()); 
 				} else {
-					// Se la selezione viene annullata, svuoto il messaggio
 					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setText(" ");
 				}
 			}
 		};
 
-		// Aggancio l'ascoltatore alla lista
 		view.getAggiuntaAnnuncioPanel().getListProdotti().addListSelectionListener(reazioneSelezionaProdottoDaVendere);
 	}
 
-
-	// --- Carrello 
+ 
 
 	private void addListenersCarrello() {
 
-		// PULSANTE LOGOUT
 		view.getCarrelloPanel().getBtnLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -549,29 +517,24 @@ public class ControllerMarketplace {
 	private void gestisciListenersReattiviCarrello() {
 
 		javax.swing.event.ListSelectionListener reazioneSelezionaCarrello = e -> {
-			// Evito il doppio scatto dell'evento
 			if (!e.getValueIsAdjusting()) {
-
-				// Pesco l'annuncio direttamente dalla JList del carrello
 				Annuncio annuncioSelezionato = view.getCarrelloPanel().getListAnnunci().getSelectedValue();
 
 				if (annuncioSelezionato != null) {
-					// Scrivo le info nella JTextArea del carrello
-					String info = annuncioSelezionato.toString(); // O il metodo che formatta i dettagli
+					String info = annuncioSelezionato.toString();
 					view.getCarrelloPanel().getLblMessaggio().setText(info);
 				} else {
-					// Se non c'è nulla di selezionato (es. dopo una rimozione), svuoto l'area
 					view.getCarrelloPanel().getLblMessaggio().setText("");
 				}
 			}
 		};
 
-		// Aggancio l'ascoltatore alla lista del carrello
+	
 		view.getCarrelloPanel().getListAnnunci().addListSelectionListener(reazioneSelezionaCarrello);
 	}
 
 
-	// --- Login
+	
 
 	private void addListenersLogin() {
 
@@ -588,31 +551,11 @@ public class ControllerMarketplace {
 			}
 		});
 
-//		view.getLoginPanel().getBtnEffettuaLogin().addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				String email = view.getLoginPanel().getTxtEmail().getText();
-//				String pw = new String(view.getLoginPanel().getTxtPassword().getPassword());
-//				model.getUtente_loggato().login(email, pw);
-//				if(model.getUtente_loggato()==null) {
-//					System.out.println("Login fallito");
-//					view.getLoginPanel().getLblMessaggio().setText("Login fallito: email o password errate");
-//				}else {
-//					System.out.println("Login riuscito");
-//
-//					if(model.getUtente_loggato().isStaff()) {
-//						view.mostraMarketplaceStaff();
-//					}else {
-//						view.mostraMarketplaceUser();
-//					}
-//				}
-//			}
-//		});
 
 	}
 
 
-	// --- GETTER E SETTER
+
 
 	public Marketplace getModel() {
 		return model;

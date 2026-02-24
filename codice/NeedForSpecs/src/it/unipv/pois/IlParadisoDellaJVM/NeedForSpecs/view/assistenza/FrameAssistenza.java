@@ -9,9 +9,10 @@ import javax.swing.JPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 
 
-/*
- * @author: Persy
+/**
+ * @author persy
  */
+
 public class FrameAssistenza extends JFrame {
 
 	private CardLayout cardLayout;

@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 
+/**
+ * @author Persy
+ */
 public class RicercaStrategyFactory {
 
 	private static RicercaStrategyFactory instance;

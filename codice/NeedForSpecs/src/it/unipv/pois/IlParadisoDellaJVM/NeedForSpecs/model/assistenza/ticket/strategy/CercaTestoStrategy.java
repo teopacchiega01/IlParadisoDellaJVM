@@ -6,8 +6,17 @@ import java.util.List;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringChecker;
 
+/**
+ * @author Persy
+ */
 public class CercaTestoStrategy implements IRicercaMessaggiStrategy {
-
+	/**
+	 * REGEX_TESTO: Valida il corpo di un messaggio o di un testo.
+	 * - "^[a-zA-Z0-9]"   : Obbliga la stringa a iniziare con una lettera o un numero 
+	 * (impedisce messaggi vuoti o che iniziano con uno spazio/punteggiatura).
+	 * - "[a-zA-Z0-9\\s\\.,?!'\"]*$" : Il resto del testo può contenere lettere, numeri, spazi (\\s) 
+	 * e la punteggiatura comune (.,?!'").
+	 */
 	
 	private static final String REGEX_TESTO = "^[a-zA-Z0-9][a-zA-Z0-9\\s\\.,?!'\"]*$";
 

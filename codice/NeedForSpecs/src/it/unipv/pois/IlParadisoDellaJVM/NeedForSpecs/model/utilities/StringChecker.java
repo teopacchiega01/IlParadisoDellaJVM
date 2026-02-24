@@ -6,8 +6,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
+
+/**
+ * @author Persy
+ */
 public class StringChecker {
 
 	private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -81,5 +87,19 @@ public class StringChecker {
 		} catch (DateTimeParseException e) {
 			return null;
 		}
+	}
+	
+	public static String formattaListaMessaggi(ArrayList<Messaggio> listaMessaggi) {
+	    StringBuilder sb = new StringBuilder();
+	    
+	    for (Messaggio m : listaMessaggi) {
+	        sb.append(formattaSingoloMessaggio(
+	            m.getAutore().getUser_name(), 
+	            m.getData_pubblicazione(), 
+	            m.getTesto()
+	        ));
+	    }
+	    
+	    return sb.toString();
 	}
 }

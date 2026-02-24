@@ -15,7 +15,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarket
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarketplace.MarketplaceStaffPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarketplace.MarketplaceUserPanel;
 
-// @Author teopacchiega
+/**
+ * @author teopacchiega
+ */
 
 public class FrameMarketplace extends JFrame {
 
@@ -61,7 +63,6 @@ public class FrameMarketplace extends JFrame {
         add(mk_main_panel);
     }
 
-    // --- METODI PER CAMBIARE SCHERMATA ---
     public void mostraMarketplaceGuest() { card_layout.show(mk_main_panel, PannelliMarketplace.MK_GUEST.name()); }
     public void mostraMarketplaceUser() { card_layout.show(mk_main_panel, PannelliMarketplace.MK_USER.name()); }
     public void mostraMarketplaceStaff() { card_layout.show(mk_main_panel, PannelliMarketplace.MK_STAFF.name()); }
@@ -72,7 +73,6 @@ public class FrameMarketplace extends JFrame {
     public void mostraLogin() { card_layout.show(mk_main_panel, PannelliMarketplace.LOGIN.name()); }
     public void cambiaSchermata(PannelliMarketplace schermata) { card_layout.show(mk_main_panel, schermata.name()); }
 
-    // --- GETTER ---
     public MarketplaceGuestPanel getMarketplaceGuestPanel() { return mk_guest_panel; }
     public MarketplaceUserPanel getMarketplaceUserPanel() { return mk_user_panel; }
     public MarketplaceStaffPanel getMarketplaceStaffPanel() { return mk_staff_panel; }
@@ -82,6 +82,5 @@ public class FrameMarketplace extends JFrame {
     public GestioneCarrelloPanel getCarrelloPanel() { return carrello_panel; }
     public LoginPanel getLoginPanel() { return login_panel; }
     
-    // --- METODI PER CHIAMARE ALTRI FRAME
     public HomeFrame getHomeFrame() { return new HomeFrame(); }
 }

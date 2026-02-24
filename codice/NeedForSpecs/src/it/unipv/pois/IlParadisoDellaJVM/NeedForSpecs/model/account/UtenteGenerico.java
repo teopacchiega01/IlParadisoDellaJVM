@@ -1,11 +1,17 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account;
 
+
+/**
+ * @author Persy
+ */
+
 import java.time.LocalDate;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi.Indirizzo;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagamento.Carta;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.Annuncio;
+
 
 public class UtenteGenerico extends Utente {
 	
@@ -80,23 +86,24 @@ public class UtenteGenerico extends Utente {
 		return false;
 	}
 
-	public void caricaDatiAggiuntivi(DAOFactory factory) {
-		Carta cartaTrovata = factory.getCartaDAO().getCarta(this);
-		Indirizzo indirizzoTrovato = factory.getIndirizzoDAO().getIndirizzo(this);
+	public void caricaDatiAggiuntivi() {
+		DAOFactory factory = DAOFactory.getInstance();
+		Carta carta_trovato = factory.getCartaDAO().getCarta(this);
+		Indirizzo indirizzo_trovato = factory.getIndirizzoDAO().getIndirizzo(this);
 
-		this.setMetodo_di_pagamento(cartaTrovata);
-		this.setInd_di_spedizione(indirizzoTrovato);
+		this.setMetodo_di_pagamento(carta_trovato);
+		this.setInd_di_spedizione(indirizzo_trovato);
 		System.out.println(this);
 	}
 	
 	public boolean modificaMetodoPagamento(String nuovoNumero, LocalDate nuovaScadenza, String nuovoCvv) {
 		
-		Carta nuovaCarta = new Carta(nuovoNumero, nuovaScadenza, nuovoCvv);
+		Carta nuova_carta = new Carta(nuovoNumero, nuovaScadenza, nuovoCvv);
 		DAOFactory factory = DAOFactory.getInstance();
-		boolean aggiornatoNelDB = factory.getCartaDAO().aggiornaCartaUtente(getUser_name(), nuovaCarta);
-		if (aggiornatoNelDB) {
+		boolean aggiornato_nel_db = factory.getCartaDAO().aggiornaCartaUtente(getUser_name(), nuova_carta);
+		if (aggiornato_nel_db) {
 	      
-			this.setMetodo_di_pagamento(nuovaCarta);
+			this.setMetodo_di_pagamento(nuova_carta);
 	        return true;
 	    }
 	    return false;

@@ -3,6 +3,10 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.configura
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author teopacchiega
+ */
+
 public class ConfiguratoreUserPanel extends ConfiguratoreBasePanel {
 
     private JTextField txtNomeBuild;
@@ -24,20 +28,17 @@ public class ConfiguratoreUserPanel extends ConfiguratoreBasePanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 4; // Inseriamo nella riga 4, prima del messaggio
+        gbc.gridy = 4; 
 
-        // Nome Build
         gbc.gridx = 1; gbc.weightx = 0.0;
         add(new JLabel("Nome build:"), gbc);
         gbc.gridx = 2; gbc.weightx = 0.5;
         add(txtNomeBuild, gbc);
 
-        // Salva Build
         gbc.gridy = 6;
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1.0;
         add(btnSalvaBuild, gbc);
 
-        // Spostiamo il messaggio alla fine
         remove(lblMessaggio);
         gbc.gridy = 7; gbc.gridx = 0; gbc.gridwidth = 3;
         add(lblMessaggio, gbc);

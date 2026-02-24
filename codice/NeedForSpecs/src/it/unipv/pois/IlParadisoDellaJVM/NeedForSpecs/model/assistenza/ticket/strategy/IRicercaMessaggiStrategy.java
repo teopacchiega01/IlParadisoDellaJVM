@@ -5,6 +5,10 @@ import java.util.List;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Messaggio;
 
+/*
+ * @author: Persy
+ */
+
 public interface IRicercaMessaggiStrategy {
 	
 	List<Messaggio> cerca(List<Messaggio> conversazione, String elemento_ricerca);

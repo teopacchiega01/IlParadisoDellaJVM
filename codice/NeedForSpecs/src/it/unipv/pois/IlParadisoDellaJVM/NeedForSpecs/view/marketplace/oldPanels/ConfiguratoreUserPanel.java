@@ -17,7 +17,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-//	@Author teopacchiega
+/**
+ * @author teopacchiega
+ */
+
 
 public class ConfiguratoreUserPanel extends JPanel {
 
@@ -92,7 +95,7 @@ public class ConfiguratoreUserPanel extends JPanel {
 		pnlDati.add(txtNomeBuild);
 		pnlDati.add(new JLabel("PREZZO TOTALE (€):"));
 		txtPrezzoBuild = new JTextField(10);
-		txtPrezzoBuild.setEditable(false); // Il prezzo lo calcola il controller, l'utente non può barare!
+		txtPrezzoBuild.setEditable(false);
 		pnlDati.add(txtPrezzoBuild);
 		JPanel pnlSalva = new JPanel(new FlowLayout());
 		btnSalvaBuild = new JButton("SALVA E REGISTRA BUILD");
@@ -105,7 +108,6 @@ public class ConfiguratoreUserPanel extends JPanel {
 		add(pnlSud, BorderLayout.SOUTH);
 	}
 
-	// --- GETTER ---
 	public JButton getBtnLogout() { return btnLogout; }
 	public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
 	public JButton getBtnCarrello() { return btnCarrello; }

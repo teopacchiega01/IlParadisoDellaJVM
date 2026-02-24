@@ -1,5 +1,9 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.eccezioni;
 
+/*
+ * @author persy
+ */
+
 public class TicketAlreadyClosedException extends TicketExeception {
 
 	public TicketAlreadyClosedException(String id) {

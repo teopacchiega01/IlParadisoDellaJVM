@@ -2,6 +2,10 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.ec
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Stato;
 
+/*
+ * @author persy
+ */
+
 public class TicketStatusUnchangedException extends TicketExeception {
 
 	public TicketStatusUnchangedException(String id,Stato nuovo_stato,Stato vecchio_stato) {

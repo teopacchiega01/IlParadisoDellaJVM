@@ -9,6 +9,10 @@ import java.sql.SQLException;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 
+
+/**
+ * @author teopacchiega
+ */
 public class CartaDAOdb implements ICartaDAO {
 
 	private static final String QUERY_GET_CARTA = 
@@ -19,6 +23,10 @@ public class CartaDAOdb implements ICartaDAO {
 	private static final String QUERY_INSERT_CARTA = 
 			"INSERT INTO Carta (numero_carta, data_scadenza, cvv) VALUES (?, ?, ?)";
 
+	private static final String QUERY_INSET_CARTA_AGGIORNA = "INSERT IGNORE INTO Carta (numero_carta, data_scadenza, cvv) VALUES (?, ?, ?)";
+   private static final  String QUERY_UPDATE_CARTA = "UPDATE UtenteGenerico SET numero_carta = ? WHERE user_name = ?";
+    
+	
 	@Override
 	public Carta getCarta(UtenteGenerico utente) {
 		Carta cartaTrovata = null;
@@ -64,18 +72,17 @@ public class CartaDAOdb implements ICartaDAO {
 	@Override
 	public boolean aggiornaCartaUtente(String username, Carta nuovaCarta) {
 		// TODO Auto-generated method stub
-		String queryInsertCarta = "INSERT IGNORE INTO Carta (numero_carta, data_scadenza, cvv) VALUES (?, ?, ?)";
-	    String queryUpdateUtente = "UPDATE UtenteGenerico SET numero_carta = ? WHERE user_name = ?";
+		
 
 	    try (Connection conn = DatabaseManager.getConnection()) {
 	        conn.setAutoCommit(false); 
-	        try (PreparedStatement ps1 = conn.prepareStatement(queryInsertCarta)) {
+	        try (PreparedStatement ps1 = conn.prepareStatement(QUERY_INSET_CARTA_AGGIORNA)) {
 	            ps1.setString(1, nuovaCarta.getNumeroCarta());
 	            ps1.setDate(2, java.sql.Date.valueOf(nuovaCarta.getDataScadenza()));
 	            ps1.setString(3, nuovaCarta.getCvv());
 	            ps1.executeUpdate();
 	        }
-	        try (PreparedStatement ps2 = conn.prepareStatement(queryUpdateUtente)) {
+	        try (PreparedStatement ps2 = conn.prepareStatement(QUERY_UPDATE_CARTA)) {
 	            ps2.setString(1, nuovaCarta.getNumeroCarta());
 	            ps2.setString(2, username);
 	            ps2.executeUpdate();

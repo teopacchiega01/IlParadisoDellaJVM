@@ -2,8 +2,8 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db;
 
 
 
-/*
- * @author: Persy
+/**
+ * @author Persy
  */
 
 public enum Persistenza {

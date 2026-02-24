@@ -11,6 +11,9 @@ import javax.swing.JPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Stato;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
 
+/**
+ * @author persy
+ */
 
 
 

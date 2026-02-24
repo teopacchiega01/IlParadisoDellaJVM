@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
 
+/**
+ * @author persy
+ */
+
 public class HomePanelUtente extends JPanel {
 	private JLabel label_benvenuto; 
 	private JLabel risultati_home_utente;

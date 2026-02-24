@@ -2,7 +2,9 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 
-//	@Author teopacchiega
+/**
+ * @author teopacchiega
+ */
 
 public interface IIndirizzoDAO {
 	public Indirizzo getIndirizzo(UtenteGenerico utente);

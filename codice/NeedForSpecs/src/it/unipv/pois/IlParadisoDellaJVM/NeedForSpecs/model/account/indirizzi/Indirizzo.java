@@ -2,22 +2,25 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.indirizzi;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreId;
 
+
+/**
+ * @author teopacchiega
+ */
 public class Indirizzo {
 	private static final int DIM_ID_INDIRIZZO = 20;
-	private String idIndirizzo;
+	private String id_indirizzo;
     private String via;
     private String civico;
     private String cap;
     private String provincia;
     private String citta;
 
-    // Costruttore vuoto
     public Indirizzo() {
     }
 
-    // Costruttore con parametri (l'ID viene generato in automatico)
+   
     public Indirizzo(String via, String civico, String cap, String provincia, String citta) {
-        this.idIndirizzo = GeneratoreId.generaId(DIM_ID_INDIRIZZO);
+        this.id_indirizzo = GeneratoreId.generaId(DIM_ID_INDIRIZZO);
         this.via = via;
         this.civico = civico;
         this.cap = cap;
@@ -27,11 +30,11 @@ public class Indirizzo {
 
 
     public String getIdIndirizzo() {
-        return idIndirizzo;
+        return id_indirizzo;
     }
 
     public void setIdIndirizzo(String idIndirizzo) {
-        this.idIndirizzo = idIndirizzo;
+        this.id_indirizzo = idIndirizzo;
     }
 
     public String getVia() {

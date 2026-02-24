@@ -16,7 +16,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-//	@Author teopacchiega
+/**
+ * @author teopacchiega
+ */
+
 
 public class ConfiguratorePanel extends JPanel {
 	
@@ -97,7 +100,6 @@ public class ConfiguratorePanel extends JPanel {
 		add(pnlSud, BorderLayout.SOUTH);
 	}
 
-	// --- GETTER ---
 	public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
 	public JButton getBtnLogin() { return btnLogin; }
 	public JButton getBtnForum() { return btnForum; }

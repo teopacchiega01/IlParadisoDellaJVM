@@ -14,10 +14,9 @@ import javax.swing.BorderFactory;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.Ricerca;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringChecker;
 
-/*
- * @author: Persy
+/**
+ * @author Persy
  */
-
 public class TicketStaffPanel extends JPanel {
 	
 	private JLabel out_ticket_staff;
@@ -26,7 +25,7 @@ public class TicketStaffPanel extends JPanel {
 	private JButton invia_messaggio_staff;
 	private JButton indietro_butt;
 	
-	// Nuovi attributi per la ricerca
+	
 	private JComboBox<Ricerca> combo_ricerca;
 	private JTextField testo_ricerca;
 	private JButton cerca_butt;
@@ -50,13 +49,13 @@ public class TicketStaffPanel extends JPanel {
 		invia_messaggio_staff = new JButton("Invia Messaggio");
 		indietro_butt = new JButton("< Torna alla Home");
 		
-		// Inizializzazione componenti ricerca
+	
 		combo_ricerca = new JComboBox<>(Ricerca.values());
 		testo_ricerca = new JTextField(15);
 		cerca_butt = new JButton("Cerca");
 		reset_ricerca_butt = new JButton("Reset");
 		
-		// PANNELLO NORD: diviso tra comandi base (sinistra) e ricerca (destra)
+		
 		JPanel nord = new JPanel(new BorderLayout());
 		
 		JPanel nordOvest = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -88,9 +87,7 @@ public class TicketStaffPanel extends JPanel {
 		this.add(sud, BorderLayout.SOUTH);
 	}
 
-	// ==========================================================
-	// METODI DI ESTRAZIONE DATI SANIFICATI
-	// ==========================================================
+	
 	public String getTestoMessaggioDaInviare() {
 		return StringChecker.pulisciInput(testo_messaggio_staff.getText());
 	}
@@ -107,9 +104,7 @@ public class TicketStaffPanel extends JPanel {
 		testo_ricerca.setText("");
 	}
 
-	// ==========================================================
-	// METODI DI GESTIONE GRAFICA
-	// ==========================================================
+
 	public boolean isPannelloVisibile() {
 	    return this.isShowing();
 	}
@@ -138,9 +133,7 @@ public class TicketStaffPanel extends JPanel {
 		out_ticket_staff.setText(text);
 	}	
 
-	// ==========================================================
-	// GETTER DEI BOTTONI PER I LISTENER DEL CONTROLLER
-	// ==========================================================
+
 	public JButton getInvia_messaggio_staff() { return invia_messaggio_staff; }
 	public JButton getIndietro_butt() { return indietro_butt; }
 	public JButton getCerca_butt() { return cerca_butt; }

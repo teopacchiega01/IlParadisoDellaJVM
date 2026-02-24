@@ -1,6 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view;
 
 import javax.swing.JFrame;
+
 import javax.swing.JPanel;
 import java.awt.CardLayout;
 
@@ -8,13 +9,16 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.Forum.ForumView;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.FrameMarketplace;
 
+/**
+ * @author Persy
+ */
 public class HomeFrame extends JFrame {
 
 	public final static String HOME_PANEL = "HOME";
 	public final static String REG_UTENTE_PANEL = "REG_UTENTE";
 	public final static String REG_STAFF_PANEL = "REG_STAFF";
 	public final static String LOGIN_PANEL = "LOGIN";
-	public final static String MODIFICA_PAGAMENTO_PANEL = "MODIFICA_PAGAMENTO"; // NUOVO PANNELLO
+	public final static String MODIFICA_PAGAMENTO_PANEL = "MODIFICA_PAGAMENTO"; 
 
 	private CardLayout cardLayout;
 	private JPanel mainPanel;
@@ -23,7 +27,7 @@ public class HomeFrame extends JFrame {
 	private RegistrazioneUtentePanel regUtentePanel;
 	private RegistrazioneStaffPanel regStaffPanel;
 	private LoginPanel loginPanel; 
-	private ModificaPagamentoPanel modificaPagamentoPanel; // NUOVO PANNELLO
+	private ModificaPagamentoPanel modificaPagamentoPanel;
 	
 	public HomeFrame() {
 		super("Il Paradiso della JVM - Home Principale");
@@ -71,5 +75,5 @@ public class HomeFrame extends JFrame {
 	public void mostraRegistrazioneUtente() { cardLayout.show(mainPanel, REG_UTENTE_PANEL); }
 	public void mostraRegistrazioneStaff() { cardLayout.show(mainPanel, REG_STAFF_PANEL); }
 	public void mostraLogin() { cardLayout.show(mainPanel, LOGIN_PANEL); }
-	public void mostraModificaPagamento() { cardLayout.show(mainPanel, MODIFICA_PAGAMENTO_PANEL); } // NUOVO METODO
+	public void mostraModificaPagamento() { cardLayout.show(mainPanel, MODIFICA_PAGAMENTO_PANEL); } 
 }

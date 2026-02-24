@@ -12,6 +12,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.assistenza.FrameAssistenza;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.FrameMarketplace;
 
+/**
+ * @author Persy
+ */
 public class ControllerHome {
 	
 	private GestoreAccount model;
@@ -29,7 +32,7 @@ public class ControllerHome {
 		this.view.setVisible(true);
 	}
 	
-	public void addListenersHomePanel() {
+	private void addListenersHomePanel() {
 		
 		view.getHomePanel().getRegistrati_staff_butt().addActionListener(e -> view.mostraRegistrazioneStaff());
 		view.getHomePanel().getRegistrati_utente_butt().addActionListener(e -> view.mostraRegistrazioneUtente());
@@ -82,7 +85,7 @@ public class ControllerHome {
 		});
 	}
 	
-	public void addListenersRegistrazioneUtentePanel() {
+	private void addListenersRegistrazioneUtentePanel() {
 		view.getRegUtentePanel().getIndietro_butt().addActionListener(e -> {
 			view.getRegUtentePanel().pulisciCampi();
 			view.mostraHome();
@@ -117,7 +120,7 @@ public class ControllerHome {
 		});
 	}
 	
-	public void addListenersRegistrazioneStaffPanel() {
+	private void addListenersRegistrazioneStaffPanel() {
 		view.getRegStaffPanel().getIndietro_butt().addActionListener(e -> {
 			view.getRegStaffPanel().pulisciCampi();
 			view.mostraHome();
@@ -171,7 +174,7 @@ public class ControllerHome {
 				view.getHomePanel().setVisibilitaRegistrati(false);
 				view.getHomePanel().setLabelOut("Benvenuto, " + model.getUtenteLoggato().getNome() + "!");
 				
-				// CONTROLLO RUOLO: Mostra il tasto pagamento solo all'Utente Generico
+				
 				if (!model.getUtenteLoggato().isStaff()) {
 					view.getHomePanel().setVisibilitaModificaPagamento(true);
 				} else {
@@ -184,7 +187,7 @@ public class ControllerHome {
 	}
 	
 
-	public void addListenersModificaPagamento() {
+	private void addListenersModificaPagamento() {
 		view.getModificaPagamentoPanel().getIndietro_butt().addActionListener(e -> {
 			view.getModificaPagamentoPanel().pulisciCampi();
 			view.getModificaPagamentoPanel().setLabelOut(" ");
@@ -212,7 +215,7 @@ public class ControllerHome {
 		});
 	}
 	
-	public void inizializzaInterfacciaHome() {
+	private void inizializzaInterfacciaHome() {
 		if(model.getUtenteLoggato() != null) {
 			view.getHomePanel().setLabelUtenteLoggato(model.getUtenteLoggato().getUser_name());
 			view.getHomePanel().setVisibilitaLogin(false);

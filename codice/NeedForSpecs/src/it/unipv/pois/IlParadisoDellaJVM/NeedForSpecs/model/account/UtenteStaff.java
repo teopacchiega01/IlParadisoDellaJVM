@@ -1,5 +1,8 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account;
 
+/**
+ * @author Persy
+ */
 public class UtenteStaff extends Utente {
 
 	public UtenteStaff(String nome_utente, String email, String psw, String nome, String cognome) {

@@ -1,5 +1,10 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.eccezioni;
 
+
+/*
+ * @author persy
+ */
+
 public class TicketNotFoundException extends TicketExeception {
 
 	public TicketNotFoundException(String id) {

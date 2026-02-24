@@ -14,7 +14,10 @@ import javax.swing.SwingConstants;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.Annuncio;
 
-//	@Author teopacchiega
+/**
+ * @author teopacchiega
+ */
+
 
 public class GestioneCarrelloPanel extends JPanel {
 	
@@ -64,7 +67,6 @@ public class GestioneCarrelloPanel extends JPanel {
         add(pnlSud, BorderLayout.SOUTH);
     }
 
-    // --- GETTER ---
     public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
 	public JButton getBtnLogout() { return btnLogout; }
 	public JButton getBtnEliminaLista() { return btnEliminaLista; }

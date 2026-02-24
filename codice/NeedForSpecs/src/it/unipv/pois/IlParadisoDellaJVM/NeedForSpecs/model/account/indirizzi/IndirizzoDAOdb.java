@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGenerico;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DatabaseManager;
 
+/**
+ * @author teopacchiega
+ */
 public class IndirizzoDAOdb implements IIndirizzoDAO {
 
 	private static final String QUERY_GET_INDIRIZZO = 
@@ -21,7 +24,7 @@ public class IndirizzoDAOdb implements IIndirizzoDAO {
 
 	@Override
 	public Indirizzo getIndirizzo(UtenteGenerico utente) {
-		Indirizzo indirizzoTrovato = null;
+		Indirizzo indirizzo_trovato = null;
 
 		try (Connection conn = DatabaseManager.getConnection();
 			 PreparedStatement ps = conn.prepareStatement(QUERY_GET_INDIRIZZO)) {
@@ -30,13 +33,13 @@ public class IndirizzoDAOdb implements IIndirizzoDAO {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
-					indirizzoTrovato = new Indirizzo();
-					indirizzoTrovato.setIdIndirizzo(rs.getString("id_indirizzo"));
-					indirizzoTrovato.setVia(rs.getString("via"));
-					indirizzoTrovato.setCivico(rs.getString("civico"));
-					indirizzoTrovato.setCap(rs.getString("cap"));
-					indirizzoTrovato.setProvincia(rs.getString("provincia"));
-					indirizzoTrovato.setCitta(rs.getString("citta"));
+					indirizzo_trovato = new Indirizzo();
+					indirizzo_trovato.setIdIndirizzo(rs.getString("id_indirizzo"));
+					indirizzo_trovato.setVia(rs.getString("via"));
+					indirizzo_trovato.setCivico(rs.getString("civico"));
+					indirizzo_trovato.setCap(rs.getString("cap"));
+					indirizzo_trovato.setProvincia(rs.getString("provincia"));
+					indirizzo_trovato.setCitta(rs.getString("citta"));
 				}
 			}
 
@@ -44,7 +47,7 @@ public class IndirizzoDAOdb implements IIndirizzoDAO {
 			System.err.println("Errore recupero indirizzo: " + e.getMessage());
 		}
 
-		return indirizzoTrovato;
+		return indirizzo_trovato;
 	}
 
 	@Override

@@ -18,7 +18,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
 
 
-//	@author teopacchiega
+/**
+* @author teopacchiega
+*/
 
 public class Marketplace {
 	private static Marketplace instance;

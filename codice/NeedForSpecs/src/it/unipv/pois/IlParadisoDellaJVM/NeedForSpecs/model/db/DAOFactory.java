@@ -42,22 +42,7 @@ public abstract class DAOFactory{
     
     
     
-    
-    public static DAOFactory getPersistenceFactory(Persistenza persistenza_scelta) {
-		
-		if (instance == null) {
-			switch(persistenza_scelta) {
-				case MYSQL_DB:
-					instance = new MySQLDAOFactory();
-					break;
-				default:
-					throw new IllegalArgumentException("Persistenza non ancora implementata dall'applicazione");
-			}
-		}
-		
-		return instance;
-	}
-	
+  
 	
 	
 	

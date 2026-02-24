@@ -15,7 +15,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-//	@Author teopacchiega
+/**
+ * @author teopacchiega
+ */
+
 
 public class MarketplacePanel extends JPanel {
 
@@ -49,7 +52,7 @@ public class MarketplacePanel extends JPanel {
 		add(pnlNord, BorderLayout.NORTH);
 
 		JPanel pnlCentro = new JPanel(new BorderLayout(10, 10));
-		listComponenti = new JList<>(); // Il controller riempirà questa lista col DefaultListModel
+		listComponenti = new JList<>();
 		JScrollPane scrollLista = new JScrollPane(listComponenti);
 		scrollLista.setPreferredSize(new Dimension(250, 0));
 		pnlCentro.add(scrollLista, BorderLayout.WEST);
@@ -70,7 +73,7 @@ public class MarketplacePanel extends JPanel {
 		btnAggiungiAnnuncio = new JButton("AGGIUNGI ANNUNCIO");
 		btnVaiConfiguratore = new JButton("VAI AL CONFIGURATORE");
 		pnlBottoniSud.add(btnAggiungiAnnuncio); pnlBottoniSud.add(btnVaiConfiguratore);
-		lblMessaggio = new JLabel(" ", SwingConstants.CENTER); // Spazio vuoto iniziale
+		lblMessaggio = new JLabel(" ", SwingConstants.CENTER);
 		lblMessaggio.setForeground(Color.RED);
 		pnlSud.add(pnlBottoniSud, BorderLayout.NORTH);
 		pnlSud.add(lblMessaggio, BorderLayout.SOUTH);

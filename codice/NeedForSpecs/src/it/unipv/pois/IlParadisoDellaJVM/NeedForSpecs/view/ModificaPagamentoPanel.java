@@ -1,6 +1,7 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view;
 
 import java.awt.BorderLayout;
+
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -11,7 +12,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.time.LocalDate;
 
+
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringChecker;
+
+/**
+ * @author Persy
+ */
 
 public class ModificaPagamentoPanel extends JPanel {
 
@@ -27,13 +33,13 @@ public class ModificaPagamentoPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        // NORD: Titolo e feedback
+       
         JPanel nord = new JPanel(new GridLayout(2, 1, 0, 10));
         nord.add(new JLabel("Modifica Metodo di Pagamento", SwingConstants.CENTER));
         label_out = new JLabel(" ", SwingConstants.CENTER);
         nord.add(label_out);
 
-        // CENTRO: Form
+        
         JPanel centro = new JPanel(new GridLayout(3, 2, 10, 15));
         centro.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         
@@ -48,7 +54,7 @@ public class ModificaPagamentoPanel extends JPanel {
         centro.add(new JLabel("CVV:")); 
         centro.add(cvv_carta_field);
 
-        // SUD: Bottoni
+
         JPanel sud = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         aggiorna_butt = new JButton("Aggiorna Dati");
         indietro_butt = new JButton("< Torna al Profilo");

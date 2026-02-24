@@ -20,8 +20,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.o
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.OrdineDAOdb;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.IProdottoDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.ProdottoDAOdb;
-
-
+/**
+ * @author all
+ */
 public class MySQLDAOFactory extends DAOFactory {
 	public ITicketDAO getTicketDAO() {
 		return new TicketDAOdb();

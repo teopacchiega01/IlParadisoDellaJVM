@@ -1,5 +1,10 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account;
 
+
+/**
+ * @author Persy
+ */
+
 public abstract class Utente {
 
 	private String user_name;

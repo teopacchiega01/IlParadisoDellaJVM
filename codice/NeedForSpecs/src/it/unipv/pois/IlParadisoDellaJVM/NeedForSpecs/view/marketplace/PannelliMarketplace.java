@@ -1,5 +1,9 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace;
 
+/**
+ * @author teopacchiega
+ */
+
 public enum PannelliMarketplace {
 	MK_GUEST,
 	MK_USER,

@@ -8,6 +8,10 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagam
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.metodiDiPagamento.ICartaDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
 
+
+/**
+ * @author Persy
+ */
 public class GestoreAccount {
 
 	private static GestoreAccount instance;
@@ -42,13 +46,11 @@ public class GestoreAccount {
 		gen.setMetodo_di_pagamento(c);
 		gen.setInd_di_spedizione(ind);
 
-		if (ind != null) {
+		if (ind != null  && c!= null) {
 			indirizzo_dao.inserisciIndirizzo(ind);
-		}
-		if (c != null) {
 			carta_dao.inserisciCarta(c);
 		}
-
+		
 		return utente_dao.registrazioneUtente(gen); 
 	}
 
@@ -58,18 +60,18 @@ public class GestoreAccount {
 	}
 	
 	public boolean loginUtente(String mail, String psw) {
-		Utente utenteDalDb = utente_dao.login(mail, psw);
+		Utente utente_db = utente_dao.login(mail, psw);
 
-		if (utenteDalDb == null) {
+		if (utente_db == null) {
 			return false; 
 		}
 		
-		if (!utenteDalDb.isStaff()) {
-			UtenteGenerico gen = (UtenteGenerico) utenteDalDb;
-			gen.caricaDatiAggiuntivi(DAOFactory.getInstance());
+		if (!utente_db.isStaff()) {
+			UtenteGenerico gen = (UtenteGenerico) utente_db;
+			gen.caricaDatiAggiuntivi();
 		}
 		
-		this.utente_loggato = utenteDalDb;
+		this.utente_loggato = utente_db;
 		System.out.println(utente_loggato);
 		return true;
 	}
@@ -79,10 +81,10 @@ public class GestoreAccount {
 			System.out.println("Lo staff NON ha una carta");
 			return false;
 		}
-		UtenteGenerico utenteGen = (UtenteGenerico) utente_loggato;
-		boolean successo = utenteGen.modificaMetodoPagamento(nuovoNumero, nuovaScadenza, nuovoCvv);
+		UtenteGenerico utente_gen = (UtenteGenerico) utente_loggato;
+		boolean successo = utente_gen.modificaMetodoPagamento(nuovoNumero, nuovaScadenza, nuovoCvv);
 		if(successo) {
-			
+			System.out.println(utente_loggato);
 			return true;
 		}
 		return false;

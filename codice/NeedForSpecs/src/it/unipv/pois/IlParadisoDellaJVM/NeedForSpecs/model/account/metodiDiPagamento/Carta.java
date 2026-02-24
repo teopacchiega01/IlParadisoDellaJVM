@@ -5,46 +5,50 @@ import java.time.LocalDate;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreId;
 
+
+/**
+ * @author teopacchiega
+ */
 public class Carta {
 	private final static int DIM_N_CARTA = 20;
-	private String numeroCarta;
-    private LocalDate dataScadenza;
+	private String numero_carta;
+    private LocalDate data_scadenza;
     private String cvv;
 
-    // Costruttore vuoto
+
     public Carta() {
     }
 
-    // Costruttore con parametri (il numero_carta viene generato in automatico)
-    public Carta(LocalDate dataScadenza, String cvv) {
-        this.numeroCarta = GeneratoreId.generaId(DIM_N_CARTA);
-        this.dataScadenza = dataScadenza;
+
+    public Carta(LocalDate data_scadenza, String cvv) {
+        this.numero_carta = GeneratoreId.generaId(DIM_N_CARTA);
+        this.data_scadenza = data_scadenza;
         this.cvv = cvv;
     }
 
     
    
-	public Carta(String numeroCarta, LocalDate dataScadenza, String cvv) {
+	public Carta(String numeroCarta, LocalDate data_scadenza, String cvv) {
 		super();
-		this.numeroCarta = numeroCarta;
-		this.dataScadenza = dataScadenza;
+		this.numero_carta = numeroCarta;
+		this.data_scadenza = data_scadenza;
 		this.cvv = cvv;
 	}
 
 	public String getNumeroCarta() {
-        return numeroCarta;
+        return numero_carta;
     }
 
     public void setNumeroCarta(String numeroCarta) {
-        this.numeroCarta = numeroCarta;
+        this.numero_carta = numeroCarta;
     }
 
     public LocalDate getDataScadenza() {
-        return dataScadenza;
+        return data_scadenza;
     }
 
     public void setDataScadenza(LocalDate dataScadenza) {
-        this.dataScadenza = dataScadenza;
+        this.data_scadenza = dataScadenza;
     }
 
     public String getCvv() {

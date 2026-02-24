@@ -1,5 +1,9 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.eccezioni;
 
+
+/*
+ * @author persy
+ */
 public class TicketExeception extends RuntimeException {
 
 	public TicketExeception(String message) {
