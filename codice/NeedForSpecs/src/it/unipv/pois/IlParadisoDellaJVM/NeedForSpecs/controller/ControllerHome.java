@@ -195,11 +195,7 @@ public class ControllerHome {
 				view.getHomePanel().setVisibilitaRegistrati(false);
 				view.getHomePanel().setLabelOut("Benvenuto, " + model.getUtenteLoggato().getNome() + "!");
 				
-<<<<<<< HEAD
-				
-=======
 
->>>>>>> refs/remotes/origin/main
 				if (!model.getUtenteLoggato().isStaff()) {
 					view.getHomePanel().setVisibilitaModificaPagamento(true);
 				} else {

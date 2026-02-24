@@ -7,19 +7,12 @@ import java.util.ArrayList;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.Ticket;
 
-<<<<<<< HEAD
+
 
 /**
  * @author Persy
  */
-=======
-/**
- *
- * * @author teomiraldi
- * 
- */
 
->>>>>>> refs/remotes/origin/main
 public interface IMessaggioDAO {
 	
 	public ArrayList<Messaggio> getMessaggiDaTicket(Ticket ticket_di_riferimento);
