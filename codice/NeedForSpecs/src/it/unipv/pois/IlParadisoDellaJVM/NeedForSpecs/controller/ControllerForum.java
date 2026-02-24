@@ -3,7 +3,6 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.controller;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -15,8 +14,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Comme
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.Forum;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.ForumException;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.ForumStrategy;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.OrdinamentoStrategyFactory;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.Ordinamento;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.Forum.ApriCommentoPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.Forum.ApriPostPanel;
@@ -59,7 +57,6 @@ public class ControllerForum {
 	private void aggiornaTabella() {
 		try {
 			ArrayList<Post> listaPost = model.inizializzaForum();
-			System.out.println("NUMERO POST CARICATI: " + listaPost.size());
 			PostAdapter adapter = forumFrame.adaptPost(listaPost);
 			view.getTabellaPost().setModel(adapter);
 		} catch (ForumException e) {
@@ -91,11 +88,9 @@ public class ControllerForum {
 		});
 
 		view.getCercaPost().addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				gestisciRicerca();
-
 			}
 		});
 
@@ -135,11 +130,10 @@ public class ControllerForum {
 		ApriPostPanel apriPost = forumFrame.apriPost();
 
 		apriPost.getlTitolo().setText(postDaAprire.getTitolo());
-		if (postDaAprire.getSottotitolo() != null) {
-			apriPost.getlSottotitolo().setText(postDaAprire.getSottotitolo());
-		} else {
-			apriPost.getlSottotitolo().setText("");
-		}
+
+		// NIENTE IF! Usiamo il metodo sicuro che hai creato nel Model
+		apriPost.getlSottotitolo().setText(postDaAprire.getSottotitoloSicuro());
+
 		apriPost.gettTesto().setText(postDaAprire.getTesto());
 		apriPost.gettTesto().setCaretPosition(0);
 
@@ -167,7 +161,6 @@ public class ControllerForum {
 			}
 		});
 
-		// MODIFICATO QUI: Avvia la logica a cascata!
 		apriPost.getApriCommento().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -179,7 +172,16 @@ public class ControllerForum {
 				CommentoAdapter adapter = (CommentoAdapter) apriPost.getTabellaCommenti().getModel();
 				Commento commento = adapter.getCommentoAt(riga);
 
-				espandiCommento(commento, postDaAprire, u, apriPost);
+
+				espandiCommento(commento, postDaAprire, u, new Runnable() {
+					@Override
+					public void run() {
+						try {
+							apriPost.getTabellaCommenti().setModel(forumFrame.adaptCommenti(model.getCommenti(postDaAprire)));
+						} catch (Exception ex) {}
+						forumFrame.cambiaFinestra(apriPost);
+					}
+				});
 			}
 		});
 
@@ -211,14 +213,14 @@ public class ControllerForum {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String titolo = creaPost.getTxtTitolo().getText().trim();
-				if (titolo.isEmpty()) {
-					creaPost.getTxtTitolo().setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-					forumFrame.mostraErrore("Devi inserire un titolo!");
-					return;
-				}
+				String testo = creaPost.getTxtTesto().getText();
+				String sottotitolo = creaPost.getTxtSottotitolo().getText();
 
 				try {
-					model.creaPost(u, creaPost.getTxtTesto().getText(), LocalDateTime.now(), titolo, creaPost.getTxtSottotitolo().getText());
+
+					model.creaPost(u, testo, titolo, sottotitolo);
+
+					creaPost.getTxtTitolo().setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					aggiornaTabella();
 					forumFrame.cambiaFinestra(view);
 
@@ -229,7 +231,11 @@ public class ControllerForum {
 						}
 					});
 
-				} catch (Exception ex) {
+				} catch (IllegalArgumentException ex) {
+					// IL MODEL HA DECISO CHE I DATI NON VANNO BENE!
+					creaPost.getTxtTitolo().setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+					forumFrame.mostraErrore(ex.getMessage());
+				} catch (ForumException ex) {
 					forumFrame.mostraErrore("Errore nel database.");
 				}
 			}
@@ -256,8 +262,9 @@ public class ControllerForum {
 		PostAdapter adapter = (PostAdapter) view.getTabellaPost().getModel();
 		Post p = adapter.getPostAt(riga);
 
-		if (!u.isStaff() && !p.getAutore().getUser_name().equals(u.getUser_name())) {
-			forumFrame.mostraErrore("Non puoi eliminare post altrui!");
+		// IL MODEL CONTROLLA I PERMESSI!
+		if (!model.puoModificareOEliminare(u, p)) {
+			forumFrame.mostraErrore("Non hai i permessi per eliminare questo contenuto!");
 			return;
 		}
 
@@ -290,11 +297,8 @@ public class ControllerForum {
 		CommentoAdapter adapter = (CommentoAdapter) apriPost.getTabellaCommenti().getModel();
 		Commento commentoDaEliminare = adapter.getCommentoAt(riga);
 
-		boolean isStaff = u.isStaff();
-		boolean isAutore = commentoDaEliminare.getAutore() != null && commentoDaEliminare.getAutore().getUser_name().equals(u.getUser_name());
-
-		if (!isStaff && !isAutore) {
-			forumFrame.mostraErrore("Non hai i permessi per eliminare il commento di un altro utente!");
+		if (!model.puoModificareOEliminare(u, commentoDaEliminare)) {
+			forumFrame.mostraErrore("Non hai i permessi per eliminare questo contenuto!");
 			return; 
 		}
 
@@ -332,30 +336,33 @@ public class ControllerForum {
 			public void actionPerformed(ActionEvent e) {
 				String testo = creaCommentoView.getTxtTesto().getText();
 
-				if (testo != null && !testo.trim().isEmpty()) {
-					try {
-						model.creaCommento(u, testo, LocalDateTime.now(), postPadre, postPadre);
-						ArrayList<Commento> listaAggiornata = model.getCommenti(postPadre);
-						CommentoAdapter nuovoAdapter = forumFrame.adaptCommenti(listaAggiornata);
-						apriPost.getTabellaCommenti().setModel(nuovoAdapter);
+				try {
 
-						apriPost.getApriCommento().setVisible(true);
-						forumFrame.cambiaFinestra(apriPost);
+					model.creaCommento(u, testo, postPadre, postPadre);
 
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								forumFrame.mostraSuccesso("Commento pubblicato!");
-							}
-						});
+					creaCommentoView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.GRAY));
+					ArrayList<Commento> listaAggiornata = model.getCommenti(postPadre);
+					CommentoAdapter nuovoAdapter = forumFrame.adaptCommenti(listaAggiornata);
+					apriPost.getTabellaCommenti().setModel(nuovoAdapter);
 
-					} catch (ForumException ex) {
-						ex.printStackTrace();
-						forumFrame.mostraErrore("Errore durante la pubblicazione.");
-						forumFrame.cambiaFinestra(apriPost);
-					}
-				} else {
+					apriPost.getApriCommento().setVisible(true);
+					forumFrame.cambiaFinestra(apriPost);
+
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							forumFrame.mostraSuccesso("Commento pubblicato!");
+						}
+					});
+
+				} catch (IllegalArgumentException ex) {
+
 					creaCommentoView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.RED));
+					forumFrame.mostraErrore(ex.getMessage());
+				} catch (ForumException ex) {
+					ex.printStackTrace();
+					forumFrame.mostraErrore("Errore durante la pubblicazione.");
+					forumFrame.cambiaFinestra(apriPost);
 				}
 			}
 		});
@@ -369,56 +376,31 @@ public class ControllerForum {
 	}
 
 	private void gestisciRicerca() {
-
 		forumFrame.pulisciMessaggi();
-
-
-		String parolaCercata = view.getTitoloPost().getText().trim().toLowerCase();
+		String parolaCercata = view.getTitoloPost().getText().trim();
 
 		try {
 
-			ArrayList<Post> tuttiIPost = model.inizializzaForum();
-
-
-			if (parolaCercata.isEmpty()) {
-				PostAdapter adapter = forumFrame.adaptPost(tuttiIPost);
-				view.getTabellaPost().setModel(adapter);
-				return;
-			}
-
-			ArrayList<Post> postTrovati = new ArrayList<>();
-
-			for (Post p : tuttiIPost) {
-
-				if (p.getTitolo().toLowerCase().contains(parolaCercata)) {
-					postTrovati.add(p);
-				}
-			}
-
-
-			PostAdapter adapterRicerca = forumFrame.adaptPost(postTrovati);
-			view.getTabellaPost().setModel(adapterRicerca);
+			ArrayList<Post> postTrovati = model.cercaPostPerTitolo(parolaCercata);
+			view.getTabellaPost().setModel(forumFrame.adaptPost(postTrovati));
 
 			if (postTrovati.isEmpty()) {
 				forumFrame.mostraErrore("Nessun post trovato con questo titolo.");
 			}
-
 		} catch (ForumException ex) {
-			ex.printStackTrace();
 			forumFrame.mostraErrore("Errore durante la ricerca.");
 		}
-
 	}
 
-	// NUOVO METODO RICORSIVO PER ESPANDERE LE RISPOSTE
-	private void espandiCommento(Commento commentoDaAprire, Post postPadre, Utente u, JPanel vistaPrecedente) {
+	private void espandiCommento(Commento commentoDaAprire, Post postPadre, Utente u, Runnable azioneIndietro) {
 		forumFrame.pulisciMessaggi();
 
 		ApriCommentoPanel apriCommentoView = forumFrame.apriCommento();
 
 		apriCommentoView.getTxtCommentoPadre().setText(commentoDaAprire.getTesto());
 		apriCommentoView.getTxtCommentoPadre().setCaretPosition(0);
-		String nomeAutore = (commentoDaAprire.getAutore() != null) ? commentoDaAprire.getAutore().getUser_name() : "Sconosciuto";
+
+		String nomeAutore = commentoDaAprire.getNomeAutoreVisibile();
 		apriCommentoView.getTxtCommentoPadre().setBorder(BorderFactory.createTitledBorder("Stai leggendo il commento di: " + nomeAutore));
 
 		aggiornaTabellaRisposte(apriCommentoView, postPadre, commentoDaAprire);
@@ -427,14 +409,7 @@ public class ControllerForum {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				forumFrame.pulisciMessaggi();
-				forumFrame.cambiaFinestra(vistaPrecedente);
-
-				// Rinfresca la vista precedente
-				if (vistaPrecedente instanceof ApriPostPanel) {
-					try {
-						((ApriPostPanel) vistaPrecedente).getTabellaCommenti().setModel(forumFrame.adaptCommenti(model.getCommenti(postPadre)));
-					} catch (Exception ex) {}
-				}
+				azioneIndietro.run();
 			}
 		});
 
@@ -449,7 +424,6 @@ public class ControllerForum {
 			}
 		});
 
-		// NAVIGAZIONE A CASCATA
 		apriCommentoView.getBtnApriRisposta().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -461,8 +435,13 @@ public class ControllerForum {
 				CommentoAdapter adapter = (CommentoAdapter) apriCommentoView.getTabellaRisposte().getModel();
 				Commento sottoRisposta = adapter.getCommentoAt(riga);
 
-				// Richiama se stesso per scendere di livello
-				espandiCommento(sottoRisposta, postPadre, u, apriCommentoView);
+				espandiCommento(sottoRisposta, postPadre, u, new Runnable() {
+					@Override
+					public void run() {
+						aggiornaTabellaRisposte(apriCommentoView, postPadre, commentoDaAprire);
+						forumFrame.cambiaFinestra(apriCommentoView);
+					}
+				});
 			}
 		});
 
@@ -479,10 +458,8 @@ public class ControllerForum {
 					CommentoAdapter adapter = (CommentoAdapter) apriCommentoView.getTabellaRisposte().getModel();
 					Commento rispostaDaEliminare = adapter.getCommentoAt(riga);
 
-					boolean isStaff = u.isStaff();
-					boolean isAutore = rispostaDaEliminare.getAutore() != null && rispostaDaEliminare.getAutore().getUser_name().equals(u.getUser_name());
-
-					if (!isStaff && !isAutore) {
+					// IL MODEL CONTROLLA I PERMESSI!
+					if (!model.puoModificareOEliminare(u, rispostaDaEliminare)) {
 						forumFrame.mostraErrore("Non hai i permessi per eliminare questa risposta!");
 						return; 
 					}
@@ -516,27 +493,27 @@ public class ControllerForum {
 			public void actionPerformed(ActionEvent e) {
 				String testo = creaRispostaView.getTxtTesto().getText();
 
-				if (testo != null && !testo.trim().isEmpty()) {
+				try {
+					// IL MODEL CONTROLLA I DATI
+					model.creaCommento(u, testo, postPadre, commentoPadre);
 
-					boolean successo = model.creaCommento(u, testo, LocalDateTime.now(), postPadre, commentoPadre);
+					creaRispostaView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.GRAY));
+					aggiornaTabellaRisposte(vistaPadre, postPadre, commentoPadre);
+					forumFrame.cambiaFinestra(vistaPadre);
 
-					if (successo) {
-						aggiornaTabellaRisposte(vistaPadre, postPadre, commentoPadre);
-						forumFrame.cambiaFinestra(vistaPadre);
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							forumFrame.mostraSuccesso("Risposta pubblicata!");
+						}
+					});
 
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								forumFrame.mostraSuccesso("Risposta pubblicata!");
-							}
-						});
+				} catch (IllegalArgumentException ex) {
 
-					} else {
-						forumFrame.mostraErrore("Errore durante la pubblicazione della risposta.");
-					}
-
-				} else {
 					creaRispostaView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.RED));
+					forumFrame.mostraErrore(ex.getMessage());
+				} catch (ForumException ex) {
+					forumFrame.mostraErrore("Errore durante la pubblicazione della risposta.");
 				}
 			}
 		});
@@ -560,26 +537,18 @@ public class ControllerForum {
 	}
 
 	private void gestisciOrdinamento() {
-		
 		forumFrame.pulisciMessaggi();
+		int indiceScelto = view.getComboOrdinamento().getSelectedIndex();
 
-		String scelta = (String) view.getComboOrdinamento().getSelectedItem();
+		Ordinamento tipoEnum = Ordinamento.values()[indiceScelto];
 
-		PostAdapter adapter = (PostAdapter) view.getTabellaPost().getModel();
-		ArrayList<Post> listaDaOrdinare = adapter.getListaPost();
+		try {
 
-		if (listaDaOrdinare == null || listaDaOrdinare.isEmpty()) return;
-
-		ForumStrategy strategy = OrdinamentoStrategyFactory.getInstance().StringaToStrategy(scelta);
-
-		if (strategy != null) {
+			ArrayList<Post> postOrdinati = model.ordinaPost(tipoEnum);
+			view.getTabellaPost().setModel(new PostAdapter(postOrdinati));
 			
-			strategy.ordinamento(listaDaOrdinare);
-			view.getTabellaPost().setModel(new PostAdapter(listaDaOrdinare));
-			
-		} else {
-			
-			forumFrame.mostraErrore("Errore: Impossibile caricare gli ordinamenti");
+		} catch (ForumException ex) {
+			forumFrame.mostraErrore("Errore durante l'ordinamento: " + ex.getMessage());
 		}
 	}
 }

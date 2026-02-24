@@ -83,4 +83,12 @@ public class Post extends ContenutoUtente {
 
 	}
 
+	public String getSottotitoloSicuro() {
+		if (this.sottotitolo == null) {
+			return "";
+		} else {
+			return this.sottotitolo;
+		}
+	}
+
 }

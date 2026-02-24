@@ -5,10 +5,10 @@ import java.time.LocalDateTime;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.Utente;
 
 public class Commento extends ContenutoUtente {
-	
+
 	private Post post_di_riferimento;
 	private ContenutoUtente parent;
-	
+
 	public Commento(Post post_di_riferimento, ContenutoUtente parent) {
 		super();
 		this.post_di_riferimento = post_di_riferimento;
@@ -30,7 +30,7 @@ public class Commento extends ContenutoUtente {
 		this.post_di_riferimento = post_di_riferimento;
 		this.parent = parent;
 	}
-	
+
 	public Commento(Utente autore, String testo, LocalDateTime data_pubblicazione, Post post_di_riferimento, ContenutoUtente parent) {
 		super(autore, testo, data_pubblicazione);
 		this.post_di_riferimento = post_di_riferimento;
@@ -52,14 +52,19 @@ public class Commento extends ContenutoUtente {
 	public void setParent(ContenutoUtente parent) {
 		this.parent = parent;
 	}
-	
-	
 
-	
-	
-	
-	
-	
-	
+	public String getNomeAutoreVisibile() {
+		if (this.getAutore() != null && this.getAutore().getUser_name() != null) {
+			return this.getAutore().getUser_name();
+		} else {
+			return "Sconosciuto";
+		}
+	}
+
+
+
+
+
+
 
 }

@@ -10,6 +10,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IComm
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.IPostDAO;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.db.DAOFactory;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.ForumStrategy;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.Ordinamento;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.forum.strategy.OrdinamentoStrategyFactory;
 
 public class Forum {
 
@@ -27,15 +30,11 @@ public class Forum {
 	}
 
 	public static Forum getInstance(DAOFactory factory) {
-
 		if(instance == null) {
-
 			instance = new Forum(factory);
 		}
-
 		return instance;
 	}
-
 
 	public ArrayList<Post> getPost() {
 		return post;
@@ -45,155 +44,139 @@ public class Forum {
 		this.post = post;
 	}
 
-
-
-	public ArrayList<Post> inizializzaForum() throws ForumException{
-
+	public ArrayList<Post> inizializzaForum() throws ForumException {
 		return postDao.getPost();
-
 	}
 
+	// CONTROLLO PERMESSI
+	public boolean puoModificareOEliminare(Utente u, ContenutoUtente contenuto) {
+		if (u == null) return false;
+		if (u.isStaff()) return true;
+		if (contenuto.getAutore() != null && contenuto.getAutore().getUser_name().equals(u.getUser_name())) {
+			return true;
+		}
+		return false;
+	}
 
-
-	public boolean creaPost(Utente autore, String testo, LocalDateTime data_pubblicazione, String titolo, String sottotitolo) throws ForumException {
-
-		if (autore == null || titolo == null || titolo.isEmpty()) {
-			throw new IllegalArgumentException("Dati del post non validi");
+	// CREAZIONE POST CON VALIDAZIONE BLINDATA
+	public boolean creaPost(Utente autore, String testo, String titolo, String sottotitolo) throws ForumException {
+		// Il Model fa da guardiano: se i dati non vanno bene, blocca tutto!
+		if (autore == null) {
+			throw new IllegalArgumentException("Devi effettuare il login per scrivere un post.");
+		}
+		if (titolo == null || titolo.trim().isEmpty()) {
+			throw new IllegalArgumentException("Errore: Il titolo del post non può essere vuoto!");
+		}
+		if (testo == null || testo.trim().isEmpty()) {
+			throw new IllegalArgumentException("Errore: Il testo del post non può essere vuoto!");
 		}
 
 		try {
-
+			LocalDateTime data_pubblicazione = LocalDateTime.now();
 			Post p = new Post(autore, testo, data_pubblicazione, titolo, sottotitolo);
-
 			postDao.creaPost(p);
-
 			post.add(p);
-
 			return true;
-
 		} catch (ForumException e) {
-			// TODO: handle exception
 			System.out.println(e.getMessage());
-
 			throw e;
-
 		}
-
-
 	}
 
-
-
-	public boolean creaCommento(Utente autore, String testo, LocalDateTime data_pubblicazione, Post p, ContenutoUtente parent) {
-
-		if (autore == null || testo == null || testo.isEmpty()) {
-			throw new IllegalArgumentException("Dati del post non validi");
+	// CREAZIONE COMMENTO CON VALIDAZIONE BLINDATA
+	public boolean creaCommento(Utente autore, String testo, Post p, ContenutoUtente parent) throws ForumException {
+		if (autore == null) {
+			throw new IllegalArgumentException("Devi effettuare il login per commentare.");
+		}
+		if (testo == null || testo.trim().isEmpty()) {
+			throw new IllegalArgumentException("Errore: Il testo del commento non può essere vuoto!");
 		}
 
 		try {
-
+			LocalDateTime data_pubblicazione = LocalDateTime.now();
 			Commento c = new Commento(autore, testo, data_pubblicazione, p, parent);
-
 			commentoDao.creaCommento(c, p, parent);
-
 			p.aggiungiCommento(c);
-
 			return true;
-
 		} catch (ForumException e) {
-			// TODO: handle exception
 			System.out.println(e.getMessage());
-
-			return false;
+			throw e;
 		}
-
-
 	}
 
-
-
-	public boolean eliminaPost(Post p) throws ForumException{
-
+	public boolean eliminaPost(Post p) throws ForumException {
 		if(p == null || p.getId_contenuto_utente() == null || p.getId_contenuto_utente().isEmpty()) {
-			throw new IllegalArgumentException("Parametro non valido");
+			throw new IllegalArgumentException("Parametro non valido per l'eliminazione.");
 		}
-
 		try {
-
 			postDao.eliminaPost(p);
-
-
 			for (Post pst : post) {
-
 				if(pst.getId_contenuto_utente().equals(p.getId_contenuto_utente())) {
-
-					post.remove(pst); 
-
-					break; 
+					post.remove(pst);
+					break;
 				}
 			}
-
 			return true;
-
 		} catch (ForumException e) {
 			System.out.println("Errore durante l'eliminazione del post: " + e.getMessage());
 			return false;
 		}
 	}
 
-
-
-
 	public boolean eliminaCommento(Commento c) {
-
 		if(c == null || c.getId_contenuto_utente() == null || c.getId_contenuto_utente().isEmpty()) {
-
-			throw new IllegalArgumentException("Parametro non valido");
-
+			throw new IllegalArgumentException("Parametro non valido per l'eliminazione.");
 		}
-
 		try {
-
 			commentoDao.eliminaCommento(c);
-
 			for (Post p: post) {
-
 				for (Commento cDaRimuovere : p.getCommenti()) {
-
 					if(cDaRimuovere.getId_contenuto_utente().equals(c.getId_contenuto_utente())) {
-
 						p.getCommenti().remove(cDaRimuovere);
 						break;
 					}
 				}
 			}
-
 			return true;
-
 		} catch (ForumException e) {
 			System.err.println("Errore durante l'eliminazione del commento: " + e.getMessage());
 			return false;
 		}
-
-
-
 	}
 
 	public ArrayList<Commento> getCommenti(Post p) throws ForumException {
-
-		return commentoDao.getCommenti(p); 
-
+		return commentoDao.getCommenti(p);
 	}
 
 	public ArrayList<Commento> getCommentiDiCommenti(Post p, Commento c) throws ForumException {
-
-		return commentoDao.getCommentiDiCommenti(p, c); 
+		return commentoDao.getCommentiDiCommenti(p, c);
 	}
 
+	public ArrayList<Post> ordinaPost(Ordinamento tipoOrdinamento) throws ForumException {
+		if (this.post == null || this.post.isEmpty()) {
+			this.post = postDao.getPost();
+		}
+		ForumStrategy strategy = OrdinamentoStrategyFactory.getInstance().getStrategy(tipoOrdinamento);
+		if (strategy != null) {
+			strategy.ordinamento(this.post);
+		} else {
+			throw new ForumException("Strategia di ordinamento non trovata o non valida.");
+		}
+		return this.post;
+	}
 
-
-
-
-
-
+	public ArrayList<Post> cercaPostPerTitolo(String parola) throws ForumException {
+		ArrayList<Post> tutti = inizializzaForum();
+		if (parola == null || parola.trim().isEmpty()) {
+			return tutti;
+		}
+		ArrayList<Post> filtrati = new ArrayList<>();
+		String parolaLower = parola.toLowerCase();
+		for (Post p : tutti) {
+			if (p.getTitolo().toLowerCase().contains(parolaLower)) {
+				filtrati.add(p);
+			}
+		}
+		return filtrati;
+	}
 }
