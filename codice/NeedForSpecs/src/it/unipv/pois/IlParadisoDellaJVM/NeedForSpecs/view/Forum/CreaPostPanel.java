@@ -13,6 +13,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class CreaPostPanel extends JPanel {
 	
 	private JLabel lTitolo;
@@ -53,7 +59,7 @@ public class CreaPostPanel extends JPanel {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
-		//Riga 1: titolo
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		formPanel.add(lTitolo, gbc);
@@ -62,7 +68,7 @@ public class CreaPostPanel extends JPanel {
 		gbc.weightx = 1.0;
 		formPanel.add(txtTitolo, gbc);
 		
-		//Riga 2: sottotitolo
+
 		gbc.gridx = 0; gbc.gridy = 1;
 		gbc.weightx = 0;
 		formPanel.add(lSottotitolo, gbc);
@@ -71,7 +77,7 @@ public class CreaPostPanel extends JPanel {
 		gbc.weightx = 1.0;
 		formPanel.add(txtSottotitolo, gbc);
 		
-		//Riga 3: testo
+
 		gbc.gridx = 0; gbc.gridy = 2; 
 		gbc.weightx = 0;
 		gbc.anchor = GridBagConstraints.NORTHWEST;

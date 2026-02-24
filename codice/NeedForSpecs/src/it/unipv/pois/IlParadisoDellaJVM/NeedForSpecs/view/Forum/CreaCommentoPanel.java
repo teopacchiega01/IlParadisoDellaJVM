@@ -11,6 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class CreaCommentoPanel extends JPanel {
 
 	private JTextArea txtTesto;
@@ -28,8 +34,8 @@ public class CreaCommentoPanel extends JPanel {
 		this.add(lblTitolo, BorderLayout.NORTH);
 
 		txtTesto = new JTextArea();
-		txtTesto.setLineWrap(true); // Va a capo in automatico...
-		txtTesto.setWrapStyleWord(true); // ...senza spezzare le parole a metà!
+		txtTesto.setLineWrap(true); //andata a capo automatica
+		txtTesto.setWrapStyleWord(true); 
 		txtTesto.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		JScrollPane scrollTesto = new JScrollPane(txtTesto);

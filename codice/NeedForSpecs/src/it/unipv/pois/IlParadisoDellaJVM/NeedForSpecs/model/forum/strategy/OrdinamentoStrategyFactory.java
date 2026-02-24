@@ -4,6 +4,12 @@ import java.io.FileInputStream;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class OrdinamentoStrategyFactory {
 
 	private static OrdinamentoStrategyFactory instance;
@@ -40,7 +46,7 @@ public class OrdinamentoStrategyFactory {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+
 			System.err.println("Errore creazione istanza" + e.getMessage());
 		}
 
@@ -49,8 +55,6 @@ public class OrdinamentoStrategyFactory {
 	}
 
 
-
-	// Traduttore da stringa a strategt
 	public ForumStrategy StringaToStrategy(String sceltaCombo) {
 
 		Ordinamento o;

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.contenutiUtente.Post;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class OrdinamentoAlfabetico implements ForumStrategy {
 
 	@Override
@@ -13,6 +19,7 @@ public class OrdinamentoAlfabetico implements ForumStrategy {
 			
 			@Override
 			public int compare(Post p1, Post p2) {
+				
 				if (p1.getTitolo() == null || p2.getTitolo() == null) {
 					
 					return 0;

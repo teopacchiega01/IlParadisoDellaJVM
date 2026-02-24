@@ -42,21 +42,12 @@ public class ControllerForum {
 		addListeners(model.getU());
 	}
 
-	private void aggiornaTabella() {
-		try {
-			ArrayList<Post> listaPost = model.inizializzaForum();
-			PostAdapter adapter = view.adaptPost(listaPost);
-			fPanel.getTabellaPost().setModel(adapter);
-		} catch (ForumException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void addListeners(Utente u) {
 
 		fPanel.getApriPost().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				gestisciAperturaPost(u);
 			}
 		});
@@ -64,6 +55,7 @@ public class ControllerForum {
 		fPanel.getCreaPost().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				gestisciCreazionePost(u);
 			}
 		});
@@ -71,6 +63,7 @@ public class ControllerForum {
 		fPanel.getOrdina().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				gestisciOrdinamento();
 			}
 		});
@@ -78,49 +71,65 @@ public class ControllerForum {
 		fPanel.getCercaPost().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				gestisciRicerca();
 			}
 		});
 
 		if (u != null) {
+
 			fPanel.getEliminaPost().setVisible(true);
 			fPanel.getEliminaPost().addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					gestisciEliminazionePost(u); 
 				}
+
 			});
+
 		} else {
+
 			fPanel.getEliminaPost().setVisible(false);
 		}
 
-		// IL BOTTONE INCRIMINATO: ORA È PERFETTO!
+
 		fPanel.getTornaAllaHome().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				view.pulisciMessaggi();
-				view.dispose(); // Chiude il Forum
-				
-				// 1. Recuperiamo il GestoreAccount (Singleton)
+				view.dispose(); 
+
 				GestoreAccount ga = GestoreAccount.getInstance();
-				
-				// 2. Manteniamo forzatamente l'utente loggato passando la 'u' del Forum
+
 				if (u != null) {
+
 					ga.setUtenteLoggato(u);
 				}
-				
-				// 3. Ricreiamo il ControllerHome passando la nuova HomeFrame creata dalla ForumView.
-				// Il ControllerHome nel suo costruttore fa "this.view.setVisible(true)", 
-				// quindi non serve nemmeno chiamarlo noi a mano!
+
 				new ControllerHome(ga, view.getHomeFrame());
-				
-				System.out.println("Ritorno alla home effettuato, Utente loggato mantenuto con successo!");
+
 			}
 		});
 	}
 
+
+	private void aggiornaTabella() {
+		try {
+
+			ArrayList<Post> listaPost = model.inizializzaForum();
+			PostAdapter adapter = view.adaptPost(listaPost);
+			fPanel.getTabellaPost().setModel(adapter);
+
+		} catch (ForumException e) {
+
+			e.printStackTrace();
+		}
+	}
+
 	private void gestisciAperturaPost(Utente u) {
+
 		view.pulisciMessaggi(); 
 
 		int rigaSelezionata = fPanel.getTabellaPost().getSelectedRow();
@@ -141,6 +150,7 @@ public class ControllerForum {
 		apriPost.gettTesto().setCaretPosition(0);
 
 		try {
+
 			ArrayList<Commento> listaCommenti = model.getCommenti(postDaAprire);
 			CommentoAdapter commentoAdapter = view.adaptCommenti(listaCommenti);
 			apriPost.getTabellaCommenti().setModel(commentoAdapter);
@@ -149,17 +159,38 @@ public class ControllerForum {
 			apriPost.getApriCommento().setVisible(ciSonoCommenti);
 
 		} catch (ForumException ex) {
+
 			ex.printStackTrace();
 		}
 
-		for (ActionListener al : apriPost.getCreaCommento().getActionListeners()) apriPost.getCreaCommento().removeActionListener(al);
-		for (ActionListener al : apriPost.getApriCommento().getActionListeners()) apriPost.getApriCommento().removeActionListener(al);
-		for (ActionListener al : apriPost.getEliminaCommento().getActionListeners()) apriPost.getEliminaCommento().removeActionListener(al);
-		for (ActionListener al : apriPost.getTornaIndietro().getActionListeners()) apriPost.getTornaIndietro().removeActionListener(al);
+		//PULIZIA LISTENER
+		ActionListener[] listenerCrea = apriPost.getCreaCommento().getActionListeners();
+		for (int i = 0; i < listenerCrea.length; i++) {
+			apriPost.getCreaCommento().removeActionListener(listenerCrea[i]);
+		}
+
+		ActionListener[] listenerApri = apriPost.getApriCommento().getActionListeners();
+		for (int i = 0; i < listenerApri.length; i++) {
+			apriPost.getApriCommento().removeActionListener(listenerApri[i]);
+		}
+
+		ActionListener[] listenerElimina = apriPost.getEliminaCommento().getActionListeners();
+		for (int i = 0; i < listenerElimina.length; i++) {
+			apriPost.getEliminaCommento().removeActionListener(listenerElimina[i]);
+		}
+
+		ActionListener[] listenerIndietro = apriPost.getTornaIndietro().getActionListeners();
+		for (int i = 0; i < listenerIndietro.length; i++) {
+			apriPost.getTornaIndietro().removeActionListener(listenerIndietro[i]);
+		}
+
+
+
 
 		apriPost.getCreaCommento().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				gestisciCreazioneCommento(apriPost, postDaAprire, u);
 			}
 		});
@@ -167,21 +198,61 @@ public class ControllerForum {
 		apriPost.getApriCommento().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				int riga = apriPost.getTabellaCommenti().getSelectedRow();
+
 				if (riga == -1) {
+
 					view.mostraErrore("Devi prima selezionare un commento!");
+
 					return;
 				}
+
 				CommentoAdapter adapter = (CommentoAdapter) apriPost.getTabellaCommenti().getModel();
 				Commento commento = adapter.getCommentoAt(riga);
 
+				/* * Passiamo un'azione di Callback (Runnable) come "biglietto di ritorno".
+				 * Quando l'utente premerà "Indietro" dal pannello delle risposte, 
+				 * questo blocco di codice verrà eseguito per:
+				 * 1. Scaricare nuovamente i commenti dal Model (per mostrare eventuali modifiche).
+				 * 2. Aggiornare la tabella della vista padre (apriPost).
+				 * 3. Riportare in primo piano la finestra originale.
+				 * Questo approccio rispetta l'MVC perché disaccoppia le due viste:
+				 * la vista figlia non ha bisogno di sapere da chi è stata chiamata.
+				 * 
+				 * Runnable: Pacchetto di istruzioni passabile ad un metodo come fosse un oggetto
+				 */
+				espandiCommento(commento, postDaAprire, u, new Runnable() {
+					
+					@Override
+					public void run() {
+
+						try {
+
+							apriPost.getTabellaCommenti().setModel(view.adaptCommenti(model.getCommenti(postDaAprire)));
+
+						} catch (Exception ex) {
+
+							ex.printStackTrace();
+						}
+
+						view.cambiaFinestra(apriPost);
+					}
+				});
 
 				espandiCommento(commento, postDaAprire, u, new Runnable() {
 					@Override
 					public void run() {
+						
 						try {
+
 							apriPost.getTabellaCommenti().setModel(view.adaptCommenti(model.getCommenti(postDaAprire)));
-						} catch (Exception ex) {}
+
+						} catch (Exception ex) {
+
+							ex.printStackTrace();
+						}
+
 						view.cambiaFinestra(apriPost);
 					}
 				});
@@ -191,6 +262,7 @@ public class ControllerForum {
 		apriPost.getEliminaCommento().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				gestisciEliminazioneCommento(apriPost, postDaAprire, u);
 			}
 		});
@@ -198,6 +270,7 @@ public class ControllerForum {
 		apriPost.getTornaIndietro().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				view.pulisciMessaggi();
 				aggiornaTabella();
 				view.cambiaFinestra(fPanel); 
@@ -209,6 +282,7 @@ public class ControllerForum {
 	}
 
 	private void gestisciCreazionePost(Utente u) {
+
 		view.pulisciMessaggi();
 		CreaPostPanel creaPost = view.creaPost();
 		view.cambiaFinestra(creaPost);
@@ -216,28 +290,35 @@ public class ControllerForum {
 		creaPost.getCrea().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				String titolo = creaPost.getTxtTitolo().getText().trim();
 				String testo = creaPost.getTxtTesto().getText();
 				String sottotitolo = creaPost.getTxtSottotitolo().getText();
 
 				try {
+
 					model.creaPost(u, testo, titolo, sottotitolo);
 
 					creaPost.getTxtTitolo().setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					aggiornaTabella();
 					view.cambiaFinestra(fPanel);
-
+					
+					//mette in coda l'output del messaggio di risposta
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
+
 							view.mostraSuccesso("Post creato con successo!");
 						}
 					});
 
 				} catch (IllegalArgumentException ex) {
+
 					creaPost.getTxtTitolo().setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 					view.mostraErrore(ex.getMessage());
+
 				} catch (ForumException ex) {
+
 					view.mostraErrore("Errore nel database.");
 				}
 			}
@@ -246,6 +327,7 @@ public class ControllerForum {
 		creaPost.getAnnulla().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				view.pulisciMessaggi();
 				view.cambiaFinestra(fPanel);
 				aggiornaTabella();
@@ -254,10 +336,15 @@ public class ControllerForum {
 	}
 
 	private void gestisciEliminazionePost(Utente u) {
+
 		view.pulisciMessaggi();
+
 		int riga = fPanel.getTabellaPost().getSelectedRow();
+
 		if (riga == -1) {
+
 			view.mostraErrore("Seleziona prima un post!");
+
 			return;
 		}
 
@@ -265,11 +352,14 @@ public class ControllerForum {
 		Post p = adapter.getPostAt(riga);
 
 		if (!model.puoModificareOEliminare(u, p)) {
+
 			view.mostraErrore("Non hai i permessi per eliminare questo contenuto!");
+
 			return;
 		}
 
 		try {
+
 			model.eliminaPost(p);
 			aggiornaTabella();
 
@@ -281,17 +371,21 @@ public class ControllerForum {
 			});
 
 		} catch (ForumException ex) {
+
 			view.mostraErrore("Errore durante l'eliminazione.");
 		}
 	}
 
 	private void gestisciEliminazioneCommento(ApriPostPanel apriPost, Post postPadre, Utente u) {
+
 		view.pulisciMessaggi();
 
 		int riga = apriPost.getTabellaCommenti().getSelectedRow();
 
 		if (riga == -1) {
+
 			view.mostraErrore("Devi prima selezionare un commento da eliminare!");
+
 			return;
 		}
 
@@ -299,34 +393,42 @@ public class ControllerForum {
 		Commento commentoDaEliminare = adapter.getCommentoAt(riga);
 
 		if (!model.puoModificareOEliminare(u, commentoDaEliminare)) {
+
 			view.mostraErrore("Non hai i permessi per eliminare questo contenuto!");
+
 			return; 
 		}
 
 		try {
+
 			model.eliminaCommento(commentoDaEliminare);
 			ArrayList<Commento> listaAggiornata = model.getCommenti(postPadre);
 			CommentoAdapter nuovoAdapter = view.adaptCommenti(listaAggiornata);
 			apriPost.getTabellaCommenti().setModel(nuovoAdapter);
 
 			if (listaAggiornata.isEmpty()) {
+
 				apriPost.getApriCommento().setVisible(false);
 			}
 
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
+
 					view.mostraSuccesso("Commento eliminato con successo!");
 				}
 			});
 
 		} catch (ForumException ex) {
+
 			ex.printStackTrace();
+
 			view.mostraErrore("Errore di eliminazione dal database.");
 		}
 	}
 
 	private void gestisciCreazioneCommento(ApriPostPanel apriPost, Post postPadre, Utente u) {
+
 		view.pulisciMessaggi();
 
 		CreaCommentoPanel creaCommentoView = view.creaCommento();
@@ -335,9 +437,11 @@ public class ControllerForum {
 		creaCommentoView.getBtnPubblica().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				String testo = creaCommentoView.getTxtTesto().getText();
 
 				try {
+
 					model.creaCommento(u, testo, postPadre, postPadre);
 
 					creaCommentoView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -356,9 +460,12 @@ public class ControllerForum {
 					});
 
 				} catch (IllegalArgumentException ex) {
+
 					creaCommentoView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.RED));
 					view.mostraErrore(ex.getMessage());
+
 				} catch (ForumException ex) {
+
 					ex.printStackTrace();
 					view.mostraErrore("Errore durante la pubblicazione.");
 					view.cambiaFinestra(apriPost);
@@ -369,30 +476,38 @@ public class ControllerForum {
 		creaCommentoView.getBtnAnnulla().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				view.cambiaFinestra(apriPost);
 			}
 		});
 	}
 
 	private void gestisciRicerca() {
+
 		view.pulisciMessaggi();
 		String parolaCercata = fPanel.getCercaPost().getText().trim();
 
 		parolaCercata = fPanel.getTitoloPost().getText().trim();
 
 		try {
+
 			ArrayList<Post> postTrovati = model.cercaPostPerTitolo(parolaCercata);
 			fPanel.getTabellaPost().setModel(view.adaptPost(postTrovati));
 
 			if (postTrovati.isEmpty()) {
+
 				view.mostraErrore("Nessun post trovato con questo titolo.");
+
 			}
+
 		} catch (ForumException ex) {
+
 			view.mostraErrore("Errore durante la ricerca.");
 		}
 	}
 
 	private void espandiCommento(Commento commentoDaAprire, Post postPadre, Utente u, Runnable azioneIndietro) {
+
 		view.pulisciMessaggi();
 
 		ApriCommentoPanel apriCommentoView = view.apriCommento();
@@ -408,6 +523,7 @@ public class ControllerForum {
 		apriCommentoView.getBtnTornaIndietro().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				view.pulisciMessaggi();
 				azioneIndietro.run();
 			}
@@ -416,8 +532,11 @@ public class ControllerForum {
 		apriCommentoView.getBtnRispondi().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				if (u == null) {
+
 					view.mostraErrore("Devi effettuare il login per rispondere!");
+
 					return;
 				}
 				gestisciCreazioneRisposta(apriCommentoView, postPadre, commentoDaAprire, u);
@@ -427,17 +546,23 @@ public class ControllerForum {
 		apriCommentoView.getBtnApriRisposta().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				int riga = apriCommentoView.getTabellaRisposte().getSelectedRow();
+
 				if (riga == -1) {
+
 					view.mostraErrore("Seleziona prima una risposta dalla tabella!");
+
 					return;
 				}
+
 				CommentoAdapter adapter = (CommentoAdapter) apriCommentoView.getTabellaRisposte().getModel();
 				Commento sottoRisposta = adapter.getCommentoAt(riga);
 
 				espandiCommento(sottoRisposta, postPadre, u, new Runnable() {
 					@Override
 					public void run() {
+
 						aggiornaTabellaRisposte(apriCommentoView, postPadre, commentoDaAprire);
 						view.cambiaFinestra(apriCommentoView);
 					}
@@ -446,36 +571,51 @@ public class ControllerForum {
 		});
 
 		if (u != null) {
+
 			apriCommentoView.getBtnElimina().setVisible(true);
 			apriCommentoView.getBtnElimina().addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
+
 					int riga = apriCommentoView.getTabellaRisposte().getSelectedRow();
+
 					if (riga == -1) {
+
 						view.mostraErrore("Devi selezionare una risposta da eliminare!");
+
 						return;
 					}
+
 					CommentoAdapter adapter = (CommentoAdapter) apriCommentoView.getTabellaRisposte().getModel();
 					Commento rispostaDaEliminare = adapter.getCommentoAt(riga);
 
 					if (!model.puoModificareOEliminare(u, rispostaDaEliminare)) {
+
 						view.mostraErrore("Non hai i permessi per eliminare questa risposta!");
+
 						return; 
 					}
 
 					boolean successo = model.eliminaCommento(rispostaDaEliminare);
 
 					if (successo) {
+
 						aggiornaTabellaRisposte(apriCommentoView, postPadre, commentoDaAprire);
+
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() { view.mostraSuccesso("Risposta eliminata!"); }
 						});
+
 					} else {
+
 						view.mostraErrore("Errore di eliminazione.");
 					}
 				}
 			});
+
 		} else {
+
 			apriCommentoView.getBtnElimina().setVisible(false);
 		}
 
@@ -483,16 +623,20 @@ public class ControllerForum {
 	}
 
 	private void gestisciCreazioneRisposta(ApriCommentoPanel vistaPadre, Post postPadre, Commento commentoPadre, Utente u) {
+
 		view.pulisciMessaggi();
 		CreaCommentoPanel creaRispostaView = view.creaCommento();
 		view.cambiaFinestra(creaRispostaView);
 
 		creaRispostaView.getBtnPubblica().addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				String testo = creaRispostaView.getTxtTesto().getText();
 
 				try {
+
 					model.creaCommento(u, testo, postPadre, commentoPadre);
 
 					creaRispostaView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -502,14 +646,19 @@ public class ControllerForum {
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
+
 							view.mostraSuccesso("Risposta pubblicata!");
 						}
 					});
 
 				} catch (IllegalArgumentException ex) {
+
 					creaRispostaView.getTxtTesto().setBorder(BorderFactory.createLineBorder(Color.RED));
+
 					view.mostraErrore(ex.getMessage());
+
 				} catch (ForumException ex) {
+
 					view.mostraErrore("Errore durante la pubblicazione della risposta.");
 				}
 			}
@@ -518,32 +667,40 @@ public class ControllerForum {
 		creaRispostaView.getBtnAnnulla().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				view.cambiaFinestra(vistaPadre);
 			}
 		});
 	}
 
 	private void aggiornaTabellaRisposte(ApriCommentoPanel panelView, Post postPadre, Commento commentoPadre) {
+
 		try {
+
 			ArrayList<Commento> risposte = model.getCommentiDiCommenti(postPadre, commentoPadre);
 			CommentoAdapter adapter = view.adaptCommenti(risposte);
 			panelView.getTabellaRisposte().setModel(adapter);
+
 		} catch (ForumException e) {
+
 			e.printStackTrace();
 		}
 	}
 
 	private void gestisciOrdinamento() {
+
 		view.pulisciMessaggi();
 		int indiceScelto = fPanel.getComboOrdinamento().getSelectedIndex();
 
 		Ordinamento tipoEnum = Ordinamento.values()[indiceScelto];
 
 		try {
+
 			ArrayList<Post> postOrdinati = model.ordinaPost(tipoEnum);
 			fPanel.getTabellaPost().setModel(new PostAdapter(postOrdinati));
 
 		} catch (ForumException ex) {
+
 			view.mostraErrore("Errore durante l'ordinamento: " + ex.getMessage());
 		}
 	}

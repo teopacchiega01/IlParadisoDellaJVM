@@ -12,6 +12,12 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 
+/**
+ *
+ * * @author teomiraldi
+ * 
+ */
+
 public class ApriCommentoPanel extends JPanel {
 
 	private JTextArea txtCommentoPadre;
@@ -19,22 +25,19 @@ public class ApriCommentoPanel extends JPanel {
 	private JButton btnTornaIndietro;
 	private JButton btnRispondi;
 	private JButton btnElimina;
-	private JButton btnApriRisposta; // Il nuovo bottone!
+	private JButton btnApriRisposta;  
 
 	public ApriCommentoPanel() {
 		this.setLayout(new BorderLayout(20, 20));
 		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-		// TOP: Bottone Indietro
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		btnTornaIndietro = new JButton("⬅ Torna Indietro");
 		topPanel.add(btnTornaIndietro);
 		this.add(topPanel, BorderLayout.NORTH);
 
-		// CENTER: Testo del Commento Padre + Tabella Risposte
 		JPanel centerPanel = new JPanel(new BorderLayout(0, 15));
 
-		// 1. Il commento genitore
 		txtCommentoPadre = new JTextArea(5, 20);
 		txtCommentoPadre.setEditable(false);
 		txtCommentoPadre.setLineWrap(true);
@@ -43,10 +46,9 @@ public class ApriCommentoPanel extends JPanel {
 		txtCommentoPadre.setBorder(BorderFactory.createTitledBorder("Stai leggendo il commento di:"));
 		centerPanel.add(new JScrollPane(txtCommentoPadre), BorderLayout.NORTH);
 
-		// 2. La tabella delle risposte
 		tabellaRisposte = new JTable();
 		tabellaRisposte.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tabellaRisposte.setRowHeight(40); // Più altezza per leggere meglio!
+		tabellaRisposte.setRowHeight(40);
 
 		JScrollPane scrollRisposte = new JScrollPane(tabellaRisposte);
 		scrollRisposte.setBorder(BorderFactory.createTitledBorder("Risposte a questo commento"));
@@ -54,7 +56,6 @@ public class ApriCommentoPanel extends JPanel {
 
 		this.add(centerPanel, BorderLayout.CENTER);
 
-		// BOTTOM: Bottoni Azione
 		JPanel bottoniPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		btnRispondi = new JButton("Rispondi al commento in alto");
 		btnApriRisposta = new JButton("Apri Risposta Selezionata");
@@ -67,10 +68,43 @@ public class ApriCommentoPanel extends JPanel {
 		this.add(bottoniPanel, BorderLayout.SOUTH);
 	}
 
-	public JTextArea getTxtCommentoPadre() { return txtCommentoPadre; }
-	public JTable getTabellaRisposte() { return tabellaRisposte; }
-	public JButton getBtnTornaIndietro() { return btnTornaIndietro; }
-	public JButton getBtnRispondi() { return btnRispondi; }
-	public JButton getBtnElimina() { return btnElimina; }
-	public JButton getBtnApriRisposta() { return btnApriRisposta; }
+	public JTextArea getTxtCommentoPadre() { 
+
+		return txtCommentoPadre; 
+
+	}
+
+
+	public JTable getTabellaRisposte() { 
+
+		return tabellaRisposte; 
+
+	}
+
+	public JButton getBtnTornaIndietro() { 
+
+		return btnTornaIndietro; 
+
+	}
+
+	public JButton getBtnRispondi() {
+
+		return btnRispondi; 
+
+	}
+
+	public JButton getBtnElimina() { 
+
+		return btnElimina; 
+
+	}
+
+	public JButton getBtnApriRisposta() { 
+
+		return btnApriRisposta;
+
+	}
+
+
+
 }
