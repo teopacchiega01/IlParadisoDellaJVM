@@ -45,7 +45,7 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement pr_stat;
 		ResultSet res_set;
-		Annuncio annuncio_trovato;
+		Annuncio annuncio_trovato = new Annuncio();
 
 		try {
 			pr_stat = conn.prepareStatement(QUERY_GET_ANNUNCIO_FROM_UD);
@@ -61,8 +61,12 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 				double prezzo_trovato = res_set.getDouble("prezzo");
 				String id_ordine_trovato = res_set.getString("id_ordine");
 
-				// getUtente
-				// getProdotto
+				UtenteGenerico utente_trovato = (UtenteGenerico)utente_dao.getUtenteFromId(id_utente_venditore_trovato);
+				Prodotto prodotto_trovato = prodotto_dao.getProdottoFromId(id_prodotto_trovato);
+				annuncio_trovato.setId_annuncio(id_annuncio_trovato);
+				annuncio_trovato.setVenditore(utente_trovato);
+				annuncio_trovato.setPrezzo(prezzo_trovato);
+				return annuncio_trovato;
 			}
 
 
