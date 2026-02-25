@@ -82,12 +82,27 @@ public class Forum {
 	 * @return true se l'utente ha i permessi necessari, false altrimenti.
 	 */
 	public boolean puoModificareOEliminare(Utente u, ContenutoUtente contenuto) {
-		if (u == null) return false;
-		if (u.isStaff()) return true;
-		if (contenuto.getAutore() != null && contenuto.getAutore().getUser_name().equals(u.getUser_name())) {
-			return true;
+		
+		if (u == null) {
+			
+			return false;
 		}
+		
+		if (u.isStaff()) {
+			
+			return true;
+			
+		}
+		
+		
+		if (contenuto.getAutore() != null && contenuto.getAutore().getUser_name().equals(u.getUser_name())) {
+			
+			return true;
+			
+		}
+		
 		return false;
+		
 	}
 
 	/**
