@@ -120,6 +120,11 @@ public class ControllerMarketplace {
 		if (view.getCarrelloPanel().isShowing()) return view.getCarrelloPanel().getListAnnunci().getSelectedValue();
 		return null;
 	}
+	
+	private Annuncio getAnnuncioPubblicatoSelezionato() {
+		if (view.getGestioneAnnunciPanel().isShowing()) return view.getGestioneAnnunciPanel().getListAnnunci().getSelectedValue();
+		return null;
+	}
 
 	private Prodotto getProdottoSelezionatoInAggiuntaAnnuncio() {
 		if (view.getAggiuntaAnnuncioPanel().isShowing()) return view.getAggiuntaAnnuncioPanel().getListProdotti().getSelectedValue();
@@ -129,7 +134,7 @@ public class ControllerMarketplace {
 	private void inizializzaListeners() {
 		addListenersHomeMarketplace();
 		addListenersConfiguratore();
-		addListenersGestioneAnnunci();
+		addListenersAnnunci();
 		addListenersCarrello();
 		gestisciListenersReattiviCarrello();
 		gestisciListenersReattiviConfiguratore();
@@ -148,6 +153,11 @@ public class ControllerMarketplace {
 		addListenersComuniConfiguratore();
 		addListenersUserConfiguratore();
 		addListenersGuestConfiguratore();
+	}
+	
+	private void addListenersAnnunci() {
+		addListenersAggiuntaAnnunci();
+		addListenersRimozioneAnnunci();
 	}
 
 
@@ -231,6 +241,15 @@ public class ControllerMarketplace {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				view.mostraAggiuntaAnnuncio();
+			}
+		});
+		
+		// PASSA A GESTIONE ANNUNCI
+		view.getMarketplaceUserPanel().getBtnGestioneAnnunci().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				view.mostraGestioneAnnunci();
 			}
 		});
 	}
@@ -501,9 +520,9 @@ public class ControllerMarketplace {
 	}
 
 	// =========================================================================================================
-	// GESTIONE ANNUNCI
+	// AGGIUNTA ANNUNCI
 
-	private void addListenersGestioneAnnunci() {
+	private void addListenersAggiuntaAnnunci() {
 
 		// LOGOUT
 		view.getAggiuntaAnnuncioPanel().getBtnLogout().addActionListener(new ActionListener() {
@@ -526,7 +545,7 @@ public class ControllerMarketplace {
 			}
 		});
 
-		//AGGIUNTA ANNUNCIo
+		// AGGIUNTA ANNUNCIO
 		view.getAggiuntaAnnuncioPanel().getBtnAggiungiAnnuncio().addActionListener(new ActionListener() {
 
 			@Override
@@ -537,6 +556,7 @@ public class ControllerMarketplace {
 			}
 		});
 
+		// TORNA AL MARKETPLACE
 		view.getAggiuntaAnnuncioPanel().getBtnTornaMarketplace().addActionListener(new ActionListener() {
 
 			@Override
@@ -565,6 +585,49 @@ public class ControllerMarketplace {
 		view.getAggiuntaAnnuncioPanel().getListProdotti().addListSelectionListener(reazione_seleziona_prodotto_da_vendere);
 	}
 
+	
+	// ========================================================================================================
+	// RIMOZIONE/GESTIONE ANNUNCI
+	// QUALCOSA QUA NON VA !!!!!!!!!
+	private void addListenersRimozioneAnnunci() {
+		
+		// PULSANTE LOGOUT
+		view.getGestioneAnnunciPanel().getBtnLogout().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				System.out.println("Premo il tasto logout");
+				model.setUtente_loggato(null);
+				aggiornaHomeMarketplace();
+				System.out.println("Logout");
+			}
+		});
+		
+		view.getGestioneAnnunciPanel().getBtnTornaMarketplace().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				aggiornaHomeMarketplace();
+				System.out.println("Torno alla home marketplace");
+			}
+		});
+		
+		view.getGestioneAnnunciPanel().getBtnEliminaAnnuncio().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.rimuoviAnnuncio(getAnnuncioPubblicatoSelezionato());
+			}
+		});
+		
+	}
+	
+	
+	
+	
+	
+	
 	// =========================================================================================================
 	// CARRELLO
 
@@ -608,10 +671,6 @@ public class ControllerMarketplace {
 				model.rimuoviElementoDalCarrello((UtenteGenerico)model.getUtente_loggato(), getElementoCarrelloSelezionato());
 			}
 		});
-
-		// PULSANTE RIMUOVI DAL CARRELLO
-		//		view.getCarrelloPanel().getBtn
-		//		view.getCarrelloPanel().getBtnLogout()
 
 	}
 

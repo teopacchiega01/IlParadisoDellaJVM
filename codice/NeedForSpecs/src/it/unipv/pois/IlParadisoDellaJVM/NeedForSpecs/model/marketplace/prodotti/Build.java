@@ -79,6 +79,8 @@ public class Build extends Prodotto{
 		this.nome = nome;
 	}
 	
+	
+	
 	/**
 	 * Genera un ID univoco per la build, combinando il nome formattato e una stringa casuale.
 	 * * @return La stringa rappresentante l'ID univoco della build.

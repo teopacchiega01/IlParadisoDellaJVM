@@ -7,7 +7,8 @@ import javax.swing.JButton;
  */
 
 public class MarketplaceUserPanel extends MarketplaceBasePanel {
-
+	private JButton btnGestioneAnnunci;
+	
     public MarketplaceUserPanel() {
         super();
         btnLoginLogout.setText("LOGOUT");
@@ -20,9 +21,13 @@ public class MarketplaceUserPanel extends MarketplaceBasePanel {
 
         btnAggiungiAnnuncio = new JButton("AGGIUNGI ANNUNCIO");
         pnlBottomLeft.add(btnAggiungiAnnuncio);
+        
+        btnGestioneAnnunci = new JButton("GESTIONE ANNUNCI");
+        pnlBottomLeft.add(btnGestioneAnnunci);
     }
 
     public JButton getBtnCarrello() { return btnCarrello; }
     public JButton getBtnAggiungiCarrello() { return btnAggiungiCarrello; }
     public JButton getBtnAggiungiAnnuncio() { return btnAggiungiAnnuncio; }
+    public JButton getBtnGestioneAnnunci() { return btnGestioneAnnunci; }
 }

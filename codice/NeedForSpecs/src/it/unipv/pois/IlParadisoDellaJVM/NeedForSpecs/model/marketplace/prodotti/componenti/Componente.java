@@ -33,6 +33,16 @@ public class Componente extends Prodotto{
 		this.setId_prodotto(generaId());
 	}
 
+	public Componente(double prezzo, String marca, String modello, TipoComponente tipo, int potenza) {
+		super(prezzo);
+		this.marca = marca;
+		this.modello = modello;
+		this.tipo = tipo;
+		this.potenza = potenza;
+		this.scheda_tecnica = new EnumMap<>(AspettiTecnici.class);
+		this.setId_prodotto(generaId());
+	}
+
 	public Componente(double prezzo, String marca, String modello, TipoComponente tipo,
 			ArrayList<String> valori_specifiche, int potenza) {
 		super(prezzo);

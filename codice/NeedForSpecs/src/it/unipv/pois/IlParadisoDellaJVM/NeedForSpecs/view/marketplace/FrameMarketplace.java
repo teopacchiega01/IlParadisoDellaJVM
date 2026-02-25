@@ -6,11 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.HomeFrame;
-import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.LoginPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.carrello.GestioneCarrelloPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.configuratore.ConfiguratoreGuestPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.configuratore.ConfiguratoreUserPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.gestioneAnnunci.AggiuntaAnnuncioPanel;
+import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.gestioneAnnunci.GestioneAnnunciPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarketplace.MarketplaceGuestPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarketplace.MarketplaceStaffPanel;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.view.marketplace.homeMarketplace.MarketplaceUserPanel;
@@ -31,7 +31,7 @@ public class FrameMarketplace extends JFrame {
 	private ConfiguratoreUserPanel conf_user_panel;
 	private AggiuntaAnnuncioPanel aggiunta_annuncio_panel;
 	private GestioneCarrelloPanel carrello_panel;
-	private LoginPanel login_panel;
+	private GestioneAnnunciPanel gestione_annunci_panel;
 
 	public FrameMarketplace() {
 		super("Il Paradiso della JVM - Hardware & Build");
@@ -49,7 +49,7 @@ public class FrameMarketplace extends JFrame {
 		conf_user_panel = new ConfiguratoreUserPanel();
 		aggiunta_annuncio_panel = new AggiuntaAnnuncioPanel();
 		carrello_panel = new GestioneCarrelloPanel();
-		login_panel = new LoginPanel();
+		gestione_annunci_panel = new GestioneAnnunciPanel();
 
 		mk_main_panel.add(mk_guest_panel, PannelliMarketplace.MK_GUEST.name());
 		mk_main_panel.add(mk_user_panel, PannelliMarketplace.MK_USER.name());
@@ -58,7 +58,7 @@ public class FrameMarketplace extends JFrame {
 		mk_main_panel.add(conf_user_panel, PannelliMarketplace.CONF_USER.name());
 		mk_main_panel.add(aggiunta_annuncio_panel, PannelliMarketplace.AGGIUNTA_ANNUNCIO.name());
 		mk_main_panel.add(carrello_panel, PannelliMarketplace.CARRELLO.name());
-		mk_main_panel.add(login_panel, PannelliMarketplace.LOGIN.name());
+		mk_main_panel.add(gestione_annunci_panel, PannelliMarketplace.GESTIONE_ANNUNCI.name());
 
 		add(mk_main_panel);
 	}
@@ -91,9 +91,9 @@ public class FrameMarketplace extends JFrame {
 		card_layout.show(mk_main_panel, PannelliMarketplace.CARRELLO.name());
 		System.out.println("Mostro "+PannelliMarketplace.CARRELLO.name()); 
 	}
-	public void mostraLogin() { 
-		card_layout.show(mk_main_panel, PannelliMarketplace.LOGIN.name());
-		System.out.println("Mostro "+PannelliMarketplace.LOGIN.name()); 
+	public void mostraGestioneAnnunci() { 
+		card_layout.show(mk_main_panel, PannelliMarketplace.GESTIONE_ANNUNCI.name());
+		System.out.println("Mostro "+PannelliMarketplace.GESTIONE_ANNUNCI.name()); 
 	}
 	public void cambiaSchermata(PannelliMarketplace schermata) { 
 		card_layout.show(mk_main_panel, schermata.name()); 
@@ -107,7 +107,7 @@ public class FrameMarketplace extends JFrame {
 	public ConfiguratoreUserPanel getConfiguratoreUserPanel() { return conf_user_panel; }
 	public AggiuntaAnnuncioPanel getAggiuntaAnnuncioPanel() { return aggiunta_annuncio_panel; }
 	public GestioneCarrelloPanel getCarrelloPanel() { return carrello_panel; }
-	public LoginPanel getLoginPanel() { return login_panel; }
+	public GestioneAnnunciPanel getGestioneAnnunciPanel() { return gestione_annunci_panel; }
 
 	public HomeFrame getHomeFrame() { return new HomeFrame(); }
 }

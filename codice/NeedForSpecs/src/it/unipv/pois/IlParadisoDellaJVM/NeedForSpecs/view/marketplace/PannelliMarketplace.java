@@ -12,5 +12,5 @@ public enum PannelliMarketplace {
 	CONF_USER,
 	AGGIUNTA_ANNUNCIO,
 	CARRELLO,
-	LOGIN;
+	GESTIONE_ANNUNCI;
 }
