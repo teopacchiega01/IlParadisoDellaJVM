@@ -1,6 +1,8 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums;
 
-//	@author teopacchiega
+/**
+* @author teopacchiega
+*/
 
 public enum FormFactorMOBO {
 	ATX, 

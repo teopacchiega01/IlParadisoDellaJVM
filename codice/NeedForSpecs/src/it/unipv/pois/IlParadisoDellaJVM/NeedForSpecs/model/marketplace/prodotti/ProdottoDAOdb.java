@@ -13,7 +13,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.AspettiTecnici;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
 
-// @Author teopacchiega
+/**
+* @author teopacchiega
+*/
 
 public class ProdottoDAOdb implements IProdottoDAO {
 	private static final String QUERY_GET_COMPONENTI =  "SELECT P.id_prodotto, P.prezzo, C.marca, C.modello, C.potenza, C.tipo_componente, A.aspetto_tecnico, A.valore "

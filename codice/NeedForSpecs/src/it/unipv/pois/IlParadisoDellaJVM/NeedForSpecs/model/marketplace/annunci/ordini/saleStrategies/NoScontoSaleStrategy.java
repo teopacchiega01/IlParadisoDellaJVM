@@ -2,6 +2,10 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.Ordine;
 
+/**
+* @author teopacchiega
+*/
+
 public class NoScontoSaleStrategy implements ISaleStrategy {
 	
 	@Override

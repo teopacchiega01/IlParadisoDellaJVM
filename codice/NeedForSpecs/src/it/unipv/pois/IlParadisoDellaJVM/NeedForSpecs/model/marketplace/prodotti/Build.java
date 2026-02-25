@@ -11,20 +11,47 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreId;
 
-//	@author teopacchiega
-
+/**
+ * La classe {@code Build} rappresenta un computer assemblato (o in via di assemblaggio),
+ * composto da una collezione di {@link Componente} raggruppati per {@link TipoComponente}.
+ * Estende la classe astratta {@link Prodotto}.
+ * * Gestisce la logica di inserimento, rimozione e verifica di compatibilità 
+ * fisica ed energetica tra i vari pezzi hardware scelti dall'utente.
+ * * @author teopacchiega
+ */
 public class Build extends Prodotto{
+	/**
+	 * Definisce la lunghezza massima del nome da utilizzare per la generazione dell'ID.
+	 */
 	private final static int DIM_NOME_ID = 15;
+	/**
+	 * Il nome assegnato alla build dall'utente.
+	 */
 	private String nome;
+	/**
+	 * Mappa che contiene le liste dei componenti attualmente inseriti nella build, 
+	 * suddivisi per la loro categoria hardware (CPU, MOBO, RAM, ecc.).
+	 */
 	private EnumMap<TipoComponente, ArrayList<Componente>> componenti;
 
+	/**
+	 * Costruttore che inizializza una build completa con prezzo, nome e mappa dei componenti pre-esistente.
+	 * * @param prezzo Il prezzo totale della build.
+	 * @param nome Il nome identificativo della build.
+	 * @param componenti La mappa contenente le liste dei componenti suddivisi per tipo.
+	 */
 	public Build(double prezzo, String nome,
 			EnumMap<TipoComponente, ArrayList<Componente>> componenti) {
 		super(prezzo);
 		this.nome = nome;
 		this.componenti = componenti;
 	}
-
+	/**
+	 * Costruttore che inizializza una build vuota, pronta per l'aggiunta di componenti.
+	 * Crea le strutture dati interne per ogni possibile {@link TipoComponente} e genera l'ID.
+	 * * @param prezzo Il prezzo iniziale della build (solitamente 0).
+	 * @param nome Il nome identificativo della build.
+	 */
 	public Build(double prezzo, String nome) {
 		super(prezzo);
 		this.nome = nome;
@@ -36,15 +63,26 @@ public class Build extends Prodotto{
 		this.setId_prodotto(generaId());
 	}
 
+	/**
+	 * Costruttore di default vuoto. Richiama il costruttore della superclasse {@link Prodotto}.
+	 */
 	public Build() {
 		super();
 	}
 
+	/**
+	 * Costruttore che inizializza una build assegnandogli solo il nome.
+	 * * @param nome Il nome della build.
+	 */
 	public Build(String nome) {
 		super();
 		this.nome = nome;
 	}
-
+	
+	/**
+	 * Genera un ID univoco per la build, combinando il nome formattato e una stringa casuale.
+	 * * @return La stringa rappresentante l'ID univoco della build.
+	 */
 	@Override
 	protected String generaId() {
 		String nome = formattazione(this.nome, DIM_NOME_ID);
@@ -53,27 +91,56 @@ public class Build extends Prodotto{
 		return id;
 	}
 
+	/**
+	 * Restituisce la tipologia del prodotto.
+	 * * @return {@link TipologiaProdotto#BUILD}
+	 */
 	@Override
 	public TipologiaProdotto getTipologia() {
 		return TipologiaProdotto.BUILD;
 	}
-
+	
+	/**
+	 * Restituisce il nome della build.
+	 * * @return Il nome attuale della build.
+	 */
 	public String getNome() {
 		return nome;
 	}
 
+	/**
+	 * Imposta il nome della build.
+	 * * @param nome Il nuovo nome da assegnare.
+	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
+	/**
+	 * Restituisce la mappa completa dei componenti inseriti nella build.
+	 * * @return Una {@link EnumMap} contenente le liste dei componenti divisi per {@link TipoComponente}.
+	 */
 	public EnumMap<TipoComponente, ArrayList<Componente>> getComponenti() {
 		return componenti;
 	}
 
+	/**
+	 * Sostituisce l'attuale mappa dei componenti con una nuova.
+	 * * @param componenti La nuova {@link EnumMap} di componenti da assegnare alla build.
+	 */
 	public void setComponenti(EnumMap<TipoComponente, ArrayList<Componente>> componenti) {
 		this.componenti = componenti;
 	}
 
+	/**
+	 * Tenta di aggiungere un nuovo componente alla build, eseguendo rigorosi controlli di 
+	 * compatibilità hardware e logica di inserimento (es. obbligo di inserire prima la MOBO, 
+	 * controllo degli slot disponibili e dei socket).
+	 * * @param nuovo_componente L'oggetto {@link Componente} che si desidera aggiungere.
+	 * @return {@code true} se l'aggiunta ha successo, {@code false} in caso di componente non gestito dal costrutto switch.
+	 * @throws ComponentiException Se viene violato un vincolo fisico o logico 
+	 * (es. MOBO mancante, slot esauriti, socket incompatibile, componenti singoli multipli).
+	 */
 	public boolean aggiungiComponente(Componente nuovo_componente) throws ComponentiException {
 		TipoComponente tipo_nuovo_componente = nuovo_componente.getTipo();
 		ArrayList<Componente> componenti_presenti = componenti.get(tipo_nuovo_componente);
@@ -195,7 +262,12 @@ public class Build extends Prodotto{
 
 	}
 
-
+	/**
+	 * Rimuove tutti i componenti appartenenti a una specifica categoria, tranne la scheda madre.
+	 * Aggiorna automaticamente il prezzo totale della build.
+	 * * @param componente_da_rimuovere Il {@link TipoComponente} di cui svuotare la lista.
+	 * @return {@code true} se la rimozione ha successo, {@code false} se si tenta di rimuovere la categoria MOBO in questo modo.
+	 */
 	public boolean rimuoviTipoDiComponenti(TipoComponente componente_da_rimuovere) {
 		if(!componente_da_rimuovere.equals(TipoComponente.MOBO)) {
 			componenti.put(componente_da_rimuovere, new ArrayList<Componente>());
@@ -206,7 +278,14 @@ public class Build extends Prodotto{
 		}
 	}
 
-
+	/**
+	 * Rimuove un singolo componente specifico dalla build.
+	 * Gestisce la logica di dipendenza della scheda madre, impedendone la rimozione 
+	 * se sono presenti altri componenti agganciati ad essa.
+	 * Aggiorna automaticamente il prezzo totale.
+	 * * @param componente_da_rimuovere L'istanza di {@link Componente} esatta da rimuovere.
+	 * @return {@code true} se la rimozione ha successo, {@code false} se il componente è null, non presente o se si tenta di rimuovere la MOBO con altri pezzi presenti.
+	 */
 	public boolean rimuoviComponente(Componente componente_da_rimuovere) {
 		if (componente_da_rimuovere == null) return false;
 
@@ -252,6 +331,14 @@ public class Build extends Prodotto{
 		}
 	}
 
+	/**
+	 * Metodo di supporto che verifica la compatibilità fisica e tecnica tra due componenti.
+	 * Controlla in particolare il Socket tra CPU e MOBO, e l'interfaccia/frequenza/slot tra MOBO e RAM/GPU.
+	 * * @param c1 Il primo {@link Componente} da confrontare.
+	 * @param c2 Il secondo {@link Componente} da confrontare.
+	 * @return {@code true} se i due componenti sono compatibili.
+	 * @throws ComponentiException Se i componenti risultano incompatibili a livello hardware.
+	 */
 	private boolean verificaCompatibilità(Componente c1, Componente c2) throws ComponentiException{
 
 		//	Controllo se uno dei due componenti è una scheda madre
@@ -333,6 +420,10 @@ public class Build extends Prodotto{
 
 	}
 
+	/**
+	 * Ricalcola il prezzo totale della build sommando i prezzi di tutti i singoli componenti attualmente inseriti.
+	 * Imposta il risultato sull'attributo prezzo della classe madre.
+	 */
 	public void aggiornaPrezzo() {
 		double totale = 0;
 		for (ArrayList<Componente> lista_di_un_tipo : componenti.values()) {
@@ -343,6 +434,10 @@ public class Build extends Prodotto{
 		this.setPrezzo(totale);
 	}
 	
+	/**
+	 * Calcola il numero totale di pezzi hardware fisicamente presenti all'interno della build.
+	 * * @return Un intero rappresentante il conteggio totale dei componenti.
+	 */
 	public int getNumeroTotaleComponenti() {
 	    int n_componenti = 0;
 	    for (ArrayList<Componente> lista : componenti.values()) {
@@ -351,10 +446,19 @@ public class Build extends Prodotto{
 	    return n_componenti;
 	}
 
+	/**
+	 * Restituisce la potenza erogabile dall'alimentatore (PSU) attualmente inserito nella build.
+	 * * @return La potenza disponibile in Watt. Presuppone che esista già un PSU.
+	 */
 	public int getPotenzaDisponibile() {
 		return componenti.get(TipoComponente.PSU).get(0).getPotenza();
 	}
 
+	/**
+	 * Calcola il consumo energetico totale stimato (TDP) sommando la potenza richiesta
+	 * da tutti i componenti della build, escludendo l'alimentatore.
+	 * * @return La potenza totale richiesta in Watt.
+	 */
 	public int getPotenzaRichiesta() {
 		int potenza_richiesta = 0;
 		for(TipoComponente tipo_appoggio : TipoComponente.values()) {
@@ -368,6 +472,11 @@ public class Build extends Prodotto{
 		return potenza_richiesta;
 	}
 
+	/**
+	 * Verifica se la potenza erogata dall'alimentatore è sufficiente a coprire 
+	 * i consumi dell'intera configurazione attuale.
+	 * * @return {@code true} se la potenza disponibile è maggiore o uguale a quella richiesta, {@code false} altrimenti.
+	 */
 	public boolean controllaPotenza() {
 		int potenza_disponibile = getPotenzaDisponibile();
 		int potenza_richiesta = getPotenzaRichiesta();
@@ -379,6 +488,12 @@ public class Build extends Prodotto{
 		}
 	}
 
+	/**
+	 * Simula l'aggiunta di un nuovo componente e verifica se la potenza dell'alimentatore 
+	 * sarebbe ancora sufficiente a reggere il carico aggiuntivo.
+	 * * @param nuovoComponente Il componente ipotetico di cui sommare il consumo.
+	 * @return {@code true} se la potenza disponibile reggerebbe il nuovo componente, {@code false} altrimenti.
+	 */
 	public boolean controllaPotenza(Componente nuovoComponente) {
 
 		int potenza_disponibile = getPotenzaDisponibile();
@@ -391,6 +506,11 @@ public class Build extends Prodotto{
 		}
 	}
 
+	/**
+	 * Genera una stringa formattata contenente il nome della build e un riepilogo 
+	 * dettagliato di tutti i componenti attualmente inseriti, raggruppati per categoria.
+	 * * @return Una {@link String} multilinea con le informazioni di riepilogo della build.
+	 */
 	public String getInfoProdotto() {
 		StringBuilder info = new StringBuilder();
 		info.append("Build: "+getNome()+" ");

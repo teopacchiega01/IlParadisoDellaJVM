@@ -1,6 +1,8 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti;
 
-//@author teopacchiega
+/**
+* @author teopacchiega
+*/
 
 public class ComponentiException extends Exception {
 	public enum TipoErrore{

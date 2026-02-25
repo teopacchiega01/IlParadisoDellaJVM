@@ -4,6 +4,10 @@ import java.io.FileInputStream;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 
+/**
+* @author teopacchiega
+*/
+
 public class SaleFactory {
 	private ISaleStrategy sale_strategy;
 	private final String PROPERTYNAME="sale.strategy.class.name";

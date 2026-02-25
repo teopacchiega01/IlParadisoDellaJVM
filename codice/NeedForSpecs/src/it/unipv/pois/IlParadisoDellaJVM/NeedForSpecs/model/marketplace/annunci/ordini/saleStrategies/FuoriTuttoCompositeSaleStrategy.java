@@ -1,5 +1,9 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies;
 
+/**
+* @author teopacchiega
+*/
+
 public class FuoriTuttoCompositeSaleStrategy extends CompositeSaleStrategy {
 	
 	

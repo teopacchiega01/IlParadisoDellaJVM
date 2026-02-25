@@ -6,8 +6,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.account.UtenteGeneric
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.Prodotto;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreId;
 
-//	@author teopacchiega
-
+/**
+* @author teopacchiega
+*/
 public class Annuncio {
 	private final static int DIM_ID_ANNUNCIO = 20;
 	private String id_annuncio;

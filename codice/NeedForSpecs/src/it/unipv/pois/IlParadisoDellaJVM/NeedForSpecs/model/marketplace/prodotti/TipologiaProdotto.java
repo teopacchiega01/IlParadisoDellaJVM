@@ -1,6 +1,8 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti;
 
-//	@author teopacchiega
+/**
+* @author teopacchiega
+*/
 
 public enum TipologiaProdotto {
 	COMPONENTE, 

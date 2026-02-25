@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.Ordine;
 
+/**
+* @author teopacchiega
+*/
+
 public abstract class CompositeSaleStrategy implements ISaleStrategy {
 	private ArrayList<ISaleStrategy> sale_strats;
 	

@@ -8,7 +8,9 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.AspettiTecnici;
 import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.componenti.enums.TipoComponente;
 
-//	@author teopacchiega
+/**
+* @author teopacchiega
+*/
 
 public class Componente extends Prodotto{
 	private final static int DIM_ID_TIPO = 3;

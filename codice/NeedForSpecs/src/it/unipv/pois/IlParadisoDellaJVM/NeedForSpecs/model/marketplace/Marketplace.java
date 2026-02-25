@@ -19,10 +19,15 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 
 
 /**
-* @author teopacchiega
-*/
-
+ * La classe {@code Marketplace} funge da controller centrale (Facade) per la gestione dell'intero
+ * sistema di compravendita e configurazione. Implementa il pattern Singleton.
+ * Coordina le operazioni tra prodotti, annunci, utenti, ordini e i rispettivi DAO (Data Access Object).
+ * * @author teopacchiega
+ */
 public class Marketplace {
+	/**
+	 * L'unica istanza statica della classe, usata per implementare il pattern Singleton.
+	 */
 	private static Marketplace instance;
 	private IProdottoDAO prod_dao;
 	private IAnnuncioDAO ann_dao;
@@ -32,6 +37,12 @@ public class Marketplace {
 	private Utente utente_loggato;
 	private Build build_configuratore;
 
+	/**
+	 * Costruttore privato completo.
+	 * * @param prodotti Lista iniziale di prodotti.
+	 * @param annunci Lista iniziale di annunci.
+	 * @param utente_loggato L'utente attualmente in sessione.
+	 */
 	private Marketplace(ArrayList<Prodotto> prodotti, ArrayList<Annuncio> annunci, Utente utente_loggato) {
 		super();
 		this.prodotti = prodotti;
@@ -44,6 +55,11 @@ public class Marketplace {
 		this.build_configuratore = (Build)creaBuild();
 	}
 
+	/**
+	 * Costruttore privato che inizializza il marketplace assegnandogli solo l'utente loggato 
+	 * e istanziando liste vuote per prodotti e annunci.
+	 * * @param utente_loggato L'utente attualmente in sessione.
+	 */
 	private Marketplace(Utente utente_loggato) {
 		super();
 		this.utente_loggato = utente_loggato;
@@ -56,7 +72,9 @@ public class Marketplace {
 		this.build_configuratore = (Build)creaBuild();
 	}
 	
-	
+	/**
+	 * Costruttore privato di default utilizzato per l'inizializzazione del Singleton.
+	 */
 	private Marketplace() {
 		super();
 		DAOFactory factory = DAOFactory.getInstance();
@@ -66,6 +84,10 @@ public class Marketplace {
 		this.build_configuratore = (Build)creaBuild();
 	}
 
+	/**
+	 * Restituisce l'istanza Singleton di {@code Marketplace}. Se non esiste, la crea.
+	 * * @return L'istanza univoca di {@code Marketplace}.
+	 */
 	public static Marketplace getInstance() {
 		if(instance == null) {
 			instance = new Marketplace();
@@ -74,6 +96,16 @@ public class Marketplace {
 		return instance;
 	}
 
+	/**
+	 * Crea un nuovo componente tramite la factory e lo aggiunge alla lista dei prodotti del marketplace.
+	 * * @param prezzo Il prezzo di listino del componente.
+	 * @param marca La marca produttrice.
+	 * @param modello Il nome del modello.
+	 * @param tipo La categoria hardware (es. CPU, RAM) tramite {@link TipoComponente}.
+	 * @param valori_specifiche Le specifiche tecniche sotto forma di lista di stringhe.
+	 * @param potenza La potenza richiesta o erogata in Watt.
+	 * @return Il {@link Prodotto} appena creato e aggiunto.
+	 */
 	public Prodotto aggiungiComponente(double prezzo, String marca, String modello, TipoComponente tipo,
 			ArrayList<String> valori_specifiche, int potenza) {
 		Prodotto nuovo_componente = ProdottiFactory.creaComponente(prezzo, marca, modello, tipo, valori_specifiche, potenza);
@@ -81,16 +113,32 @@ public class Marketplace {
 		return nuovo_componente;
 	}
 
+	/**
+	 * Crea una nuova Build con nome e la aggiunge alla lista dei prodotti del marketplace.
+	 * * @param nome Il nome da assegnare alla nuova Build.
+	 * @return L'istanza di {@link Prodotto} (di tipo Build) appena creata.
+	 */
 	public Prodotto aggiungiBuild(String nome) {
 		Prodotto nuova_build = ProdottiFactory.creaBuild(nome);
 		prodotti.add(nuova_build);
 		return nuova_build;
 	}
 	
+	/**
+	 * Crea un'istanza vuota di una Build tramite la factory senza aggiungerla direttamente alle liste.
+	 * * @return Una nuova {@link Build} vuota castata a {@link Prodotto}.
+	 */
 	public Prodotto creaBuild() {
 		return ProdottiFactory.creaBuild();
 	}
 
+	/**
+	 * Tenta di aggiungere un componente hardware a una specifica configurazione (Build).
+	 * * @param build_da_aggiornare La {@link Build} a cui aggiungere il pezzo.
+	 * @param componente_da_aggiungere Il {@link Componente} da inserire.
+	 * @return {@code true} se l'aggiunta ha successo.
+	 * @throws ComponentiException Se ci sono problemi di compatibilità o vincoli violati.
+	 */
 	public boolean aggiungiComponenteABuild(Build build_da_aggiornare, Componente componente_da_aggiungere) throws ComponentiException {
 		boolean operazione_riuscita = false;
 
@@ -103,6 +151,13 @@ public class Marketplace {
 		}
 	}
 
+	/**
+	 * Crea un nuovo annuncio di vendita per un prodotto e lo aggiunge alla lista in memoria.
+	 * * @param prodotto_in_vendita Il {@link Prodotto} oggetto dell'annuncio.
+	 * @param venditore L'{@link UtenteGenerico} che mette in vendita il prodotto.
+	 * @param prezzo Il prezzo di vendita stabilito per l'annuncio.
+	 * @return {@code true} se l'annuncio viene aggiunto con successo.
+	 */
 	public boolean aggiungiAnnuncio(Prodotto prodotto_in_vendita, UtenteGenerico venditore, double prezzo) {
 		boolean operazione_riuscita = false;
 
@@ -118,6 +173,11 @@ public class Marketplace {
 
 	}
 
+	/**
+	 * Rimuove un prodotto dal catalogo in memoria del marketplace cercando il suo ID.
+	 * * @param id_prodotto_da_rimuovere L'ID univoco del prodotto da eliminare.
+	 * @return {@code true} se il prodotto viene trovato e rimosso, {@code false} altrimenti.
+	 */
 	public boolean rimuoviProdotto(String id_prodotto_da_rimuovere) {
 		boolean operazione_riuscita = false;
 
@@ -137,6 +197,12 @@ public class Marketplace {
 		}
 	}
 
+	/**
+	 * Rimuove un annuncio sia dalla lista in memoria del marketplace che dal database (tramite DAO),
+	 * cercando la corrispondenza tramite l'ID testuale.
+	 * * @param id_annuncio_da_rimuovere L'ID univoco dell'annuncio da eliminare.
+	 * @return {@code true} se l'annuncio viene trovato e rimosso con successo.
+	 */
 	public boolean rimuoviAnnuncio(String id_annuncio_da_rimuovere) {
 		boolean operazione_riuscita = false;
 
@@ -157,6 +223,11 @@ public class Marketplace {
 		}
 	}
 	
+	/**
+	 * Rimuove un annuncio specifico (passato come oggetto) dalla lista in memoria e dal database.
+	 * * @param annuncio_da_rimuovere L'oggetto {@link Annuncio} da rimuovere.
+	 * @return {@code true} se la rimozione ha successo sia in memoria che su DB.
+	 */
 	public boolean rimuoviAnnuncio(Annuncio annuncio_da_rimuovere) {
 		if(annunci.remove(annuncio_da_rimuovere)) {
 			ann_dao.rimuoviAnnuncio(annuncio_da_rimuovere);
@@ -166,6 +237,10 @@ public class Marketplace {
 		}
 	}
 
+	/**
+	 * Restituisce una stringa formattata contenente la lista di tutti gli annunci attualmente presenti.
+	 * * @return Una stringa riepilogativa degli annunci, o {@code null} se la lista è vuota.
+	 */
 	public String mostraAnnunci() {
 		if(annunci.isEmpty()) {
 			return null;
@@ -179,6 +254,10 @@ public class Marketplace {
 
 	}
 
+	/**
+	 * Restituisce una stringa formattata contenente la lista e le info di tutti i prodotti a catalogo.
+	 * * @return Una stringa riepilogativa dei prodotti, o {@code null} se il catalogo è vuoto.
+	 */
 	public String mostraProdotti() {
 		if(prodotti.isEmpty()) {
 			return null;
@@ -191,10 +270,18 @@ public class Marketplace {
 		}
 	}
 
+	/**
+	 * Resetta l'attuale build in configurazione creandone una nuova vuota.
+	 */
 	public void resetBuild() {
 		this.build_configuratore = (Build)creaBuild();
 	}
 	
+	/**
+	 * Salva la configurazione della build attuale (se contiene almeno 2 componenti) 
+	 * aggiungendola alla lista dei prodotti del marketplace, per poi resettare il configuratore.
+	 * * @return {@code true} se il salvataggio va a buon fine, {@code false} se mancano i requisiti minimi.
+	 */
 	public boolean salvaBuildConfiguratore() {
 		if (build_configuratore != null && build_configuratore.getNumeroTotaleComponenti() >= 2) {
 	        this.prodotti.add(build_configuratore);
@@ -204,6 +291,12 @@ public class Marketplace {
 	    return false;
 	}
 	
+	/**
+	 * Aggiunge un annuncio al carrello personale di un utente loggato.
+	 * * @param utente_loggato L'utente che esegue l'operazione.
+	 * @param annuncio_da_acquistare L'{@link Annuncio} che l'utente vuole inserire nel carrello.
+	 * @return {@code true} se l'operazione va a buon fine.
+	 */
 	public boolean aggiungiAlCarrello(UtenteGenerico utente_loggato, Annuncio annuncio_da_acquistare) {
 		if(utente_loggato.aggiungiElementoAlCarrello(annuncio_da_acquistare)){
 			return true;
@@ -212,6 +305,12 @@ public class Marketplace {
 		}
 	}
 
+	/**
+	 * Rimuove un annuncio dal carrello personale dell'utente loggato.
+	 * * @param utente_loggato L'utente che esegue l'operazione.
+	 * @param annuncio_da_acquistare L'{@link Annuncio} da togliere dal carrello.
+	 * @return {@code true} se la rimozione ha successo.
+	 */
 	public boolean rimuoviElementoDalCarrello(UtenteGenerico utente_loggato, Annuncio annuncio_da_acquistare) {
 		if(utente_loggato.getCarr().eliminaElementoDalCarrello(annuncio_da_acquistare)){
 			return true;
@@ -220,6 +319,13 @@ public class Marketplace {
 		}
 	}
 
+	/**
+	 * Finalizza l'acquisto processando gli elementi presenti nel carrello dell'utente.
+	 * Crea un nuovo {@link Ordine}, svuota il carrello e salva l'ordine nel database tramite DAO.
+	 * * @param acquirente L'utente che sta completando l'acquisto.
+	 * @return {@code true} se l'ordine viene creato e salvato con successo, {@code false} se 
+	 * mancano requisiti fondamentali (es. carrello vuoto, metodo di pagamento o indirizzo mancanti).
+	 */
 	//TODO implementare degli errori specifici
 	public boolean effettuaOrdine(UtenteGenerico acquirente) {
 		if(acquirente.getCarr().getAcquisti().isEmpty() || (acquirente.getMetodo_di_pagamento()==null) || (acquirente.getInd_di_spedizione()==null)) {
@@ -236,7 +342,10 @@ public class Marketplace {
 	}
 
 
-
+	/**
+	 * Carica i dati iniziali del marketplace popolando le liste in memoria 
+	 * interrogando il database tramite i rispettivi DAO.
+	 */
 	public void inizializzaMarketplace() {
 		setProdotti(prod_dao.getProdotti());
 		setAnnunci(ann_dao.getAnnunci());
