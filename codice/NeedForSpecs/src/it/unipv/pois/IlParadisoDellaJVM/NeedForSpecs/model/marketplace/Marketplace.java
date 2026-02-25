@@ -70,6 +70,7 @@ public class Marketplace {
 		this.ann_dao = factory.getAnnuncioDAO();
 		this.ord_dao = factory.getOrdineDAO();
 		this.build_configuratore = (Build)creaBuild();
+		inizializzaMarketplace();
 	}
 	
 	/**
@@ -82,6 +83,7 @@ public class Marketplace {
 		this.ann_dao = factory.getAnnuncioDAO();
 		this.ord_dao = factory.getOrdineDAO();
 		this.build_configuratore = (Build)creaBuild();
+		inizializzaMarketplace();
 	}
 
 	/**
@@ -348,7 +350,9 @@ public class Marketplace {
 	 */
 	public void inizializzaMarketplace() {
 		setProdotti(prod_dao.getProdotti());
+		System.out.println("N prodotti trovati: "+getProdotti().size());
 		setAnnunci(ann_dao.getAnnunci());
+		System.out.println("N annuncio trovati: "+getProdotti().size());
 	}
 
 	public IProdottoDAO getProd_dao() {

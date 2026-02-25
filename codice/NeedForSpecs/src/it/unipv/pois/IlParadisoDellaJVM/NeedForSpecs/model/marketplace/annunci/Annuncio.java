@@ -68,4 +68,9 @@ public class Annuncio {
 		return ret;
 	}
 	
+	@Override
+	public String toString() {
+		return getInfoAnnuncio();
+	}
+	
 }

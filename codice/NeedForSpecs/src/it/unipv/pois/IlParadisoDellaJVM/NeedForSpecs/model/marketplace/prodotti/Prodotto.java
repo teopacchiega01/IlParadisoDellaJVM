@@ -63,4 +63,9 @@ public abstract class Prodotto {
 		return DIM_ID_PRODOTTO;
 	}
 	
+	@Override
+	public String toString() {
+		return getInfoProdotto();
+	}
+	
 }

@@ -27,10 +27,15 @@ public class Carrello {
 
 	private double getPrezzoTotale() {
 		double totale = 0;
-		for(Annuncio prodotto_nel_carrello : acquisti) {
-			totale += prodotto_nel_carrello.getPrezzo();
+		if(!acquisti.isEmpty()) {
+			for(Annuncio prodotto_nel_carrello : acquisti) {
+				totale += prodotto_nel_carrello.getPrezzo();
+			}
+			return totale;
+		}else {
+			return 0;
 		}
-		return totale;
+		
 	}
 	
 	public boolean aggiungiElementoAlCarrello(Annuncio acquisto) {
@@ -48,11 +53,11 @@ public class Carrello {
 	}
 	
 	public boolean eliminaElementoDalCarrello(Annuncio acquisto_da_eliminare) {
-		if(this.acquisti.add(acquisto_da_eliminare)) {
-			this.prezzo_totale = getPrezzoTotale();
-			return true;
-		}else{
+		if(acquisto_da_eliminare==null || acquisti.isEmpty()) {
 			return false;
+		}else {
+			this.acquisti.remove(acquisto_da_eliminare);
+			return true;
 		}
 	}
 

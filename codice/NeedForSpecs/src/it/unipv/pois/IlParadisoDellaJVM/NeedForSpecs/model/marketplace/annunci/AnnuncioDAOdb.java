@@ -16,8 +16,8 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 //	@Author teopacchiega
 
 public class AnnuncioDAOdb implements IAnnuncioDAO {
-	private final static String QUERY_GET_ANNUNCIO_FROM_UD = "SELECT A.id_annuncio, A.id_utente_venditore, A.id_prodotto, A.prezzo,  "
-			+ "FROM Annuncio AS A JOIN Utente AS U ON A.id_utente_venditore = U.user_name"
+	private final static String QUERY_GET_ANNUNCIO_FROM_ID = "SELECT A.id_annuncio, A.id_utente_venditore, A.id_prodotto, A.prezzo,  "
+			+ "FROM Annuncio AS A JOIN Utente AS U ON A.id_utente_venditore = U.user_name "
 			+ "JOIN Prodotto AS P ON A.id_prodotto = P.id_prodotto"
 			+ "WHERE id_annuncio=? "
 			+ "AND A.id_ordine IS NULL;";
@@ -49,7 +49,7 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 		Annuncio annuncio_trovato = new Annuncio();
 
 		try {
-			pr_stat = conn.prepareStatement(QUERY_GET_ANNUNCIO_FROM_UD);
+			pr_stat = conn.prepareStatement(QUERY_GET_ANNUNCIO_FROM_ID);
 
 			pr_stat.setString(1, id_annuncio);
 
@@ -67,6 +67,7 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 				annuncio_trovato.setId_annuncio(id_annuncio_trovato);
 				annuncio_trovato.setVenditore(utente_trovato);
 				annuncio_trovato.setPrezzo(prezzo_trovato);
+				annuncio_trovato.setProdotto_in_vendita(prodotto_trovato);
 				return annuncio_trovato;
 			}
 
@@ -83,7 +84,15 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 
 	@Override
 	public ArrayList<Annuncio> getAnnunci() {
+
 		ArrayList<Annuncio> lista_annunci = new ArrayList<>();
+
+		class DatiGrezzi {
+			String id_annuncio, id_venditore, id_prodotto;
+			double prezzo;
+		}
+		ArrayList<DatiGrezzi> dati_estratti = new ArrayList<>();
+
 		Connection conn = DatabaseManager.getConnection();
 		PreparedStatement pr_stat = null;
 		ResultSet res_set = null;
@@ -93,21 +102,12 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 			res_set = pr_stat.executeQuery();
 
 			while(res_set.next()) {
-				String id_annuncio_trovato = res_set.getString("id_annuncio");
-				String id_utente_venditore_trovato = res_set.getString("id_utente_venditore");
-				String id_prodotto_trovato = res_set.getString("id_prodotto");
-				double prezzo_trovato = res_set.getDouble("prezzo");
-
-				Annuncio annuncio = new Annuncio();
-				annuncio.setId_annuncio(id_annuncio_trovato);
-				annuncio.setPrezzo(prezzo_trovato);
-
-				UtenteGenerico venditore = (UtenteGenerico)utente_dao.getUtenteFromId(id_utente_venditore_trovato);
-				Prodotto prodotto = prodotto_dao.getProdottoFromId(id_prodotto_trovato);
-				annuncio.setVenditore(venditore);
-				annuncio.setProdotto_in_vendita(prodotto);
-
-				lista_annunci.add(annuncio);
+				DatiGrezzi dati = new DatiGrezzi();
+				dati.id_annuncio = res_set.getString("id_annuncio");
+				dati.id_venditore = res_set.getString("id_utente_venditore");
+				dati.id_prodotto = res_set.getString("id_prodotto");
+				dati.prezzo = res_set.getDouble("prezzo");
+				dati_estratti.add(dati);
 			}
 
 		} catch (SQLException e) {
@@ -115,11 +115,26 @@ public class AnnuncioDAOdb implements IAnnuncioDAO {
 		} finally {
 			try { if (res_set != null) res_set.close(); } catch (Exception e) {};
 			try { if (pr_stat != null) pr_stat.close(); } catch (Exception e) {};
+			DatabaseManager.closeConnection(conn);
 		}
 
-		DatabaseManager.closeConnection(conn);
+		for (DatiGrezzi grezzo : dati_estratti) {
+			Annuncio annuncio = new Annuncio();
+			annuncio.setId_annuncio(grezzo.id_annuncio);
+			annuncio.setPrezzo(grezzo.prezzo);
+
+			UtenteGenerico venditore = (UtenteGenerico)utente_dao.getUtenteFromId(grezzo.id_venditore);
+			Prodotto prodotto = prodotto_dao.getProdottoFromId(grezzo.id_prodotto);
+
+			annuncio.setVenditore(venditore);
+			annuncio.setProdotto_in_vendita(prodotto);
+
+			lista_annunci.add(annuncio);
+		}
+
 		return lista_annunci;
 	}
+
 
 	@Override
 	public boolean inserisciAnnuncio(Annuncio annuncio_da_inserire) {

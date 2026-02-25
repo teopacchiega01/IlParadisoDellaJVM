@@ -49,6 +49,7 @@ public class Componente extends Prodotto{
 		this.marca = marca;
 		this.modello = modello;
 		this.tipo = tipo;
+		this.potenza = potenza;
 		this.scheda_tecnica = new EnumMap<>(AspettiTecnici.class);
 		switch (tipo) {
 		case MOBO:

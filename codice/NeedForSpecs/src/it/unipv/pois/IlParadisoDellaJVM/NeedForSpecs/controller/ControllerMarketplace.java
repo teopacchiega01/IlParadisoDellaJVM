@@ -37,6 +37,8 @@ public class ControllerMarketplace {
 	private void inizializzaInterfaccia() {
 		aggiornaHomeMarketplace();
 		inizializzaListeners();
+		popolaListaProdotti();
+		popolaListaCarrello();
 	}
 
 	private void aggiornaHomeMarketplace() {
@@ -60,9 +62,11 @@ public class ControllerMarketplace {
 
 	private void popolaListaProdotti() {
 		DefaultListModel<Prodotto> model_prodotti = new DefaultListModel<>();
-
+		int i = 0;
 		for (Prodotto p : model.getProdotti()) {
 			model_prodotti.addElement(p);
+			System.out.println("Prodotto n."+i+" = "+p.getInfoProdotto());
+			i++;
 		}
 
 		view.getMarketplaceGuestPanel().getListTuttiProdotti().setModel(model_prodotti);
@@ -74,8 +78,14 @@ public class ControllerMarketplace {
 		DefaultListModel<Annuncio> model_annunci = new DefaultListModel<>();
 
 		for (Annuncio a : model.getAnnunci()) {
-			if (a.getProdotto_in_vendita().getId_prodotto().equals(prodottoSelezionato.getId_prodotto())) {
-				model_annunci.addElement(a);
+			if (a.getProdotto_in_vendita() != null) {
+
+				if (a.getProdotto_in_vendita().getId_prodotto().equals(prodottoSelezionato.getId_prodotto())) {
+					model_annunci.addElement(a);
+				}
+
+			} else {
+				System.err.println("ATTENZIONE: Trovato Annuncio senza prodotto! ID Annuncio: " + a.getId_annuncio());
 			}
 		}
 
@@ -83,6 +93,7 @@ public class ControllerMarketplace {
 		view.getMarketplaceUserPanel().getListAnnunciProdottoSelezionato().setModel(model_annunci);
 		view.getMarketplaceStaffPanel().getListAnnunciProdottoSelezionato().setModel(model_annunci);
 	}
+
 
 	private Prodotto getProdottoSelezionato() {
 		if (view.getMarketplaceGuestPanel().isShowing()) return view.getMarketplaceGuestPanel().getListTuttiProdotti().getSelectedValue();
@@ -120,7 +131,7 @@ public class ControllerMarketplace {
 		if (view.getCarrelloPanel().isShowing()) return view.getCarrelloPanel().getListAnnunci().getSelectedValue();
 		return null;
 	}
-	
+
 	private Annuncio getAnnuncioPubblicatoSelezionato() {
 		if (view.getGestioneAnnunciPanel().isShowing()) return view.getGestioneAnnunciPanel().getListAnnunci().getSelectedValue();
 		return null;
@@ -154,7 +165,7 @@ public class ControllerMarketplace {
 		addListenersUserConfiguratore();
 		addListenersGuestConfiguratore();
 	}
-	
+
 	private void addListenersAnnunci() {
 		addListenersAggiuntaAnnunci();
 		addListenersRimozioneAnnunci();
@@ -243,10 +254,10 @@ public class ControllerMarketplace {
 				view.mostraAggiuntaAnnuncio();
 			}
 		});
-		
+
 		// PASSA A GESTIONE ANNUNCI
 		view.getMarketplaceUserPanel().getBtnGestioneAnnunci().addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				view.mostraGestioneAnnunci();
@@ -551,7 +562,7 @@ public class ControllerMarketplace {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Prodotto prod_annuncio = getProdottoSelezionato();
-				double prezzo = Double.parseDouble(view.getAggiuntaAnnuncioPanel().getTxtPrezzo().getSelectedText());
+				double prezzo = Double.parseDouble(view.getAggiuntaAnnuncioPanel().getTxtPrezzo().getText());
 
 			}
 		});
@@ -585,15 +596,15 @@ public class ControllerMarketplace {
 		view.getAggiuntaAnnuncioPanel().getListProdotti().addListSelectionListener(reazione_seleziona_prodotto_da_vendere);
 	}
 
-	
+
 	// ========================================================================================================
 	// RIMOZIONE/GESTIONE ANNUNCI
 	// QUALCOSA QUA NON VA !!!!!!!!!
 	private void addListenersRimozioneAnnunci() {
-		
+
 		// PULSANTE LOGOUT
 		view.getGestioneAnnunciPanel().getBtnLogout().addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -603,31 +614,31 @@ public class ControllerMarketplace {
 				System.out.println("Logout");
 			}
 		});
-		
+
 		view.getGestioneAnnunciPanel().getBtnTornaMarketplace().addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				aggiornaHomeMarketplace();
 				System.out.println("Torno alla home marketplace");
 			}
 		});
-		
+
 		view.getGestioneAnnunciPanel().getBtnEliminaAnnuncio().addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.rimuoviAnnuncio(getAnnuncioPubblicatoSelezionato());
 			}
 		});
-		
+
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	// =========================================================================================================
 	// CARRELLO
 
@@ -654,6 +665,7 @@ public class ControllerMarketplace {
 			}
 		});
 
+		// EFFETTUA ORDINE
 		view.getCarrelloPanel().getBtnEffettuaOrdine().addActionListener(new ActionListener() {
 
 			@Override
@@ -663,17 +675,49 @@ public class ControllerMarketplace {
 			}
 		});
 
+		
 		view.getCarrelloPanel().getBtnEliminaLista().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				model.rimuoviElementoDalCarrello((UtenteGenerico)model.getUtente_loggato(), getElementoCarrelloSelezionato());
+				if(getElementoCarrelloSelezionato()==null) {
+					view.getCarrelloPanel().getLblMessaggio().setText("Nessun elemento selezionato");
+				}else if(model.rimuoviElementoDalCarrello((UtenteGenerico)model.getUtente_loggato(), getElementoCarrelloSelezionato())){
+					view.getCarrelloPanel().getLblMessaggio().setText("Elemento rimosso dal carrello");
+				}else {
+					view.getCarrelloPanel().getLblMessaggio().setText("Impossibile rimuovere elemento dal carrello");
+				}
+				popolaListaCarrello();
+				
 			}
 		});
 
 	}
 
+	private void popolaListaCarrello() {
+		DefaultListModel<Annuncio> model_carrello = new DefaultListModel<>();
+
+		if (model.getUtente_loggato() != null && model.getUtente_loggato() instanceof UtenteGenerico) {
+			
+			UtenteGenerico utente = (UtenteGenerico) model.getUtente_loggato();
+			
+			if (utente.getCarr() != null && utente.getCarr().getAcquisti() != null) {
+				
+				for (Annuncio a : utente.getCarr().getAcquisti()) {
+					if (a != null) { 
+						model_carrello.addElement(a);
+					}
+				}
+				double totale = utente.getCarr().getPrezzo_totale();
+				view.getCarrelloPanel().getTxtPrezzoTotale().setText(String.format("%.2f €", totale));
+			}
+		}
+
+		view.getCarrelloPanel().getListAnnunci().setModel(model_carrello);
+	}
+	
+	
 	private void gestisciListenersReattiviCarrello() {
 
 		javax.swing.event.ListSelectionListener reazione_seleziona_carrello = e -> {
