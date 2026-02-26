@@ -5,12 +5,12 @@ BUILD=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.B
 
 # -- SaleStrategy
 #sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.BlackFridaySaleStrategy
-#sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.DieciPercSaleStrategy
+sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.DieciPercSaleStrategy
 #sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.NoIvaSaleStrategy
 #sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.NoScontoSaleStrategy
 #sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.GratisSaleStrategy
 #sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.SuperScontiCompositeSaleStrategy
-sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.FuoriTuttoCompositeSaleStrategy
+#sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.FuoriTuttoCompositeSaleStrategy
 
 # -- RICERCAMESSAGGI
 AUTORE_MESSAGGIO=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaAutoreStrategy
