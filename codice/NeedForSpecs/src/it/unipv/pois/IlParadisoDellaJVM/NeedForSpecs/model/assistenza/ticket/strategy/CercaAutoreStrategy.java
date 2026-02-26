@@ -15,11 +15,12 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.StringCheck
 public class CercaAutoreStrategy implements IRicercaMessaggiStrategy {
 	/**
 	 * REGEX_AUTORE: Valida l'username o il nome dell'autore.
-	 * "^[a-zA-Z]"    : Deve iniziare obbligatoriamente con una lettera.
-	 * "[a-zA-Z0-9]*$" : Può essere seguito da zero o più lettere o numeri. 
-	 * (Niente spazi, niente caratteri speciali).
+	 * "^[a-zA-Z]"        : Deve iniziare obbligatoriamente con una lettera.
+	 * "[a-zA-Z0-9_.-]*$" : Può essere seguito da zero o più lettere, numeri,
+	 * underscore (_), punti (.) o trattini (-). 
+	 * (Niente spazi, niente altri caratteri speciali).
 	 */
-	private static final String REGEX_AUTORE = "^[a-zA-Z][a-zA-Z0-9]*$";
+	private static final String REGEX_AUTORE = "^[a-zA-Z][a-zA-Z0-9_.-]*$";
 
 	@Override
 	public List<Messaggio> cerca(List<Messaggio> conversazione, String nome_autore) {

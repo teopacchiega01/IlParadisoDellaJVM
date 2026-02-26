@@ -32,6 +32,12 @@ public class main {
 //		UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@staff.it", "adminpass", "Luca", "Verdi");
 
 		
+		//Se si vuole usare bidello fare la query :
+		/*
+		UPDATE Ticket 
+		SET id_utente_richiedente = 'bidello_modulare' 
+		WHERE id_ticket = 'Ticket1001';
+		*/
 		HomeFrame hf = new HomeFrame();
 		GestoreAccount ga = GestoreAccount.getInstance();
 //		ga.setUtenteLoggato(utenteSimulato);

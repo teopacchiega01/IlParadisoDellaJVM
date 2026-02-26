@@ -15,9 +15,9 @@ public class DatabaseManager {
 	private static final String USER = "ipdj";
 	
 	// MAC
-//	private static final String URL = "jdbc:mysql://localhost:3306/NeedForSpecsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+private static final String URL = "jdbc:mysql://localhost:3306/needforspecs?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 	// UBUNTU
-	private static final String URL = "jdbc:mysql://localhost:3306/needforspecs";
+	//private static final String URL = "jdbc:mysql://localhost:3306/needforspecs";
 
 	private static final String PASSWORD = "Garpez67";
 	
