@@ -7,7 +7,7 @@ public enum Ricerca {
 	
 	
 	TESTO,
-	AUTORE,
+	AUTORE_MESSAGGIO,
 	DATA
 	
 	

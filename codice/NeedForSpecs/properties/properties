@@ -13,7 +13,7 @@ sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.mar
 #sale.strategy.class.name=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.ordini.saleStrategies.FuoriTuttoCompositeSaleStrategy
 
 # -- RICERCAMESSAGGI
-AUTORE=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaAutoreStrategy
+AUTORE_MESSAGGIO=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaAutoreStrategy
 DATA=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaDataStrategy
 TESTO=it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.assistenza.ticket.strategy.CercaTestoStrategy
 

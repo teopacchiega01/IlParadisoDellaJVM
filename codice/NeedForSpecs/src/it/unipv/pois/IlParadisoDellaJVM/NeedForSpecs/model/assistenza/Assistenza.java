@@ -214,6 +214,7 @@ public class Assistenza {
 			System.err.println("Nessun utente loggato presente nel Model!");
 			return;
 		}
+		this.richieste_assistenza.clear();
 		
 		if (this.utente_loggato.isStaff()) {
 			UtenteStaff staff = (UtenteStaff) this.utente_loggato;
