@@ -20,7 +20,7 @@ public class HomePanelUtente extends JPanel {
 	private JComboBox<Ticket> ticket_combo;
 	private JButton crea_ticket_butt;
 	private JButton vai_a_ticket_butt;
-	private JButton logout_butt;
+	private JButton torna_home_butt;
 	
 	public HomePanelUtente() {
 		this.setLayout(new BorderLayout());
@@ -29,13 +29,13 @@ public class HomePanelUtente extends JPanel {
 		ticket_combo = new JComboBox<Ticket>();
 		crea_ticket_butt = new JButton("Crea ticket");
 		vai_a_ticket_butt = new JButton("Vai a ticket selezionato");
-		logout_butt = new JButton("Logout");
+		torna_home_butt = new JButton("< Torna alla Home");
 		
 		JPanel nord  = new JPanel(new BorderLayout());
 		JPanel nordLabels = new JPanel(new java.awt.GridLayout(2, 1)); 
 		nordLabels.add(label_benvenuto);
 		nordLabels.add(risultati_home_utente);
-		nord.add(logout_butt, BorderLayout.WEST);
+		nord.add(torna_home_butt, BorderLayout.WEST);
 		nord.add(nordLabels, BorderLayout.CENTER);
 		
 		JPanel centro = new JPanel();
@@ -107,11 +107,11 @@ public class HomePanelUtente extends JPanel {
 		this.vai_a_ticket_butt = vai_a_ticket_butt;
 	}
 
-	public JButton getLogout_butt() {
-		return logout_butt;
+	public JButton getTornaHomeButt() {
+		return torna_home_butt;
 	}
 
-	public void setLogout_butt(JButton logout_butt) {
-		this.logout_butt = logout_butt;
+	public void setTornaHomeButt(JButton logout_butt) {
+		this.torna_home_butt = logout_butt;
 	}
 }

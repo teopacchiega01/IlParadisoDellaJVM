@@ -74,7 +74,7 @@ public class ControllerAssistenza {
 		});
 		view.getTicketUtentePanel().getInvia_messaggio_utente().addActionListener(e -> gestisciInvioMessaggioUtente());
 		
-		view.getHomePanelUtente().getLogout_butt().addActionListener(e ->{
+		view.getHomePanelUtente().getTornaHomeButt().addActionListener(e ->{
 			view.getHomePanelUtente().setLabelOutUtente("Logout effettuato con successo. Arrivederci!");
 			
 			
@@ -179,7 +179,7 @@ public class ControllerAssistenza {
 		
 		
 
-		view.getHomePanelStaff().getLogout_butt().addActionListener(e ->{
+		view.getHomePanelStaff().getTornaHomeButt().addActionListener(e ->{
 			view.getHomePanelStaff().setLabelOutStaff("Logout effettuato con successo. Arrivederci!");
 			GestoreAccount gen = GestoreAccount.getInstance();
 			gen.logout();
