@@ -3,6 +3,8 @@ package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.controller;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.EnumMap;
 
 import javax.swing.DefaultListModel;
 
@@ -52,6 +54,7 @@ public class ControllerMarketplace {
 		}else {
 			view.mostraMarketplaceUser();
 		}
+		popolaListaProdotti();
 	}
 
 	private void aggiornaConfiguratore() {
@@ -402,21 +405,66 @@ public class ControllerMarketplace {
 
 		ActionListener aggiungi_alla_build = e -> {
 			System.out.println("Aggiungo componente alla build");
-			try {
-				model.getBuild_configuratore().aggiungiComponente(getComponenteCatalogoSelezionato());
-			} catch (ComponentiException exc) {
-				view.getConfiguratoreGuestPanel().getLblMessaggio().setText("ERRORE: "+exc.getMessage());
-				view.getConfiguratoreUserPanel().getLblMessaggio().setText("ERRORE: "+exc.getMessage());
-				exc.printStackTrace();
+			Componente componenteDaAggiungere = getComponenteCatalogoSelezionato();
+			if (componenteDaAggiungere != null) {
+				try {
+					model.getBuild_configuratore().aggiungiComponente(componenteDaAggiungere);
+					popolaListaComponentiBuild();
+					
+					view.getConfiguratoreGuestPanel().getLblMessaggio().setForeground(Color.GREEN);
+					view.getConfiguratoreGuestPanel().getLblMessaggio().setText("Componente aggiunto con successo!");
+					view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.GREEN);
+					view.getConfiguratoreUserPanel().getLblMessaggio().setText("Componente aggiunto con successo!");
+					
+				} catch (ComponentiException exc) {
+					view.getConfiguratoreGuestPanel().getLblMessaggio().setForeground(Color.RED);
+					view.getConfiguratoreGuestPanel().getLblMessaggio().setText("ERRORE: " + exc.getMessage());
+					view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.RED);
+					view.getConfiguratoreUserPanel().getLblMessaggio().setText("ERRORE: " + exc.getMessage());
+//					exc.printStackTrace();
+				}
+			} else {
+				view.getConfiguratoreGuestPanel().getLblMessaggio().setForeground(Color.RED);
+				view.getConfiguratoreGuestPanel().getLblMessaggio().setText("Seleziona un componente dal catalogo prima di aggiungere!");
+				view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.RED);
+				view.getConfiguratoreUserPanel().getLblMessaggio().setText("Seleziona un componente dal catalogo prima di aggiungere!");
 			}
-
 		};
+		
+		view.getConfiguratoreUserPanel().getBtnAggiungiPezzoAllaBuild().addActionListener(aggiungi_alla_build);
+		view.getConfiguratoreGuestPanel().getBtnAggiungiPezzoAllaBuild().addActionListener(aggiungi_alla_build);
 
 		ActionListener rimuovi_dalla_build = e -> {
 			System.out.println("Rimuovo componente dalla build");
-			model.getBuild_configuratore().rimuoviComponente(getComponenteCatalogoSelezionato());
+			
+			Componente componenteDaRimuovere = getComponenteBuildSelezionato();
+			
+			if (componenteDaRimuovere != null) {
+				model.getBuild_configuratore().rimuoviComponente(componenteDaRimuovere);
+				
+				popolaListaComponentiBuild();
+				
+				view.getConfiguratoreGuestPanel().getTxtAreaInfoBuild().setText("");
+				view.getConfiguratoreUserPanel().getTxtAreaInfoBuild().setText("");
+				
+				view.getConfiguratoreGuestPanel().getLblMessaggio().setForeground(Color.GREEN);
+				view.getConfiguratoreGuestPanel().getLblMessaggio().setText("Componente rimosso.");
+				view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.GREEN);
+				view.getConfiguratoreUserPanel().getLblMessaggio().setText("Componente rimosso.");
+			} else {
+				view.getConfiguratoreGuestPanel().getLblMessaggio().setForeground(Color.RED);
+				view.getConfiguratoreGuestPanel().getLblMessaggio().setText("Seleziona un componente dalla tua build per rimuoverlo!");
+				view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.RED);
+				view.getConfiguratoreUserPanel().getLblMessaggio().setText("Seleziona un componente dalla tua build per rimuoverlo!");
+			}
 		};
+		
+		view.getConfiguratoreUserPanel().getBtnAggiungiPezzoAllaBuild().addActionListener(rimuovi_dalla_build);
+		view.getConfiguratoreGuestPanel().getBtnAggiungiPezzoAllaBuild().addActionListener(rimuovi_dalla_build);
 
+		
+		
+		
 
 	}
 
@@ -439,10 +487,37 @@ public class ControllerMarketplace {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nome_build = view.getConfiguratoreUserPanel().getTxtNomeBuild().getText();
-				model.getBuild_configuratore().setNome(nome_build);
-				model.getBuild_configuratore().aggiornaPrezzo();
-				model.salvaBuildConfiguratore();
+//				System.out.println("Salvo build");
+//				String nome_build = view.getConfiguratoreUserPanel().getTxtNomeBuild().getText();
+//				model.getBuild_configuratore().setNome(nome_build);
+//				model.getBuild_configuratore().aggiornaPrezzo();
+//				model.salvaBuildConfiguratore();
+//				popolaListaComponentiBuild();
+//				popolaListaCatalogoConfiguratore(getTipoSelezionato());
+				
+				
+				String nome_build = view.getConfiguratoreUserPanel().getTxtNomeBuild().getText().trim();
+				
+				if (nome_build.isEmpty()) {
+					view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.RED);
+					view.getConfiguratoreUserPanel().getLblMessaggio().setText("ERRORE: Devi inserire un nome per la build prima di salvarla!");
+				}else {
+					model.getBuild_configuratore().setNome(nome_build);
+					model.getBuild_configuratore().aggiornaPrezzo();
+					
+					if(model.salvaBuildConfiguratore()) {
+						view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.GREEN);
+						view.getConfiguratoreUserPanel().getLblMessaggio().setText("Build '" + nome_build + "' salvata con successo!");
+					} else {
+						view.getConfiguratoreUserPanel().getLblMessaggio().setForeground(Color.RED);
+						view.getConfiguratoreUserPanel().getLblMessaggio().setText("Errore di sistema durante il salvataggio.");
+					}
+				}
+				view.getConfiguratoreUserPanel().getTxtNomeBuild().setText("");
+				popolaListaTipiComponente();
+				popolaListaComponentiBuild();
+				popolaListaCatalogoConfiguratore(getTipoSelezionato());
+				
 			}
 		});
 
@@ -463,6 +538,7 @@ public class ControllerMarketplace {
 	private void addListenersGuestConfiguratore() {
 		//		view.getConfiguratoreGuestPanel().getBtn
 
+		//LOGIN
 		view.getConfiguratoreGuestPanel().getBtnLoginLogout().addActionListener(new ActionListener() {
 
 			@Override
@@ -477,8 +553,30 @@ public class ControllerMarketplace {
 		});
 
 	}
+	
+	
+	
 
-
+	private void popolaListaComponentiBuild() {
+		DefaultListModel<Componente> model_build = new DefaultListModel<>();
+		if (model.getBuild_configuratore() != null) {
+			EnumMap<TipoComponente, ArrayList<Componente>> mappa_componenti = model.getBuild_configuratore().getComponenti(); 
+			if (mappa_componenti != null) {
+				for (ArrayList<Componente> listaPerTipo : mappa_componenti.values()) {
+					if (listaPerTipo != null) {
+						for (Componente c : listaPerTipo) {
+							if (c != null) { 
+								model_build.addElement(c);
+							}
+						}
+					}
+				}
+			}
+		}
+		view.getConfiguratoreGuestPanel().getListComponentiBuild().setModel(model_build);
+		view.getConfiguratoreUserPanel().getListComponentiBuild().setModel(model_build);
+		aggiornaStatisticheBuild();
+	}
 
 	private void popolaListaCatalogoConfiguratore(TipoComponente tipoScelto) {
 		DefaultListModel<Componente> model_catalogo = new DefaultListModel<>();
@@ -559,6 +657,28 @@ public class ControllerMarketplace {
 		view.getConfiguratoreUserPanel().getListComponentiBuild().addListSelectionListener(reazione_componente_build);
 	}
 
+	private void aggiornaStatisticheBuild() {
+		if (model.getBuild_configuratore() != null) {
+			
+			model.getBuild_configuratore().aggiornaPrezzo();
+			
+			double totale = model.getBuild_configuratore().getPrezzo();
+			int watt_richiesti = model.getBuild_configuratore().getPotenzaRichiesta();
+			
+			String stringaStatistiche = String.format("TOTALE: %.2f €   |   CONSUMO STIMATO: %d W", totale, watt_richiesti);
+			
+			if (model.getBuild_configuratore().getComponenti().get(TipoComponente.PSU) != null && 
+			   !model.getBuild_configuratore().getComponenti().get(TipoComponente.PSU).isEmpty()) {
+				
+				int watt_disponibili = model.getBuild_configuratore().getPotenzaDisponibile();
+				stringaStatistiche += " / " + watt_disponibili + " W";
+			}
+			
+			view.getConfiguratoreGuestPanel().getLblStatistiche().setText(stringaStatistiche);
+			view.getConfiguratoreUserPanel().getLblStatistiche().setText(stringaStatistiche);
+		}
+	}
+	
 	// =========================================================================================================
 	// AGGIUNTA ANNUNCI
 
@@ -682,7 +802,7 @@ public class ControllerMarketplace {
 			}
 		});
 
-		
+
 		//TORNA AL MARKETPLACE
 		view.getGestioneAnnunciPanel().getBtnTornaMarketplace().addActionListener(new ActionListener() {
 
@@ -700,23 +820,29 @@ public class ControllerMarketplace {
 				model.rimuoviAnnuncio(getAnnuncioPubblicatoSelezionato());
 			}
 		});
-		
+
 		view.getGestioneAnnunciPanel().getBtnEliminaAnnuncio().addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				Annuncio ann_da_rimuovere = getAnnuncioPubblicatoSelezionato();
-				model.rimuoviAnnuncio(ann_da_rimuovere);
-				System.out.println("Annuncio rimosso");
-				view.getGestioneAnnunciPanel().getLblMessaggioErrore().setText("Annuncio rimosso con successo");
-				popolaListaGestioneAnnunci();
+				if(ann_da_rimuovere != null) {
+					if(model.rimuoviAnnuncio(ann_da_rimuovere)) {
+						view.getGestioneAnnunciPanel().getLblMessaggioErrore().setForeground(Color.GREEN);
+						view.getGestioneAnnunciPanel().getLblMessaggioErrore().setText("Annuncio eliminato.");
+						popolaListaGestioneAnnunci();
+					} else {
+						view.getGestioneAnnunciPanel().getLblMessaggioErrore().setForeground(Color.RED);
+						view.getGestioneAnnunciPanel().getLblMessaggioErrore().setText("Impossibile eliminare l'annuncio.");
+						popolaListaGestioneAnnunci();
+					}
+				}
 			}
 		});
 
 	}
 
-	
+
 
 	private void popolaListaGestioneAnnunci() {
 		DefaultListModel<Annuncio> model_miei_annunci = new DefaultListModel<>();
@@ -796,6 +922,7 @@ public class ControllerMarketplace {
 				}else {
 					view.getCarrelloPanel().getLblMessaggio().setText("Impossibile rimuovere elemento dal carrello");
 				}
+				
 				popolaListaCarrello();
 
 			}
@@ -806,24 +933,23 @@ public class ControllerMarketplace {
 	private void popolaListaCarrello() {
 		DefaultListModel<Annuncio> model_carrello = new DefaultListModel<>();
 
-		//System.out.println("Utente loggato: \n"+model.getUtente_loggato().toString());
-		if (model.getUtente_loggato() != null && !model.getUtente_loggato().isStaff() ) {
-
+		if (model.getUtente_loggato() != null && !model.getUtente_loggato().isStaff()) {
 			UtenteGenerico utente = (UtenteGenerico) model.getUtente_loggato();
 
-			if (utente.getCarr() != null && utente.getCarr().getAcquisti() != null) {
-
-				for (Annuncio a : utente.getCarr().getAcquisti()) {
-					if (a != null) { 
-						model_carrello.addElement(a);
+			if (utente.getCarr() != null) {
+				
+				if (utente.getCarr().getAcquisti() != null) {
+					for (Annuncio a : utente.getCarr().getAcquisti()) {
+						if (a != null) { 
+							model_carrello.addElement(a);
+						}
 					}
 				}
-				double totale = utente.getCarr().getPrezzo_totale();
-				view.getCarrelloPanel().getTxtPrezzoTotale().setText(String.format("%.2f €", totale));
 			}
 		}
 
 		view.getCarrelloPanel().getListAnnunci().setModel(model_carrello);
+		view.getCarrelloPanel().getTxtPrezzoTotale().setText(((UtenteGenerico)model.getUtente_loggato()).getCarr().getPrezzo_totale()+" €");
 	}
 
 

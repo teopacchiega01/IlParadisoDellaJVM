@@ -177,15 +177,15 @@ public class ProdottoDAOdb implements IProdottoDAO {
 								prodotto.getTipologia() == TipologiaProdotto.COMPONENTE) {
 
 							Componente comp = (Componente) prodotto;
-							try {
-								buildDaRiempire.aggiungiComponente(comp);
-							} catch (Exception e) {
-								System.err.println("Errore di integrità nella Build dal DB: " + e.getMessage());
-							}
+							
+							buildDaRiempire.getComponenti().get(comp.getTipo()).add(comp);
+							
 							break; 
 						}
 					}
 				}
+				
+				buildDaRiempire.aggiornaPrezzo();
 			}
 
 		} catch (Exception e) {

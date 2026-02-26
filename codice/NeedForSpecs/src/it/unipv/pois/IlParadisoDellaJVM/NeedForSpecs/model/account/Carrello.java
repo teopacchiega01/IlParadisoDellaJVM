@@ -16,7 +16,7 @@ public class Carrello {
 	public Carrello(ArrayList<Annuncio> acquisti, double prezzo_totale) {
 		super();
 		this.acquisti = acquisti;
-		this.prezzo_totale = getPrezzoTotale();
+		this.prezzo_totale = getPrezzoTotaleAggiornato();
 	}
 	
 	public Carrello() {
@@ -25,7 +25,7 @@ public class Carrello {
 		this.prezzo_totale = 0;
 	}
 
-	private double getPrezzoTotale() {
+	private double getPrezzoTotaleAggiornato() {
 		double totale = 0;
 		if(!acquisti.isEmpty()) {
 			for(Annuncio prodotto_nel_carrello : acquisti) {
@@ -40,7 +40,7 @@ public class Carrello {
 	
 	public boolean aggiungiElementoAlCarrello(Annuncio acquisto) {
 		if(this.acquisti.add(acquisto)) {
-			this.prezzo_totale = getPrezzoTotale();
+			this.prezzo_totale = getPrezzoTotaleAggiornato();
 			return true;
 		}else{
 			return false;
@@ -57,8 +57,10 @@ public class Carrello {
 			return false;
 		}else {
 			this.acquisti.remove(acquisto_da_eliminare);
+			this.prezzo_totale = getPrezzoTotaleAggiornato();
 			return true;
 		}
+		
 	}
 
 	public ArrayList<Annuncio> getAcquisti() {
@@ -76,5 +78,4 @@ public class Carrello {
 	public void setPrezzo_totale(double prezzo_totale) {
 		this.prezzo_totale = prezzo_totale;
 	}
-
 }

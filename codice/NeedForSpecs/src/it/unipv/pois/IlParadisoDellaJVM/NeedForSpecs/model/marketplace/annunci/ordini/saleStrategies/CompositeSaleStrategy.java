@@ -27,8 +27,9 @@ public abstract class CompositeSaleStrategy implements ISaleStrategy {
 	public double getTotaleElaborato(Ordine ordine_da_elaborare) {
 		double prezzo_finale = ordine_da_elaborare.getPrezzo_totale();
 		for(ISaleStrategy sale_strat : sale_strats) {
-			if(prezzo_finale<sale_strat.getTotaleElaborato(ordine_da_elaborare)) {
-				prezzo_finale = sale_strat.getTotaleElaborato(ordine_da_elaborare);
+			double prezzo_scontato = sale_strat.getTotaleElaborato(ordine_da_elaborare); 
+			if(prezzo_scontato<prezzo_finale) {
+				prezzo_finale = prezzo_scontato;
 			}
 		}
 		return prezzo_finale;

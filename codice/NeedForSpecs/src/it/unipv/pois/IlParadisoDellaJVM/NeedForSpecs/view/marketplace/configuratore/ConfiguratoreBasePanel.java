@@ -25,15 +25,14 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.prodotti.
 
 public abstract class ConfiguratoreBasePanel extends JPanel {
 
+	protected JLabel lblStatistiche;
     protected JButton btnLoginLogout, btnTornaMarketplace;
     protected JList<TipoComponente> listTipiComponente;
-    protected JButton btnAggiungiTipoAllaBuild;
+    protected JButton btnAggiungiPezzoAllaBuild;
 
     protected JList<Componente> listComponentiDisponibili;
-    protected JButton AggiungiComponenteAllaBuild;
     protected JTextArea txtAreaInfoCatalogo;
 
-  
     protected JList<Componente> listComponentiBuild;
     protected JButton btnRimuoviDaBuild;
     protected JTextArea txtAreaInfoBuild;
@@ -51,10 +50,13 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
         btnLoginLogout = new JButton();
         btnTornaMarketplace = new JButton("TORNA AL MARKETPLACE");
         
+        lblStatistiche = new JLabel("TOTALE: 0.00 €   |   CONSUMO: 0 W", javax.swing.SwingConstants.CENTER);
+        lblStatistiche.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
+        lblStatistiche.setForeground(Color.BLUE);
 
 
         listTipiComponente = new JList<TipoComponente>();
-        btnAggiungiTipoAllaBuild = new JButton("AGGIUNGI ALLA BUILD");
+        btnAggiungiPezzoAllaBuild = new JButton("AGGIUNGI ALLA BUILD");
 
         listComponentiDisponibili = new JList<Componente>();
 
@@ -79,12 +81,12 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
         add(btnLoginLogout, gbc);
         gbc.gridx = 1;
         add(btnTornaMarketplace, gbc);
+       
         
-
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         add(new JScrollPane(listTipiComponente), gbc);
         gbc.gridx = 2; gbc.gridwidth = 1;
-        add(btnAggiungiTipoAllaBuild, gbc);
+        add(btnAggiungiPezzoAllaBuild, gbc);
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1; gbc.weightx = 0.3; gbc.weighty = 0.4; gbc.fill = GridBagConstraints.BOTH;
         add(new JScrollPane(listComponentiDisponibili), gbc);
 
@@ -110,19 +112,22 @@ public abstract class ConfiguratoreBasePanel extends JPanel {
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 0.7;
         add(pnlInfoBuild, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 3; gbc.weightx = 1.0; gbc.weighty = 0.1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 3; gbc.weightx = 1.0; gbc.weighty = 0.0; gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(lblStatistiche, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 3; gbc.weightx = 1.0; gbc.weighty = 0.1; gbc.fill = GridBagConstraints.HORIZONTAL;
         add(lblMessaggio, gbc);
     }
 
     public JButton getBtnLoginLogout() { return btnLoginLogout; }
     public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
-	public JList<TipoComponente> getListTipiComponente() { return listTipiComponente; }
-	public JButton getBtnAggiungiTipoAllaBuild() { return btnAggiungiTipoAllaBuild; }
-	public JList<Componente> getListComponentiDisponibili() { return listComponentiDisponibili; }
-	public JTextArea getTxtAreaInfoCatalogo() { return txtAreaInfoCatalogo; }
-	public JList<Componente> getListComponentiBuild() { return listComponentiBuild; }
-	public JButton getBtnRimuoviDaBuild() { return btnRimuoviDaBuild; }
-	public JTextArea getTxtAreaInfoBuild() { return txtAreaInfoBuild; }
-	public JLabel getLblMessaggio() { return lblMessaggio; }
-    
+    public JList<TipoComponente> getListTipiComponente() { return listTipiComponente; }
+    public JButton getBtnAggiungiPezzoAllaBuild() { return btnAggiungiPezzoAllaBuild; }
+    public JList<Componente> getListComponentiDisponibili() { return listComponentiDisponibili; }
+    public JTextArea getTxtAreaInfoCatalogo() { return txtAreaInfoCatalogo; }
+    public JList<Componente> getListComponentiBuild() { return listComponentiBuild; }
+    public JButton getBtnRimuoviDaBuild() { return btnRimuoviDaBuild; }
+    public JTextArea getTxtAreaInfoBuild() { return txtAreaInfoBuild; }
+    public JLabel getLblMessaggio() { return lblMessaggio; }
+    public JLabel getLblStatistiche() { return lblStatistiche; } 
 }

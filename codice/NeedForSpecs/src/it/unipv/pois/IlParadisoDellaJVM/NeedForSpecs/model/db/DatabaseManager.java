@@ -13,10 +13,11 @@ public class DatabaseManager {
 
 	private static Connection conn; 
 	private static final String USER = "ipdj";
-	private static final String URL = "jdbc:mysql://localhost:3306/NeedForSpecsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 	
-	//NON ELIMINATE LA RIGA SOTTO!!!!!!!!!!!!
-//	private static final String URL = "jdbc:mysql://localhost:3306/needforspecs";
+	// MAC
+//	private static final String URL = "jdbc:mysql://localhost:3306/NeedForSpecsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+	// UBUNTU
+	private static final String URL = "jdbc:mysql://localhost:3306/needforspecs";
 
 	private static final String PASSWORD = "Garpez67";
 	

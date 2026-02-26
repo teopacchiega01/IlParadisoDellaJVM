@@ -10,51 +10,33 @@ public class main {
 
 	public static void main(String[] args) {
 
+		// UTENTI NEL DB
+//		| AdminTech_Luca     | admin.luca@staff.com    | adminpass   | Luca   | Verdi   |
+//		| anna_neri          | anna.neri@email.com     | hash_pw_012 | Anna   | Neri    |
+//		| bidello_modulare   | paolo.limiti@email.com  | password1   | Paolo  | Limiti  |
+//		| giulia_verdi       | giulia.verdi@email.com  | hash_pw_789 | Giulia | Verdi   |
+//		| GiuliaBianchi      | giulia.b@email.com      | qwerty      | Giulia | Bianchi |
+//		| luigi_bianchi      | luigi.bianchi@email.com | hash_pw_456 | Luigi  | Bianchi |
+//		| mario_rossi88      | mario.rossi@email.com   | hash_pw_123 | Mario  | Rossi   |
+//		| MarioRossi99       | mario.rossi2@email.com  | password123 | Mario  | Rossi   |
+//		| paolo_gialli       | paolo.gialli@email.com  | hash_pw_345 | Paolo  | Gialli  |
+//		| tarallo_perforante | pietro.smusi@staff.com  | 12345678    | Pietro | Smusi   |
 
+		
+		// ATTENZIONE
+		// Controllare sulla classe DatabaseManager che sia
+		// decommentato il link al db corretto per il proprio OS
+		
+		// UTENTI DI PROVA
+//		UtenteGenerico utenteSimulato = new UtenteGenerico("GiuliaBianchi", "giulia.b@email.com", "qwerty", "Giulia", "Bianchi");
+//		UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@staff.it", "adminpass", "Luca", "Verdi");
 
-		// 1. Creo gli utenti simulati
-		UtenteGenerico utenteSimulato = new UtenteGenerico("GiuliaBianchi", "giulia.b@email.com", "qwerty", "Giulia", "Bianchi");
-		UtenteStaff luca = new UtenteStaff("AdminTech_Luca", "admin.luca@staff.it", "adminpass", "Luca", "Verdi");
-
+		
 		HomeFrame hf = new HomeFrame();
 		GestoreAccount ga = GestoreAccount.getInstance();
-		ga.setUtenteLoggato(utenteSimulato);
+//		ga.setUtenteLoggato(utenteSimulato);
+		ga.setUtenteLoggato(null);
 		new ControllerHome(ga, hf);
-
-
-		////		
-		//		Assistenza ass = Assistenza.getInstance();
-		//		ass.setUtente_loggato(utenteSimulato);
-		//		FrameAssistenza frame = new FrameAssistenza();
-		//		new ControllerAssistenza(frame, ass);
-
-		//		
-		//		Assistenza ass = Assistenza.getInstance();
-		//		ass.setUtente_loggato(luca);
-		//		FrameAssistenza frame = new FrameAssistenza();
-		//		new ControllerAssistenza(frame, ass);
-		//		
-
-
-		//		Forum f = Forum.getInstance(factory);
-		//
-		//		ForumView fFrame = new ForumView();
-		//		fFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//		fFrame.setVisible(true);
-		//
-		//		UtenteStaff teo = new UtenteStaff("admin_teo", "teo@needforspecs.it", "password123", "Teo", "Rossi");
-		//		UtenteGenerico s = new UtenteGenerico("sbs", "s@gmail.it", "sbspw", "Simone", "Bassi");
-		//		UtenteGenerico g = new UtenteGenerico("GerryS", "gs@gmail.com", "sbatti", "Gerry", "Scotti");
-		//
-		//		new ControllerForum(f, fFrame.getPostView(),fFrame, g);
-
-
-
-
-
-
-
-
 
 
 	}

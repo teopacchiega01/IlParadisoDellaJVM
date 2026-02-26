@@ -59,7 +59,6 @@ public class Build extends Prodotto{
 		for(TipoComponente appoggio : TipoComponente.values()) {
 			componenti.put(appoggio, new ArrayList<Componente>());
 		}
-
 		this.setId_prodotto(generaId());
 	}
 
@@ -68,6 +67,12 @@ public class Build extends Prodotto{
 	 */
 	public Build() {
 		super();
+		this.nome = "";
+		this.componenti = new EnumMap<>(TipoComponente.class);
+		for(TipoComponente appoggio : TipoComponente.values()) {
+			componenti.put(appoggio, new ArrayList<Componente>());
+		}
+		this.setId_prodotto(generaId());
 	}
 
 	/**
@@ -77,10 +82,15 @@ public class Build extends Prodotto{
 	public Build(String nome) {
 		super();
 		this.nome = nome;
+		this.componenti = new EnumMap<>(TipoComponente.class);
+		for(TipoComponente appoggio : TipoComponente.values()) {
+			componenti.put(appoggio, new ArrayList<Componente>());
+		}
+		this.setId_prodotto(generaId());
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Genera un ID univoco per la build, combinando il nome formattato e una stringa casuale.
 	 * * @return La stringa rappresentante l'ID univoco della build.
@@ -101,7 +111,7 @@ public class Build extends Prodotto{
 	public TipologiaProdotto getTipologia() {
 		return TipologiaProdotto.BUILD;
 	}
-	
+
 	/**
 	 * Restituisce il nome della build.
 	 * * @return Il nome attuale della build.
@@ -260,7 +270,7 @@ public class Build extends Prodotto{
 			}
 
 		}
-		
+
 
 	}
 
@@ -358,29 +368,79 @@ public class Build extends Prodotto{
 				st_comp = c1.getScheda_tecnica();
 			}
 
+
 			// Controllo la compatibilità delle mobo con altri tipi di componenti 
 			switch (comp) {
 			case CPU:
-				if(st_mobo.get(AspettiTecnici.SOCKET_CPU).equals(st_comp.get(AspettiTecnici.SOCKET_CPU))) {
+				String socketMobo = st_mobo.get(AspettiTecnici.SOCKET_CPU);
+				String socketCpu = st_comp.get(AspettiTecnici.SOCKET_CPU);
+
+				if (socketMobo == null || socketCpu == null) {
+					throw new ComponentiException("Errore nei dati: Socket mancante nella scheda tecnica.", TipoErrore.SOCKET_CPU_INCOMPATIBILE);
+				}
+
+				if(socketMobo.equals(socketCpu)) {
 					return true;
-				}else {
+				} else {
 					throw new ComponentiException("Socket CPU e scheda madre incompatibili", TipoErrore.SOCKET_CPU_INCOMPATIBILE);
 				}
+
 			case RAM:
-				if(st_mobo.get(AspettiTecnici.TIPO_RAM).equals(st_comp.get(AspettiTecnici.TIPO_RAM))) {
-					return true;
-				}else {
-					throw new ComponentiException("Tipo RAM incompatibil con la scheda madre", TipoErrore.TIPO_RAM_INCOMPATIBILE);
+				String tipoRamMobo = st_mobo.get(AspettiTecnici.TIPO_RAM);
+				String tipoRamComp = st_comp.get(AspettiTecnici.TIPO_RAM);
+
+				if (tipoRamMobo == null || tipoRamComp == null) {
+					throw new ComponentiException("Errore nei dati: Tipo RAM mancante nella scheda tecnica.", TipoErrore.TIPO_RAM_INCOMPATIBILE);
 				}
-			case GPU:
-				if(st_mobo.get(AspettiTecnici.TIPO_SLOT_PCIE).equals(st_comp.get(AspettiTecnici.TIPO_SLOT_PCIE))) {
+
+				if(tipoRamMobo.equals(tipoRamComp)) {
 					return true;
-				}else {
+				} else {
+					throw new ComponentiException("Tipo RAM incompatibile con la scheda madre", TipoErrore.TIPO_RAM_INCOMPATIBILE);
+				}
+
+			case GPU:
+				String pcieMobo = st_mobo.get(AspettiTecnici.TIPO_SLOT_PCIE);
+				String pcieGpu = st_comp.get(AspettiTecnici.TIPO_SLOT_PCIE);
+
+				if (pcieMobo == null || pcieGpu == null) {
+					throw new ComponentiException("Errore nei dati: Tipo Slot PCIe mancante nella scheda tecnica.", TipoErrore.SLOT_PCIE_INCOMPATIBILE);
+				}
+
+				if(pcieMobo.equals(pcieGpu)) {
+					return true;
+				} else {
 					throw new ComponentiException("Slot PCIe GPU e scheda madre incompatibili", TipoErrore.SLOT_PCIE_INCOMPATIBILE);
 				}
+
 			default:
 				return false;
 			}
+
+
+			// Controllo la compatibilità delle mobo con altri tipi di componenti 
+//			switch (comp) {
+//			case CPU:
+//				if(st_mobo.get(AspettiTecnici.SOCKET_CPU).equals(st_comp.get(AspettiTecnici.SOCKET_CPU))) {
+//					return true;
+//				}else {
+//					throw new ComponentiException("Socket CPU e scheda madre incompatibili", TipoErrore.SOCKET_CPU_INCOMPATIBILE);
+//				}
+//			case RAM:
+//				if(st_mobo.get(AspettiTecnici.TIPO_RAM).equals(st_comp.get(AspettiTecnici.TIPO_RAM))) {
+//					return true;
+//				}else {
+//					throw new ComponentiException("Tipo RAM incompatibil con la scheda madre", TipoErrore.TIPO_RAM_INCOMPATIBILE);
+//				}
+//			case GPU:
+//				if(st_mobo.get(AspettiTecnici.TIPO_SLOT_PCIE).equals(st_comp.get(AspettiTecnici.TIPO_SLOT_PCIE))) {
+//					return true;
+//				}else {
+//					throw new ComponentiException("Slot PCIe GPU e scheda madre incompatibili", TipoErrore.SLOT_PCIE_INCOMPATIBILE);
+//				}
+//			default:
+//				return false;
+//			}
 		}
 		// Se nessuno dei componenti è una scheda madre, controllo che abbiano la stessa interfaccia
 		else {
@@ -435,17 +495,17 @@ public class Build extends Prodotto{
 		}
 		this.setPrezzo(totale);
 	}
-	
+
 	/**
 	 * Calcola il numero totale di pezzi hardware fisicamente presenti all'interno della build.
 	 * * @return Un intero rappresentante il conteggio totale dei componenti.
 	 */
 	public int getNumeroTotaleComponenti() {
-	    int n_componenti = 0;
-	    for (ArrayList<Componente> lista : componenti.values()) {
-	    	n_componenti += lista.size();
-	    }
-	    return n_componenti;
+		int n_componenti = 0;
+		for (ArrayList<Componente> lista : componenti.values()) {
+			n_componenti += lista.size();
+		}
+		return n_componenti;
 	}
 
 	/**
