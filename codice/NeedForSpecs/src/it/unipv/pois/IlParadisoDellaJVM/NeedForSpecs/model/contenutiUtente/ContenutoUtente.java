@@ -43,6 +43,11 @@ public abstract class ContenutoUtente {
 	}
 	
 
+	public void setId_contenuto_utente(String id_contenuto_utente) {
+		this.id_contenuto_utente = id_contenuto_utente;
+	}
+
+
 	public String getId_contenuto_utente() {
 		return id_contenuto_utente;
 	}
