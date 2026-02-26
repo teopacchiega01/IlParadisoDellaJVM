@@ -72,7 +72,7 @@ public class Marketplace {
 		this.build_configuratore = (Build)creaBuild();
 		inizializzaMarketplace();
 	}
-	
+
 	/**
 	 * Costruttore privato di default utilizzato per l'inizializzazione del Singleton.
 	 */
@@ -112,6 +112,7 @@ public class Marketplace {
 			ArrayList<String> valori_specifiche, int potenza) {
 		Prodotto nuovo_componente = ProdottiFactory.creaComponente(prezzo, marca, modello, tipo, valori_specifiche, potenza);
 		prodotti.add(nuovo_componente);
+		prod_dao.inserisciProdotto(nuovo_componente);
 		return nuovo_componente;
 	}
 
@@ -123,9 +124,10 @@ public class Marketplace {
 	public Prodotto aggiungiBuild(String nome) {
 		Prodotto nuova_build = ProdottiFactory.creaBuild(nome);
 		prodotti.add(nuova_build);
+		prod_dao.inserisciProdotto(nuova_build);
 		return nuova_build;
 	}
-	
+
 	/**
 	 * Crea un'istanza vuota di una Build tramite la factory senza aggiungerla direttamente alle liste.
 	 * * @return Una nuova {@link Build} vuota castata a {@link Prodotto}.
@@ -165,7 +167,8 @@ public class Marketplace {
 
 		Annuncio nuovo_annuncio = new Annuncio(prodotto_in_vendita, venditore, prezzo);
 		operazione_riuscita = annunci.add(nuovo_annuncio);
-
+		ann_dao.inserisciAnnuncio(nuovo_annuncio);
+		
 		if(operazione_riuscita) {
 			return true;
 		}else {
@@ -224,7 +227,7 @@ public class Marketplace {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Rimuove un annuncio specifico (passato come oggetto) dalla lista in memoria e dal database.
 	 * * @param annuncio_da_rimuovere L'oggetto {@link Annuncio} da rimuovere.
@@ -278,7 +281,7 @@ public class Marketplace {
 	public void resetBuild() {
 		this.build_configuratore = (Build)creaBuild();
 	}
-	
+
 	/**
 	 * Salva la configurazione della build attuale (se contiene almeno 2 componenti) 
 	 * aggiungendola alla lista dei prodotti del marketplace, per poi resettare il configuratore.
@@ -286,13 +289,14 @@ public class Marketplace {
 	 */
 	public boolean salvaBuildConfiguratore() {
 		if (build_configuratore != null && build_configuratore.getNumeroTotaleComponenti() >= 2) {
-	        this.prodotti.add(build_configuratore);
-	        resetBuild();
-	        return true;
-	    }
-	    return false;
+			this.prodotti.add(build_configuratore);
+			prod_dao.inserisciProdotto(build_configuratore);
+			resetBuild();
+			return true;
+		}
+		return false;
 	}
-	
+
 	/**
 	 * Aggiunge un annuncio al carrello personale di un utente loggato.
 	 * * @param utente_loggato L'utente che esegue l'operazione.

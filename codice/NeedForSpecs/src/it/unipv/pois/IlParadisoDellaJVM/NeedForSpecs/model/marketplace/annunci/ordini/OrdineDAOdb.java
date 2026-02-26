@@ -11,7 +11,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.marketplace.annunci.A
 //	@Author teopacchiega
 
 public class OrdineDAOdb implements IOrdineDAO {
-	private static final String QUERY_INSERT_ORDINE = "INSERT INTO Ordine (id_ordine, id_utente_acquirente) VALUES (?, ?)";
+	private static final String QUERY_INSERT_ORDINE = "INSERT INTO Ordine (id_ordine, id_utente_acquirente, prezzo) VALUES (?, ?, ?)";
 	private static final String QUERY_UPDATE_ANNUNCIO = "UPDATE Annuncio SET id_ordine = ? WHERE id_annuncio = ?";
 
 	@Override
@@ -21,12 +21,16 @@ public class OrdineDAOdb implements IOrdineDAO {
 		try {
 			conn = DatabaseManager.getConnection();
 			conn.setAutoCommit(false);
+
 			try (PreparedStatement ps_ordine = conn.prepareStatement(QUERY_INSERT_ORDINE)) {
 				ps_ordine.setString(1, ordine_da_inserire.getId_ordine()); 
 				ps_ordine.setString(2, ordine_da_inserire.getAcquirente().getUser_name());
+				ps_ordine.setDouble(3, ordine_da_inserire.getPrezzo_totale()); 
 				ps_ordine.executeUpdate();
 			}
+
 			ArrayList<Annuncio> prodotti_comprati = ordine_da_inserire.getProdotti_acquistati();
+
 			if (prodotti_comprati != null && !prodotti_comprati.isEmpty()) {
 				try (PreparedStatement ps_annuncio = conn.prepareStatement(QUERY_UPDATE_ANNUNCIO)) {
 					for (Annuncio annuncio : prodotti_comprati) {
@@ -58,7 +62,7 @@ public class OrdineDAOdb implements IOrdineDAO {
 			if (conn != null) {
 				try {
 					conn.setAutoCommit(true);
-					conn.close();
+					DatabaseManager.closeConnection(conn);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

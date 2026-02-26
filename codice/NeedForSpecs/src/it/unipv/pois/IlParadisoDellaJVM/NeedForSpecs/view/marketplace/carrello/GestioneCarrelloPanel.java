@@ -23,7 +23,7 @@ public class GestioneCarrelloPanel extends JPanel {
 	
 	private JButton btnLogout;
 	
-	private JButton btnEliminaLista;
+	private JButton btnEliminaElementoDalCarrello;
 	private JList<Annuncio> listAnnunci;
 	
 	private JButton btnEffettuaOrdine, btnTornaMarketplace;
@@ -42,8 +42,8 @@ public class GestioneCarrelloPanel extends JPanel {
         listAnnunci = new JList<>();
         pnlCentro.add(new JScrollPane(listAnnunci), BorderLayout.CENTER);
         JPanel pnlAzioniLista = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        btnEliminaLista = new JButton("ELIMINA DAL CARRELLO");
-        pnlAzioniLista.add(btnEliminaLista);
+        btnEliminaElementoDalCarrello = new JButton("ELIMINA DAL CARRELLO");
+        pnlAzioniLista.add(btnEliminaElementoDalCarrello);
         pnlCentro.add(pnlAzioniLista, BorderLayout.SOUTH);
         add(pnlCentro, BorderLayout.CENTER);
 
@@ -69,7 +69,7 @@ public class GestioneCarrelloPanel extends JPanel {
 
     public JButton getBtnTornaMarketplace() { return btnTornaMarketplace; }
 	public JButton getBtnLogout() { return btnLogout; }
-	public JButton getBtnEliminaLista() { return btnEliminaLista; }
+	public JButton getBtnEliminaElementoDalCarrello() { return btnEliminaElementoDalCarrello; }
 	public JButton getBtnEffettuaOrdine() { return btnEffettuaOrdine; }
 	public JList<Annuncio> getListAnnunci() { return listAnnunci; }
 	public JTextField getTxtPrezzoTotale() { return txtPrezzoTotale; }

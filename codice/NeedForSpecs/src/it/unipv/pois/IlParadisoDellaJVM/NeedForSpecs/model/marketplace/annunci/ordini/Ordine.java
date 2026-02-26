@@ -11,7 +11,7 @@ import it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.model.utilities.GeneratoreI
 //	@author teopacchiega
 
 public class Ordine {
-	private final static int DIM_ID_ORDINE = 20;
+	private final static int DIM_ID_ORDINE = 10;
 	private String id_ordine;
 	private ArrayList<Annuncio> prodotti_acquistati;
 	private double prezzo_totale;

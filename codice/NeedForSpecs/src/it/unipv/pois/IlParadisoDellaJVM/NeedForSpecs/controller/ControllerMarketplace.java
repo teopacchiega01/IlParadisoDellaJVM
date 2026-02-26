@@ -1,5 +1,6 @@
 package it.unipv.pois.IlParadisoDellaJVM.NeedForSpecs.controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,7 +39,8 @@ public class ControllerMarketplace {
 		aggiornaHomeMarketplace();
 		inizializzaListeners();
 		popolaListaProdotti();
-		popolaListaCarrello();
+		popolaListaTipiComponente();
+		popolaListaProdottiDaVendere();
 	}
 
 	private void aggiornaHomeMarketplace() {
@@ -223,6 +225,7 @@ public class ControllerMarketplace {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				popolaListaCarrello();
 				view.mostraCarrello();
 				System.out.println("Passo al carrello");
 
@@ -236,11 +239,20 @@ public class ControllerMarketplace {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				Annuncio nuovo_acquisto = getAnnuncioSelezionato();
-				if(model.aggiungiAlCarrello((UtenteGenerico)model.getUtente_loggato(), nuovo_acquisto)) {
-					System.out.println("Annuncio aggiunto al carrello");
-				}else{
-					System.out.println("Impossibile aggiungere annuncio al carrello");
-				};
+				if(nuovo_acquisto==null) {
+					System.out.println("Impossibile aggiungere prodotto: non è stato selezionato nessun annuncio");
+					view.getMarketplaceUserPanel().getLblMessaggio().setText("Non è stato selezionato alcun annuncio");
+				}else {
+					System.out.println("Annuncio selezionato: "+nuovo_acquisto.toString());
+					if(model.aggiungiAlCarrello((UtenteGenerico)model.getUtente_loggato(), nuovo_acquisto)) {
+						System.out.println("Annuncio aggiunto al carrello");
+						view.getMarketplaceUserPanel().getLblMessaggio().setText("Annuncio aggiunto al carrello");
+					}else{
+						System.out.println("Impossibile aggiungere annuncio al carrello");
+						view.getMarketplaceUserPanel().getLblMessaggio().setText("Impossibile aggiungere annuncio al carrello");
+					};
+				}	
+				popolaListaCarrello();
 
 			}
 		});
@@ -260,6 +272,7 @@ public class ControllerMarketplace {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				popolaListaGestioneAnnunci();
 				view.mostraGestioneAnnunci();
 			}
 		});
@@ -426,7 +439,7 @@ public class ControllerMarketplace {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nome_build = view.getConfiguratoreUserPanel().getTxtNomeBuild().toString();
+				String nome_build = view.getConfiguratoreUserPanel().getTxtNomeBuild().getText();
 				model.getBuild_configuratore().setNome(nome_build);
 				model.getBuild_configuratore().aggiornaPrezzo();
 				model.salvaBuildConfiguratore();
@@ -440,6 +453,8 @@ public class ControllerMarketplace {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				view.mostraCarrello();
+				popolaListaCarrello();
+				System.out.println("Passo al carrello");
 
 			}
 		});
@@ -463,6 +478,8 @@ public class ControllerMarketplace {
 
 	}
 
+
+
 	private void popolaListaCatalogoConfiguratore(TipoComponente tipoScelto) {
 		DefaultListModel<Componente> model_catalogo = new DefaultListModel<>();
 
@@ -478,6 +495,18 @@ public class ControllerMarketplace {
 
 		view.getConfiguratoreGuestPanel().getListComponentiDisponibili().setModel(model_catalogo);
 		view.getConfiguratoreUserPanel().getListComponentiDisponibili().setModel(model_catalogo);
+	}
+
+	private void popolaListaTipiComponente() {
+		DefaultListModel<TipoComponente> model_tipi = new DefaultListModel<>();
+
+		// Il metodo .values() estrae in automatico tutti i valori della tua Enum!
+		for (TipoComponente tipo : TipoComponente.values()) {
+			model_tipi.addElement(tipo);
+		}
+
+		view.getConfiguratoreGuestPanel().getListTipiComponente().setModel(model_tipi);
+		view.getConfiguratoreUserPanel().getListTipiComponente().setModel(model_tipi);
 	}
 
 	private void gestisciListenersReattiviConfiguratore() {
@@ -552,6 +581,7 @@ public class ControllerMarketplace {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				view.mostraCarrello();
+				popolaListaCarrello();
 				System.out.println("Passo al carrello");
 			}
 		});
@@ -561,9 +591,31 @@ public class ControllerMarketplace {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Prodotto prod_annuncio = getProdottoSelezionato();
-				double prezzo = Double.parseDouble(view.getAggiuntaAnnuncioPanel().getTxtPrezzo().getText());
+				Prodotto prod_annuncio = getProdottoSelezionatoInAggiuntaAnnuncio();
+				String testoPrezzo = view.getAggiuntaAnnuncioPanel().getTxtPrezzo().getText();
 
+				if (prod_annuncio == null) {
+					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setText("Errore: Seleziona un prodotto dalla lista!");
+					return; 
+				}
+
+				if (testoPrezzo == null || testoPrezzo.trim().isEmpty()) {
+					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setText("Errore: Inserisci un prezzo di vendita!");
+					return;
+				}
+
+				try {
+					double prezzo = Double.parseDouble(testoPrezzo);
+					model.aggiungiAnnuncio(prod_annuncio, (UtenteGenerico)model.getUtente_loggato(), prezzo);
+					System.out.println("Annuncio creato e aggiunto");
+					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setForeground(Color.GREEN);
+					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setText("Annuncio pubblicato con successo!");
+					view.getAggiuntaAnnuncioPanel().getTxtPrezzo().setText("");
+
+				} catch (NumberFormatException ex) {
+					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setForeground(Color.RED);
+					view.getAggiuntaAnnuncioPanel().getLblMessaggio().setText("Errore: Il prezzo deve essere un numero valido!");
+				}
 			}
 		});
 
@@ -577,6 +629,20 @@ public class ControllerMarketplace {
 			}
 		});
 
+	}
+
+	private void popolaListaProdottiDaVendere() {
+		DefaultListModel<Prodotto> model_prodotti = new DefaultListModel<>();
+
+		if (model.getProdotti() != null) {
+			for (Prodotto p : model.getProdotti()) {
+				if (p != null) {
+					model_prodotti.addElement(p);
+				}
+			}
+		}
+
+		view.getAggiuntaAnnuncioPanel().getListProdotti().setModel(model_prodotti);
 	}
 
 	private void gestisciListenersReattiviAggiuntaAnnuncio() {
@@ -597,9 +663,10 @@ public class ControllerMarketplace {
 	}
 
 
+
+
 	// ========================================================================================================
 	// RIMOZIONE/GESTIONE ANNUNCI
-	// QUALCOSA QUA NON VA !!!!!!!!!
 	private void addListenersRimozioneAnnunci() {
 
 		// PULSANTE LOGOUT
@@ -615,6 +682,8 @@ public class ControllerMarketplace {
 			}
 		});
 
+		
+		//TORNA AL MARKETPLACE
 		view.getGestioneAnnunciPanel().getBtnTornaMarketplace().addActionListener(new ActionListener() {
 
 			@Override
@@ -631,11 +700,44 @@ public class ControllerMarketplace {
 				model.rimuoviAnnuncio(getAnnuncioPubblicatoSelezionato());
 			}
 		});
+		
+		view.getGestioneAnnunciPanel().getBtnEliminaAnnuncio().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				Annuncio ann_da_rimuovere = getAnnuncioPubblicatoSelezionato();
+				model.rimuoviAnnuncio(ann_da_rimuovere);
+				System.out.println("Annuncio rimosso");
+				view.getGestioneAnnunciPanel().getLblMessaggioErrore().setText("Annuncio rimosso con successo");
+				popolaListaGestioneAnnunci();
+			}
+		});
 
 	}
 
+	
 
+	private void popolaListaGestioneAnnunci() {
+		DefaultListModel<Annuncio> model_miei_annunci = new DefaultListModel<>();
 
+		if (model.getUtente_loggato() != null) {
+
+			String usernameLoggato = model.getUtente_loggato().getUser_name();
+
+			for (Annuncio a : model.getAnnunci()) {
+
+				if (a != null && a.getVenditore() != null) {
+
+					if (a.getVenditore().getUser_name().equals(usernameLoggato)) {
+						model_miei_annunci.addElement(a);
+					}
+				}
+			}
+		}
+
+		view.getGestioneAnnunciPanel().getListAnnunci().setModel(model_miei_annunci);
+	}
 
 
 
@@ -671,12 +773,18 @@ public class ControllerMarketplace {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				model.effettuaOrdine((UtenteGenerico)model.getUtente_loggato());
+				if(model.effettuaOrdine((UtenteGenerico)model.getUtente_loggato())) {
+					view.getCarrelloPanel().getLblMessaggio().setText("Ordine effettuato");
+				}else {
+					view.getCarrelloPanel().getLblMessaggio().setText("Impossibile effettuare l'ordine");
+				}
+				popolaListaCarrello();
+
 			}
 		});
 
-		
-		view.getCarrelloPanel().getBtnEliminaLista().addActionListener(new ActionListener() {
+		// ELIMINA ELEMENTO DAL CARRELLO
+		view.getCarrelloPanel().getBtnEliminaElementoDalCarrello().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -689,7 +797,7 @@ public class ControllerMarketplace {
 					view.getCarrelloPanel().getLblMessaggio().setText("Impossibile rimuovere elemento dal carrello");
 				}
 				popolaListaCarrello();
-				
+
 			}
 		});
 
@@ -698,12 +806,13 @@ public class ControllerMarketplace {
 	private void popolaListaCarrello() {
 		DefaultListModel<Annuncio> model_carrello = new DefaultListModel<>();
 
-		if (model.getUtente_loggato() != null && model.getUtente_loggato() instanceof UtenteGenerico) {
-			
+		//System.out.println("Utente loggato: \n"+model.getUtente_loggato().toString());
+		if (model.getUtente_loggato() != null && !model.getUtente_loggato().isStaff() ) {
+
 			UtenteGenerico utente = (UtenteGenerico) model.getUtente_loggato();
-			
+
 			if (utente.getCarr() != null && utente.getCarr().getAcquisti() != null) {
-				
+
 				for (Annuncio a : utente.getCarr().getAcquisti()) {
 					if (a != null) { 
 						model_carrello.addElement(a);
@@ -716,8 +825,8 @@ public class ControllerMarketplace {
 
 		view.getCarrelloPanel().getListAnnunci().setModel(model_carrello);
 	}
-	
-	
+
+
 	private void gestisciListenersReattiviCarrello() {
 
 		javax.swing.event.ListSelectionListener reazione_seleziona_carrello = e -> {
@@ -736,27 +845,6 @@ public class ControllerMarketplace {
 
 		view.getCarrelloPanel().getListAnnunci().addListSelectionListener(reazione_seleziona_carrello);
 	}
-
-
-
-
-	//	private void addListenersLogin() {
-	//
-	//		view.getLoginPanel().getBtnTornaHome().addActionListener(new ActionListener() {
-	//
-	//			@Override
-	//			public void actionPerformed(ActionEvent e) {
-	//				// TODO Auto-generated method stub
-	//				view.dispose();
-	//				GestoreAccount new_model = GestoreAccount.getInstance();
-	//				ControllerHome ch = new ControllerHome(new_model, view.getHomeFrame());
-	//				ch.getView().setVisible(true);
-	//				System.out.println("Torno alla home");
-	//			}
-	//		});
-	//
-	//
-	//	}
 
 
 
